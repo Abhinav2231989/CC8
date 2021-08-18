@@ -28,7 +28,7 @@
         label="displaykey.NVV.Matter.SubView.MatterGeneral.Matter.AssignedUser.Name"
         value="Matter.AssigneeDisplayString"/>
       <Input
-        id="AssignedGroup_Name"
+        id="AssignedGroup_Name_Ext"
         label="displaykey.NVV.Matter.SubView.MatterGeneral.Matter.AssignedGroup.Name"
         value="Matter.AssigneeGroupOnlyDisplayString"/>
       <TypeKeyInput
@@ -62,7 +62,7 @@
         required="false"
         value="Matter.SubroRelated"/>
       <DateInput
-        id="Matter_CloseDate"
+        id="Matter_CloseDate_Ext"
         label="displaykey.NVV.Matter.SubView.NewMatterGeneral.Matter.CloseDate"
         value="Matter.CloseDate"/>
       <TypeKeyInput
@@ -325,44 +325,52 @@
       <InputDivider
         visible="Matter.MatterType == &quot;Mediation&quot;"/>
       <!-- <Label
-        label="displaykey.NVV.Matter.SubView.MatterGeneral.SuitDetails"/>  <Input
+        label="displaykey.NVV.Matter.SubView.MatterGeneral.SuitDetails"/> -->
+      <!-- <Input
         editable="true"
         id="SuitDetails_SuitType"
         label="displaykey.NVV.Matter.SubView.MatterGeneral.SuitDetails.SuitType"
         required="false"
-        value="matter.SuitType"/>  <Input
+        value="matter.SuitType"/> -->
+      <!-- <Input
         editable="true"
         id="SuitDetails_MotionSummaryJgmt"
         label="displaykey.NVV.Matter.SubView.MatterGeneral.SuitDetails.MotionSummaryJgmt"
         required="false"
-        value="matter.MotionSummaryJgmt"/>  <ClaimContactInput
+        value="matter.MotionSummaryJgmt"/> -->
+      <!-- <ClaimContactInput
         claim="Matter.Claim"
         editable="true"
         id="SuitDetails_Lienholder"
         label="displaykey.NVV.Matter.SubView.MatterGeneral.SuitDetails.Lienholder"
         required="false"
         value="matter.LienHolder"
-        valueRange="Matter.Claim.relatedContacts"/>  <Input
+        valueRange="Matter.Claim.relatedContacts"/> -->
+      <!-- <Input
         editable="true"
         id="SuitDetails_DeclaratoryJudgment"
         label="displaykey.NVV.Matter.SubView.MatterGeneral.SuitDetails.DeclaratoryJudgment"
         required="false"
-        value="matter.DeclaratoryJgmt"/>  <Input
+        value="matter.DeclaratoryJgmt"/> -->
+      <!-- <Input
         editable="true"
         id="SuitDetails_StructuredSettlement"
         label="displaykey.NVV.Matter.SubView.MatterGeneral.SuitDetails.StructuredSettlement"
         required="false"
-        value="matter.StructuredSettle"/>  <Input
+        value="matter.StructuredSettle"/> -->
+      <!-- <Input
         editable="true"
         id="SuitDetails_FirstNotice"
         label="displaykey.NVV.Matter.SubView.MatterGeneral.SuitDetails.FirstNotice"
         required="false"
-        value="matter.FirstNotice"/>  <Input
+        value="matter.FirstNotice"/> -->
+      <!-- <Input
         editable="true"
         id="Matter_Risk"
         label="displaykey.NVV.Matter.SubView.MatterGeneral.Matter.Risk"
         required="false"
-        value="matter.RiskType"/>  <InputDivider/> -->
+        value="matter.RiskType"/> -->
+      <!-- <InputDivider/> -->
       <Label
         label="displaykey.Matter.AdditionalDetails"
         visible="Matter.MatterType == &quot;Lawsuit&quot; || Matter.MatterType == &quot;Arbitration&quot; || Matter.MatterType == &quot;Hearing&quot; || Matter.MatterType == &quot;General&quot;"/>

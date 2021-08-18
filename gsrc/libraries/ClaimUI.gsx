@@ -66,4 +66,12 @@ enhancement ClaimUI : entity.Claim
       }
     }
   }
+  function associationDetails() : String {
+
+    if(this.ClaimsAssociatedWith.firstWhere( \ elt -> elt.PrimaryClaim) != null){
+      return "Primary"
+    } else {
+      return "Companion"
+    }
+  }
 }

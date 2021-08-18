@@ -82,6 +82,12 @@
           id="V_EIN"
           label="displaykey.Web.ContactDetail.Name.TaxID.EIN"
           value="Company.TaxID"/>
+        <ContentInput>
+          <Link
+            action="PickExistingDocumentPopup.push(claim)"
+            id="LinkDoc"
+            label="&quot;Link Document&quot;"/>
+        </ContentInput>
         <InputSetRef
           def="VendorW9InfoInputSet(contactHandle)"
           visible="Company typeis CompanyVendor and gw.api.admin.BaseAdminUtil.getDefaultCountry() == Country.TC_US "/>

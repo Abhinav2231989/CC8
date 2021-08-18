@@ -12,10 +12,10 @@
       name="PrintTargetLV"/>
     <SearchPanel
       criteriaName="criteriaWrapper"
-      maxSearchResults="gw.api.search.MaxSearchResults.forClaims()"
+      maxSearchResults="0"
       resultCachingEnabled="false"
       resultsName="claimSearchResults"
-      search="new gw.api.name.SearchNameOwner(criteriaWrapper.Criteria.NameCriteria).clearNonvisibleFields(); return criteriaWrapper.Criteria.performAdvancedSearchWithoutSummary()"
+      search="mySearch(criteriaWrapper)//new gw.api.name.SearchNameOwner(criteriaWrapper.Criteria.NameCriteria).clearNonvisibleFields(); return criteriaWrapper.Criteria.performAdvancedSearchWithoutSummary()"
       searchCriteria="gw.api.claim.ClaimUtil.getClaimSearchCriteria()"
       searchOnEnter="true"
       searchOnRefresh="false"
@@ -23,7 +23,7 @@
       <PanelRef
         def="ClaimSearchDV(criteriaWrapper.Criteria, archiveSearchEnabled)"/>
       <PanelRef
-        def="ClaimSearchResultsLV(claimSearchResults)"
+        def="ClaimSearchResultsLV(claimSearchResults , criteriaWrapper.Criteria)"
         mode="criteriaWrapper.Criteria.ClaimSearchType.Code">
         <TitleBar
           appendListViewPaging="true"
@@ -57,6 +57,33 @@
     </SearchPanel>
     <Code><![CDATA[function isArchived(csc : ClaimSearchCriteria) : boolean {
       return csc.ClaimSearchType == ClaimSearchType.TC_ARCHIVED;
-      }]]></Code>
+      }
+      
+      
+function mySearch(criteriaWrapper: com.guidewire.cc.domain.claim.impl.ClaimSearchCriteriaWrapper) : search.ClaimSearchResults {
+  new gw.api.name.SearchNameOwner(criteriaWrapper.Criteria.NameCriteria).clearNonvisibleFields()
+  //new gw.api.name.SearchNameOwner(criteriaWrapper.Criteria.NameCriteriaOpt_Ext).clearNonvisibleFields(); 
+  //checkDateSearch(criteriaWrapper.Criteria); 
+  return criteriaWrapper.Criteria.performAdvancedSearch_Ext()
+}
+
+function checkDateSearch(sCrit: gw.cc.claim.entity.ClaimSearchCriteria ) {
+  if(sCrit.DateCriterionChoice.StartDate == null)   return
+  if(sCrit.DateCriterionChoice.EndDate == null)
+    sCrit.DateCriterionChoice.EndDate = sCrit.DateCriterionChoice.StartDate
+
+  sCrit.AssignedToGroup.IncludeSubGroups = true
+  if(sCrit.AssignedToGroup.AssignedToGroup != null) return
+
+  //Look for the Root Group (it has no Parent)
+  var grp = User.util.CurrentUser.AllGroups.first() as Group       //Get a Group from the user
+  while(grp.Parent != null){
+    if(grp.Parent == User.util.CurrentUser.RootGroup){           // We want the group below the Root Group
+      break
+    }
+    grp = grp.Parent               //Next Group up the chain
+  }
+  sCrit.AssignedToGroup.AssignedToGroup = grp
+}]]></Code>
   </Screen>
 </PCF>

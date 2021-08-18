@@ -12,6 +12,9 @@
       flags="RetrievableClaim"
       valueType="com.guidewire.cc.domain.claim.ArchivedClaimCompatible"
       widget="ClaimSearchResultsIterator"/>
+    <Require
+      name="ClaimSearchCriteria"
+      type="ClaimSearchCriteria"/>
     <Variable
       initialValue="claimSearchResults == null ? null : claimSearchResults.getArchivedClaimSearchResults() as ClaimInfoSearchViewQuery"
       name="ClaimInfoSearchViewList"

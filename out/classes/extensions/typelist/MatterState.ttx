@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<typelist
+  xmlns="http://guidewire.com/typelists"
+  desc="MatterState"
+  name="MatterState">
+  <typecode
+    code="Open"
+    desc="Open"
+    name="Open"/>
+  <typecode
+    code="closed"
+    desc="Closed"
+    name="Closed"/>
+  <typecode
+    code="openclose"
+    desc="Open and Closed"
+    name="Open and Closed"/>
+</typelist>

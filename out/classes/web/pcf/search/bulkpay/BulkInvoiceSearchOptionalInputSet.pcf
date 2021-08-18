@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
   <InputSet
-    id="BulkInvoiceSearchOptionalInputSet">
+          id="BulkInvoiceSearchOptionalInputSet">
     <Require
       name="BulkInvoiceSearchCriteria"
       type="BulkInvoiceSearchCriteria"/>
@@ -27,5 +27,10 @@
       label="displaykey.Financials.BulkPay.Search.DateSearch"
       required="false"
       value="BulkInvoiceSearchCriteria.DateCriterionChoice"/>
+    <Input
+      editable="true"
+      id="Status"
+      label="&quot;Status&quot;"
+      value="BulkInvoiceSearchCriteria.Status"/>
   </InputSet>
 </PCF>

@@ -28,7 +28,7 @@
         label="displaykey.NVV.Matter.SubView.MatterGeneral.Matter.AssignedUser.Name"
         value="Matter.AssigneeDisplayString"/>
       <Input
-        id="AssignedGroup_Name"
+        id="AssignedGroup_Name_Ext"
         label="displaykey.NVV.Matter.SubView.MatterGeneral.Matter.AssignedGroup.Name"
         value="Matter.AssigneeGroupOnlyDisplayString"/>
       <TypeKeyInput

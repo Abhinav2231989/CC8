@@ -13,10 +13,14 @@
       flags="RetrievableClaim"
       valueType="com.guidewire.cc.domain.claim.ArchivedClaimCompatible"
       widget="ClaimSearchResultsIterator"/>
+    <Require
+      name="ClaimSearchCriteria"
+      type="ClaimSearchCriteria"/>
     <Variable
-      initialValue="claimSearchResults == null ? null : claimSearchResults.getActiveClaimSearchResults() as ClaimSearchViewQuery"
+      initialValue="getClaimSearchViewList()//claimSearchResults == null ? null : claimSearchResults.getActiveClaimSearchResults() as ClaimSearchViewQuery"
       name="ClaimSearchViewList"
-      recalculateOnRefresh="true"/>
+      recalculateOnRefresh="true"
+      type="java.util.List &lt;ClaimSearchView&gt;"/>
     <Variable
       initialValue="User.util.CurrentUser"
       name="CurrentUser"
@@ -143,7 +147,53 @@
           label="displaykey.LV.Claim.ClaimSearchResults.Claims.StateOfJurisdiction"
           value="ClaimSearchView.JurisdictionState"
           visible="print.PrintUtil.isPrintingCSV()"/>
+        <Cell
+          id="AssociationClaim"
+          label="&quot;Assoc claim&quot;"
+          value="ClaimSearchView.Claim.associationDetails()"
+          visible="true"/>
       </Row>
     </RowIterator>
+    <Code><![CDATA[function getClaimSearchViewList() : java.util.List <ClaimSearchView>
+{
+  if(claimSearchResults != null) {
+    var searchViewResults = claimSearchResults.getActiveClaimSearchResults() //as java.util.List <ClaimSearchView>//ClaimSearchViewQuery
+    var results = filterTPA(searchViewResults)
+
+    var filteredResults : java.util.List <ClaimSearchView>
+    filteredResults = results
+    if(ClaimSearchCriteria.MatterStatus != null){
+      if(ClaimSearchCriteria.MatterStatus == MatterState.TC_OPEN){
+        print("Open")
+        filteredResults = results.where( \ elt -> !elt.Claim.Matters.IsEmpty and elt.Claim.Matters.where( \ elt1 -> elt1.Closed) != null)
+        print(filteredResults.Count)
+      }else if(ClaimSearchCriteria.MatterStatus == MatterState.TC_CLOSED){
+        filteredResults = results.where( \ elt -> !elt.Claim.Matters.IsEmpty and elt.Claim.Matters.where( \ elt1 -> elt1.Closed) == null)
+        print("Closed")
+      } else if(ClaimSearchCriteria.MatterStatus == MatterState.TC_OPENCLOSE){
+        filteredResults = results.where( \ elt -> !elt.Claim.Matters.IsEmpty)
+        print("Openclosed")
+      }
+    }
+    
+
+    return filteredResults
+  } else {
+    return null
+  }
+}
+
+public static function filterTPA(results: ClaimSearchViewQuery): java.util.List <ClaimSearchView> {
+  
+  var filteredResults = new java.util.ArrayList <ClaimSearchView> ()
+  for(claimView in results) {
+    
+    if(User.util.CurrentUser.AllGroups.contains(claimView.Claim.AssignedGroup) and
+        results.hasMatch(\elt -> elt.Claim.AssignedGroup == claimView.AssignedGroup and elt.Claim == claimView.Claim)) {
+      filteredResults.add(claimView)
+    }
+  }
+  return filteredResults
+}]]></Code>
   </ListViewPanel>
 </PCF>

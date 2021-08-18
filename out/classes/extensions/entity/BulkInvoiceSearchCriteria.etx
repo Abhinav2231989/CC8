@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<extension
+  xmlns="http://guidewire.com/datamodel"
+  entityName="BulkInvoiceSearchCriteria">
+  <typekey
+    name="Status"
+    nullok="true"
+    typelist="BulkInvoiceStatus"/>
+</extension>
