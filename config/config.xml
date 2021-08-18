@@ -28,7 +28,7 @@
   <!-- Enable internal debug tools page http://localhost:8080/app/InternalTools.do
        Shared with CM
   -->
-  <param name="EnableInternalDebugTools" value="false"/>
+  <param name="EnableInternalDebugTools" value="true"/>
 
   <!-- The default application locale if locale can't be determined from user or browser
        Shared with CM
@@ -473,7 +473,7 @@ an entity is most likely to be re-used. -->
   <param name="MaxDuplicateContactSearchResults" value="25"/>
 
   <!-- The maximum number of search results before the UI warning appears -->
-  <param name="MaxClaimSearchResults" value="300"/>
+  <param name="MaxClaimSearchResults" value="3"/>
 
   <!-- The maximum number of search results before the UI warning appears -->
   <param name="MaxActivitySearchResults" value="300"/>
@@ -802,11 +802,11 @@ an entity is most likely to be re-used. -->
   <param name="CloseClaimAfterFinalPayment" value="true"/>
 
   <!-- Whether Multi Currency Reserving (MCR) is enabled. -->
-  <param name="EnableMulticurrencyReserving" value="false"/>
+  <param name="EnableMulticurrencyReserving" value="true"/>
 
   <!-- Currency Display mode for claims: SINGLE currency used, or display UI with
        support for MULTIPLE currencies. -->
-  <param name="MulticurrencyDisplayMode" value="SINGLE"/>
+  <param name="MulticurrencyDisplayMode" value="MULTIPLE"/>
 
   <!-- Default/Base currency for all Financials. (a.k.a. Reporting currency)
        Financials values are tracked in this currency. Should be set for SINGLE currency
@@ -1304,6 +1304,7 @@ newloss. In either case, a validation failure will cause the policy refresh or c
         <mimetype name="application/postscript" extensions=".ps" icon="document.png"/>
         <mimetype name="application/rtf" extensions=".rtf" icon="word.png"/>
         <mimetype name="application/vnd.ms-excel" extensions=".xls" icon="excel.png"/>
+        <mimetype name="application/vnd.ms-outlook" extensions=".msg" icon="document.png"/>
         <mimetype name="application/vnd.ms-powerpoint" extensions=".ppt|.pps" icon="document.png"/>
         <mimetype name="application/vnd.openxmlformats-officedocument.presentationml.presentation"
                   extensions=".pptx" icon="document.png"/>
