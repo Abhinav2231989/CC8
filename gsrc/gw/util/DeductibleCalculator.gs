@@ -10,7 +10,7 @@ class DeductibleCalculator {
    * if necessary ok.sdasdasdas
    */
   public static function calculateDeductibleAmountForCoverage(coverage : Coverage) : CurrencyAmount {
-    print("")
+    print("Hello")
     return coverage.Deductible
   }
 }
