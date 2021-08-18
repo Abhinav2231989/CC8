@@ -1,0 +1,29 @@
+package rules.Segmentation.ExposureSegmentationRules_dir.ESG01000Auto_dir
+
+@gw.rules.RuleName("ESG01300 - Auto High")
+internal class ESG01300AutoHigh {
+  static function doCondition(exposure : entity.Exposure) : boolean {
+    
+/*start00rule*/
+return (exposure.Incident.Severity == "severe-injury" 
+ or exposure.Incident.Severity == "major-injury"
+ or exposure.VehicleIncident.TotalLoss == true 
+ or exposure.Incident.Severity == "fatal")
+/*end00rule*/
+
+  }
+
+  static function doAction(exposure : entity.Exposure, actions : gw.rules.Action) {
+
+/*start00rule*/
+uses gw.api.util.Logger
+
+exposure.Segment = "auto_high"
+Logger.logDebug(displaykey.Rules.Segmentation.Exposure(actions.ShortRuleName))
+Logger.logDebug(displaykey.Rules.Segmentation.Exposure.SegmentedTo(exposure.Segment))
+actions.exit()
+
+/*end00rule*/
+
+  }
+}

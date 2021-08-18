@@ -1,0 +1,21 @@
+package rules.Workplan.ClaimWorkplan_dir.CLW00100NotFirstandFinal_dir
+
+@gw.rules.RuleName("CLW01000 - Contact insured")
+internal class CLW01000Contactinsured {
+  static function doCondition(claim : entity.Claim) : boolean {
+    
+/*start00rule*/
+return true
+/*end00rule*/
+
+  }
+
+  static function doAction(claim : entity.Claim, actions : gw.rules.Action) {
+
+/*start00rule*/
+claim.createActivityFromPattern(
+    null, ActivityPattern.finder.getActivityPatternByCode("contact_insured"))
+/*end00rule*/
+
+  }
+}

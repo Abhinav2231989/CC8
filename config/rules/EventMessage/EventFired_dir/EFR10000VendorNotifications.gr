@@ -1,0 +1,53 @@
+package rules.EventMessage.EventFired_dir
+uses wsi.remote.gw.webservice.vendor.dto.Notification
+uses wsi.remote.gw.webservice.vendor.dto.NewMessageNotification
+uses wsi.remote.gw.webservice.vendor.dto.OperationNotification
+uses wsi.remote.gw.webservice.vendor.dto.NewDocumentNotification
+@gw.rules.RuleName("EFR10000 - Vendor Notifications")
+internal class EFR10000VendorNotifications {
+  static function doCondition(messageContext : entity.MessageContext) : boolean {
+/*start00rule*/
+return true
+/*end00rule*/
+}
+
+  static function doAction(messageContext : entity.MessageContext, actions : gw.rules.Action) {
+/*start00rule*/
+var notification : Notification
+
+if(messageContext.Root typeis ServiceRequestMessage) {
+  if(messageContext.EventName == "ServiceRequestMessageToVendorAdded") {
+    notification = new NewMessageNotification(messageContext.Root)
+  }
+}
+if(messageContext.Root typeis ServiceRequestDocumentLink) {
+  if(messageContext.EventName  == "ServiceRequestDocumentToVendorAdded") {
+    notification =  new NewDocumentNotification(messageContext.Root)
+  }
+}
+
+final var operationTypeKeyFromEvent = \ eventName : String -> {
+  return ServiceRequestOperation.get(eventName.substring(eventName.indexOf("_") + 1, eventName.length()))
+}
+
+if(messageContext.Root typeis ServiceRequest) {
+  if(messageContext.EventName.startsWith("ServiceRequestOperation_")) {
+    notification =  new OperationNotification(messageContext.Root, operationTypeKeyFromEvent(messageContext.EventName))
+  }
+}
+if(messageContext.Root typeis ServiceRequestInvoice) {
+  if(messageContext.EventName.startsWith("ServiceRequestInvoiceOperation_")) {
+    notification =  new OperationNotification(messageContext.Root, operationTypeKeyFromEvent(messageContext.EventName))
+  }
+}
+
+
+if(notification != null) {
+  if(notification.SpecialistCommMethod == TC_GWPORTAL and messageContext.DestID == 85) {
+    notification.EventName = messageContext.EventName
+    messageContext.createMessage(notification.toJSON().toJSONString())
+  }
+}
+/*end00rule*/
+  }
+}

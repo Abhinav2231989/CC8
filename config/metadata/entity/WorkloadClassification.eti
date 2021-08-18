@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<entity
+        xmlns="http://guidewire.com/datamodel"
+        abstract="true"
+        desc="Weighted Workload Classification"
+        entity="WorkloadClassification"
+        final="false"
+        displayName="Weighted Workload Classification"
+        exportable="false"
+        extendable="true"
+        subpackage="assignment.workload"
+        table="workloadclassification"
+        admin="true"
+        ignoreForEvents="true"
+        type="editable">
+  <implementsEntity name="Validatable"/>
+  <column name="Name" desc="Name" type="varchar" nullok="false">
+    <columnParam name="size" value="256"/>
+    <localization nullok="true" tableName="wclass_name_l10n"/>
+  </column>
+  <column name="Active" default="true" desc="True if this rule is active." nullok="false" type="bit"/>
+  <column name="Priority" default="1" nullok="false" type="positiveinteger"/>
+  <column name="Description" desc="Description" nullok="true" type="shorttext">
+    <localization nullok="true" tableName="wclass_desc_l10n"/>
+  </column>
+  <column name="Weight" desc="Weight that matching assignables will be given" type="nonnegativeinteger" nullok="false"/>
+  <array name="Conditions" arrayentity="ClassificationCondition" desc="Filtering criteria associated with this classification" exportable="false" ignoreforevents="true" cascadeDelete="true" triggersValidation="true">
+    <link-association>
+      <subtype-map/>
+    </link-association>
+  </array>
+
+  <typekey name="ClaimLOBCode" desc="Line of Business code; typically related to the policy." typelist="LobCode" nullok="true">
+    <keyfilters>
+      <keyfilter name="ClaimLossType"/>
+    </keyfilters>
+  </typekey>
+
+  <typekey name="ClaimPolicyType" typelist="PolicyType" desc="Type of Policy" nullok="true">
+    <keyfilters>
+      <keyfilter name="ClaimLOBCode"/>
+    </keyfilters>
+  </typekey>
+
+  <typekey name="ClaimLossType" typelist="LossType" desc="Loss Type of Claim" nullok="true"/>
+
+  <!--Index to ensure that classifications are unique based on Subtype and Priority -->
+  <index desc="Ensure that priority is unique for Rules based on Subtype" name="prisubtypeindex" unique="true">
+    <indexcol name="Priority" keyposition="1"/>
+    <indexcol name="Subtype" keyposition="2"/>
+  </index>
+</entity>

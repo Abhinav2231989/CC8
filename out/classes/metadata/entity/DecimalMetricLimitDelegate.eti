@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><delegate xmlns="http://guidewire.com/datamodel" extendable="true" name="DecimalMetricLimitDelegate" subpackage="metric">
+  <fulldescription>Delegate used by decimal claim and exposure metric limits
+    </fulldescription>
+  <column desc="Decimal field to store the target value." name="DecimalTargetValue" nullok="true" type="decimalmetric"/>
+  <column desc="Decimal field to store the yellow value." name="DecimalYellowValue" nullok="true" type="decimalmetric"/>
+  <column desc="Decimal field to store the red value." name="DecimalRedValue" nullok="true" type="decimalmetric"/>
+</delegate>

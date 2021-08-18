@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><entity xmlns="http://guidewire.com/datamodel" admin="true" desc="The history of catastrophe finder batch process runs." entity="CatastropheClaimsHistory" exportable="true" platform="false"  subpackage="catastrophe" table="catastropheclaimshistory" type="versionable">
+  <column desc="Description of the history event." name="Description" nullok="true" type="mediumtext"/>
+  <column desc="Timestamp when the event occurred." name="EventTimestamp" nullok="true" type="datetime"/>
+  <foreignkey columnName="CatastropheId" desc="The catastrophe." fkentity="Catastrophe" name="Catastrophe" nullok="false"/>
+</entity>

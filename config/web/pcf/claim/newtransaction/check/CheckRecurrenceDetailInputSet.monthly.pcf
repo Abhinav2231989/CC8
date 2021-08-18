@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <InputSet
+    id="CheckRecurrenceDetailInputSet"
+    mode="monthly">
+    <Require
+      name="check"
+      type="Check"/>
+    <Require
+      name="recurrenceHelper"
+      type="gw.financials.CheckRecurrenceUIHelper"/>
+    <DateInput
+      editable="!check.CheckSet.Approved"
+      id="ScheduledSendDate"
+      label="displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.FirstCheckDueDate"
+      required="true"
+      validationExpression="check.ScheduledSendDate.before(DateTime.Today) ? displaykey.Java.Validation.Date.ForbidPast : null"
+      value="recurrenceHelper.ScheduledSendDate"/>
+    <InputDivider/>
+    <InputSet
+      editable="!check.CheckSet.Approved"
+      id="SubsequentChecks">
+      <Label
+        label="displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.SubsequentChecks.Label"/>
+      <RangeRadioInput
+        editable="true"
+        id="Frequency"
+        label="displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.SubsequentChecks.Frequency"
+        required="true"
+        sortValueRange="false"
+        stacked="true"
+        value="recurrenceHelper.Monthly.FrequencyType"
+        valueRange="gw.financials.MonthlyRecurrenceFrequency.AllValues">
+        <PostOnChange/>
+      </RangeRadioInput>
+      <TextInput
+        editable="true"
+        format="displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.SubsequentChecks.Frequency.MonthlyFormat"
+        id="EveryXMonth"
+        numCols="3"
+        required="recurrenceHelper.Monthly.FrequencyType == gw.financials.MonthlyRecurrenceFrequency.OTHER"
+        value="recurrenceHelper.Monthly.Recurrence.MonthlyFrequency"
+        visible="recurrenceHelper.Monthly.Recurrence.MonthlyFrequency != 1"/>
+      <RangeInput
+        editable="true"
+        id="TypeOfDueDate"
+        label="displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.SubsequentChecks.DueDateBasedOn"
+        required="true"
+        value="recurrenceHelper.Monthly.DateType"
+        valueRange="gw.financials.MonthlyRecurrenceDateType.AllValues">
+        <PostOnChange/>
+      </RangeInput>
+      <Input
+        editable="true"
+        id="DayOfMonth"
+        label="displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.SubsequentChecks.DayOfMonth"
+        numCols="3"
+        requestValidationExpression="(VALUE &lt; 1 or VALUE &gt; 31) ? displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.SubsequentChecks.DayOfMonth.ValidationError : null"
+        required="recurrenceHelper.Monthly.DateType == gw.financials.MonthlyRecurrenceDateType.SPECIFIC_DATE"
+        value="recurrenceHelper.Monthly.Recurrence.RecurrenceDate"
+        visible="recurrenceHelper.Monthly.DateType == gw.financials.MonthlyRecurrenceDateType.SPECIFIC_DATE"/>
+      <TypeKeyInput
+        editable="true"
+        id="WeekOfMonth"
+        label="displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.SubsequentChecks.WhichWeek"
+        required="recurrenceHelper.Monthly.DateType == gw.financials.MonthlyRecurrenceDateType.WEEKDAY"
+        value="recurrenceHelper.Monthly.Recurrence.RecurrenceWeek"
+        visible="recurrenceHelper.Monthly.DateType == gw.financials.MonthlyRecurrenceDateType.WEEKDAY"/>
+      <TypeKeyInput
+        editable="true"
+        id="DayOfWeek"
+        label="displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.SubsequentChecks.DayOfWeek"
+        required="recurrenceHelper.Monthly.DateType == gw.financials.MonthlyRecurrenceDateType.WEEKDAY"
+        value="recurrenceHelper.Monthly.Recurrence.RecurrenceDay"
+        visible="recurrenceHelper.Monthly.DateType == gw.financials.MonthlyRecurrenceDateType.WEEKDAY"/>
+      <CheckBoxInput
+        editable="!recurrenceHelper.Check.CheckSet.Approved"
+        id="IssueCheckInAdvance"
+        value="recurrenceHelper.IssueCheckInAdvance"
+        valueLabel="displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.SubsequentChecks.SpecialInstructions.IssueCheckInAdvance">
+        <PostOnChange/>
+      </CheckBoxInput>
+      <Input
+        editable="!recurrenceHelper.Check.CheckSet.Approved"
+        id="DaysInAdvance"
+        label="displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.SubsequentChecks.SpecialInstructions.DaysInAdvance"
+        numCols="3"
+        required="recurrenceHelper.IssueCheckInAdvance"
+        validationExpression="if(recurrenceHelper.CheckRecurrence.IssuanceDateOffset &lt; 1) {return displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.SubsequentChecks.SpecialInstructions.DaysInAdvance.LessThanOne}"
+        value="recurrenceHelper.CheckRecurrence.IssuanceDateOffset"
+        visible="recurrenceHelper.IssueCheckInAdvance==true"/>
+    </InputSet>
+    <InputDivider/>
+    <InputSetRef
+      def="CheckRecurrenceAdditionalInfoInputSet(recurrenceHelper)"/>
+  </InputSet>
+</PCF>

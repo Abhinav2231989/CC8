@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <DetailViewPanel
+    id="PolicyLocationRUDetailsDV">
+    <Require
+      name="RU"
+      type="LocationBasedRU"/>
+    <InputColumn>
+      <Input
+        editable="true"
+        helpText="displaykey.NVV.Policy.LocationDetail.Property.Risks.Add.Tooltip"
+        id="RUNumber"
+        label="displaykey.NVV.Policy.LocationDetail.Property.Risks.Number"
+        value="RU.RUNumber"/>
+      <TypeKeyInput
+        editable="true"
+        helpText="displaykey.NVV.Policy.LocationDetail.Property.Risks.Add.Tooltip"
+        id="MiscRUType"
+        label="displaykey.NVV.Policy.LocationDetail.Property.Risks.MiscType"
+        required="RU typeis entity.LocationMiscRU"
+        value="(RU as entity.LocationMiscRU).OtherRiskType"
+        visible="RU typeis entity.LocationMiscRU"/>
+      <TextAreaInput
+        editable="true"
+        id="RUDescription"
+        label="displaykey.NVV.Policy.LocationDetail.Property.Risks.Description"
+        numRows="4"
+        value="RU.Description"/>
+    </InputColumn>
+    <InputColumn>
+      <InputSet
+        visible="RU typeis LocationBasedRU and RU.Policy.PolicyType != PolicyType.TC_WORKERSCOMP">
+        <ContentInput
+          boldLabel="true"
+          hideIfReadOnly="true"
+          label="displaykey.NVV.Policy.LocationDetail.Property.Building">
+          <Link
+            action="RU.Policy.createNewBuilding(RU)"
+            id="AddBuilding"
+            label="displaykey.NVV.Policy.LocationDetail.Property.Building.Add"
+            styleClass="miniButton"
+            tooltip="displaykey.NVV.Policy.LocationDetail.Property.Building.Add.Tooltip"
+            visible="RU.Building == null"/>
+          <Link
+            action="RU.Policy.removeBuilding(RU)"
+            id="RemoveBuilding"
+            label="displaykey.NVV.Policy.LocationDetail.Property.Building.Remove"
+            styleClass="miniButton"
+            tooltip="displaykey.NVV.Policy.LocationDetail.Property.Building.Remove.Tooltip"
+            visible="RU.Building != null"/>
+        </ContentInput>
+        <InputSet
+          visible="RU.Building != null">
+          <Label
+            label="displaykey.Web.ClaimSnapshotPolicyLocationDV.Building"/>
+          <Input
+            editable="true"
+            helpText="displaykey.NVV.Policy.LocationDetail.Property.Building.Number.Tooltip"
+            id="BuildingNumber"
+            label="displaykey.NVV.Policy.LocationDetail.Property.Building.Number"
+            required="true"
+            value="RU.Building.BuildingNumber"/>
+          <TextAreaInput
+            editable="true"
+            id="BuildingNotes"
+            label="displaykey.NVV.Policy.LocationDetail.Property.Building.Notes"
+            numRows="4"
+            value="RU.Building.Notes"/>
+        </InputSet>
+      </InputSet>
+      <InputDivider
+        visible="RU.Building != null and CurrentLocation.InEditMode == false"/>
+      <ListViewInput
+        boldLabel="true"
+        def="EditableRULienholdersLV(RU, RU.Policy.Claim)"
+        editable="true"
+        label="displaykey.NVV.Policy.LocationDetail.Property.Lienholders"
+        labelAbove="true"
+        visible="RU.Policy.PolicyType != PolicyType.TC_WORKERSCOMP">
+        <Toolbar>
+          <IteratorButtons
+            iterator="EditableRULienholdersLV.EditableRULienholdersLV"/>
+        </Toolbar>
+      </ListViewInput>
+      <InputGroup
+        childrenVisible="RU.ClassCode != null"
+        id="ClassCodeInputGroup"
+        label="displaykey.NVV.Policy.WCLocationDetail.Property.ClassCodes"
+        onToggle="toggleClassCode()"
+        visible="RU.Policy.PolicyType == PolicyType.TC_WORKERSCOMP">
+        <InputSetRef
+          def="ClassCodeInputSet(RU.ClassCode)"/>
+      </InputGroup>
+    </InputColumn>
+    <Code><![CDATA[function toggleClassCode() {
+  if(RU.ClassCode != null) {
+    RU.removeClassCode()
+  }  
+  else {
+    RU.addNewClassCode() 
+  }
+}]]></Code>
+  </DetailViewPanel>
+</PCF>

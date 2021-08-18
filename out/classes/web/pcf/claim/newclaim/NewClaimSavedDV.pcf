@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <DetailViewPanel
+    id="NewClaimSavedDV">
+    <Require
+      name="claim"
+      type="Claim"/>
+    <InputColumn>
+      <Label
+        id="Header"
+        label="displaykey.Web.NewClaimWizard.Saved.Header( claim.ClaimNumber)"/>
+      <TextInput
+        id="AssignedGroup"
+        labelAbove="true"
+        value="displaykey.Web.NewClaimWizard.Saved.AssignedGroup( claim.AssignedGroup)"/>
+      <TextInput
+        id="AssignedUser"
+        labelAbove="true"
+        value="displaykey.Web.NewClaimWizard.Saved.AssignedUser( claim.AssignedUser)"
+        visible="claim.AssignmentStatus == &quot;assigned&quot;"/>
+      <TextInput
+        id="PendingAssignment"
+        labelAbove="true"
+        value="displaykey.Web.NewClaimWizard.Saved.PendingAssignment"
+        visible="claim.AssignmentStatus != &quot;assigned&quot;"/>
+      <ContentInput/>
+      <ListViewInput
+        boldLabel="true"
+        editable="false"
+        label="displaykey.Web.ServiceRequest.FNOL.RequestedServices"
+        labelAbove="true"
+        visible="not claim.ServiceRequests.IsEmpty">
+        <Toolbar/>
+        <ListViewPanel>
+          <RowIterator
+            editable="false"
+            elementName="serviceRequest"
+            value="claim.ServiceRequests">
+            <Row>
+              <Cell
+                icon="serviceRequest.Kind.Icon"
+                iconLabel="serviceRequest.Kind.Label"
+                id="Kind"
+                label="displaykey.LV.Claim.ServiceRequest.Kind"
+                showHeaderIcon="false"
+                value="true"/>
+              <Cell
+                action="pcf.ClaimServiceRequests.go(claim, serviceRequest)"
+                id="ServiceRequestNumber"
+                label="displaykey.LV.Claim.ServiceRequest.ServiceRequestNumber"
+                sortOrder="3"
+                value="serviceRequest.ServiceRequestNumber"/>
+              <Cell
+                id="Incident"
+                label="displaykey.Web.ServiceRequest.RelatesTo"
+                sortOrder="1"
+                value="serviceRequest.TypePrefixedIncidentName"/>
+              <Cell
+                id="Services"
+                label="displaykey.LV.Claim.ServiceRequest.Services"
+                value="serviceRequest.ServicesString"/>
+              <Cell
+                id="Specialist"
+                label="displaykey.LV.Claim.ServiceRequest.Specialist"
+                sortOrder="2"
+                value="serviceRequest.SpecialistName"/>
+              <DateCell
+                id="RequestedCompletionDate"
+                label="displaykey.LV.Claim.ServiceRequest.Target"
+                value="serviceRequest.quoteAllowed() ? serviceRequest.RequestedQuoteCompletionDate : serviceRequest.RequestedServiceCompletionDate"/>
+            </Row>
+          </RowIterator>
+        </ListViewPanel>
+      </ListViewInput>
+      <ContentInput/>
+      <Label
+        id="YouCan"
+        label="displaykey.Web.NewClaimWizard.Saved.YouCan"/>
+      <BulletPointTextInput
+        action="pcf.Claim.go(claim)"
+        id="GoToClaim"
+        labelAbove="true"
+        shortcut="V"
+        value="displaykey.Web.NewClaimWizard.Saved.GoToClaim(claim.ClaimNumber)"/>
+      <BulletPointTextInput
+        action="FNOLWizard.go()"
+        id="CreateNewClaim"
+        labelAbove="true"
+        shortcut="N"
+        value="displaykey.Web.NewClaimWizard.Saved.CreateNewClaim"/>
+      <BulletPointTextInput
+        action="NewReserveSet.go(claim)"
+        id="CreateReserve"
+        labelAbove="true"
+        shortcut="R"
+        value="displaykey.Web.NewClaimWizard.Saved.AddReserves"/>
+      <BulletPointTextInput
+        action="NormalCreateCheckWizardForward.go(claim)"
+        id="CreatePayment"
+        labelAbove="true"
+        shortcut="P"
+        value="displaykey.Web.NewClaimWizard.Saved.MakePayments"/>
+    </InputColumn>
+  </DetailViewPanel>
+</PCF>

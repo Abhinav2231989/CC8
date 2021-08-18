@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<plugin
+  interface="InboundIntegrationPlugin"
+  name="InboundFileIntegration">
+  <plugin-java
+    disabled="true"
+    javaclass="com.guidewire.pl.integration.inbound.file.DefaultFileInboundIntegrationPlugin">
+    <param
+      name="integrationservice"
+      value="exampleFileIntegration"/>
+  </plugin-java>
+</plugin>

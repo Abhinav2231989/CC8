@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><subtype xmlns="http://guidewire.com/datamodel" entity="ReopenExposureInfo" subpackage="exposure" supertype="ExpCloseReopenInfo">
+  <fulldescription>
+      Holds transitional internal state information during the reopen exposure
+      operation. This is an internal, virtual entity, the system does not store it.
+    </fulldescription>
+  <typekey name="reopenReason" nullok="true" typelist="ExposureReopenedReason"/>
+</subtype>

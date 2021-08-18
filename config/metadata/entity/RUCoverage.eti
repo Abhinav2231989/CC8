@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!-- RUCoverage -->
+<subtype xmlns="http://guidewire.com/datamodel" desc="Coverage associated with a risk unit." entity="RUCoverage" final="false" subpackage="policy" supertype="Coverage">
+  <fulldescription>
+A &lt;code&gt;Coverage&lt;/code&gt; associated with a &lt;code&gt;RiskUnit&lt;/code&gt;.
+    </fulldescription>
+  <foreignkey columnName="RiskUnitID"  desc="RiskUnit associated with the coverage." exportable="true" fkentity="RiskUnit" name="RiskUnit" nullok="false" triggersValidation="true"/>
+</subtype>

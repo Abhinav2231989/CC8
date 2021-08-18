@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <ListViewPanel
+    id="ExposureConditionsLV">
+    <ExposeIterator
+      valueType="ExposureConditionFilter"
+      widget="ExposureConditionsLV"/>
+    <Require
+      name="classification"
+      type="WorkloadClassification"/>
+    <RowIterator
+      editable="true"
+      elementName="exposure"
+      hideCheckBoxesIfReadOnly="true"
+      toAdd="classification.ExposureCondition.addToConditionFilters(exposure)"
+      toRemove="classification.ExposureCondition.removeFromConditionFilters(exposure)"
+      value="classification.ExposureCondition.ConditionFilters">
+      <Row>
+        <RangeCell
+          editable="true"
+          id="CoverageType"
+          label="displaykey.Web.Admin.Workload.WorkloadClassification.ExposuresLV.CoverageType"
+          required="true"
+          value="exposure.CoverageType"
+          valueRange="getValidCoverageTypeRange(classification.ClaimPolicyType)">
+          <PostOnChange
+            onChange="gw.api.assignment.workload.util.WorkloadClassificationUIHelper.validateAndUpdateExposureCondition(exposure)"/>
+        </RangeCell>
+        <TypeKeyCell
+          editable="true"
+          id="CoverageSubtype"
+          label="displaykey.Web.Admin.Workload.WorkloadClassification.ExposuresLV.CoverageSubType"
+          required="true"
+          value="exposure.CoverageSubType">
+          <PostOnChange
+            onChange="gw.api.assignment.workload.util.WorkloadClassificationUIHelper.validateAndUpdateExposureCondition(exposure)"
+            target="DATA_ONLY"/>
+        </TypeKeyCell>
+        <TypeKeyCell
+          editable="true"
+          id="LossPartyType"
+          label="displaykey.Web.Admin.Workload.WorkloadClassification.ExposuresLV.LossParty"
+          required="true"
+          value="exposure.LossPartyType"/>
+      </Row>
+    </RowIterator>
+    <Code><![CDATA[function getValidCoverageTypeRange(policyType : PolicyType) : List<CoverageType> {
+    var allCoverageTypes = typekey.CoverageType.getTypeKeys(false)
+    if (policyType != null) {
+      return allCoverageTypes.where(\ ct -> ct.hasCategory(policyType))
+    }
+    return allCoverageTypes
+}]]></Code>
+  </ListViewPanel>
+</PCF>

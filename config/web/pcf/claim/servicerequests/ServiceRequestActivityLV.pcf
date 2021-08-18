@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <ListViewPanel
+    id="ServiceRequestActivityLV">
+    <Require
+      name="activityList"
+      type="ActivityQuery"/>
+    <Variable
+      initialValue="activity.WorkplanFilterSet.INSTANCE"
+      name="filterSet"
+      type="activity.WorkplanFilterSet"/>
+    <ExposeIterator
+      flags="CanAssignActivity,CanSkipActivity,CanCompleteActivity,CanApproveActivity"
+      name="Iterator"
+      valueType="entity.Activity"
+      widget="ServiceRequestActivityLV"/>
+    <RowIterator
+      editable="false"
+      elementName="activity"
+      hasCheckBoxes="true"
+      value="activityList">
+      <ToolbarFlag
+        condition="activity.canAssign() &amp;&amp; !gw.api.activity.ActivityUtil.isWorksheetOpen(activity as Key)"
+        name="CanAssignActivity"/>
+      <ToolbarFlag
+        condition="activity.canSkip() &amp;&amp; !gw.api.activity.ActivityUtil.isWorksheetOpen(activity as Key)"
+        name="CanSkipActivity"/>
+      <ToolbarFlag
+        condition="activity.canComplete() &amp;&amp; !gw.api.activity.ActivityUtil.isWorksheetOpen(activity as Key)"
+        name="CanCompleteActivity"/>
+      <ToolbarFlag
+        condition="activity.canApprove() &amp;&amp; !gw.api.activity.ActivityUtil.isWorksheetOpen(activity as Key)"
+        name="CanApproveActivity"/>
+      <ToolbarFilter
+        name="ServiceRequestFilter">
+        <ToolbarFilterOption
+          filter="filterSet.NotReviewOpenFilter"
+          label="displaykey.Java.Workplan.AllOpenActivities"
+          selectOnEnter="true"/>
+        <ToolbarFilterOption
+          filter="filterSet.MyNotReviewNotExternalOpenFilter"
+          label="displaykey.Java.Workplan.MyOpenActivities"/>
+        <ToolbarFilterOption
+          filter="filterSet.NotReviewFilter"
+          label="displaykey.Java.Workplan.AllActivities"/>
+        <ToolbarFilterOption
+          filter="filterSet.MyNotReviewNotExternalFilter"
+          label="displaykey.Java.Workplan.MyActivities"/>
+        <ToolbarFilterOption
+          filter="filterSet.getMyNotReviewNotExternalOpenDueInNDaysFilter(7)"
+          label="displaykey.Java.Workplan.MyOpenActivitiesDueNextNDays(7)"/>
+        <ToolbarFilterOption
+          filter="filterSet.getMyNotReviewNotExternalOpenDueInNDaysFilter(14)"
+          label="displaykey.Java.Workplan.MyOpenActivitiesDueNextNDays(14)"/>
+        <ToolbarFilterOption
+          filter="filterSet.getMyNotReviewNotExternalOpenDueInNDaysFilter(30)"
+          label="displaykey.Java.Workplan.MyOpenActivitiesDueNextNDays(30)"/>
+        <ToolbarFilterOption
+          filter="filterSet.NotReviewExternalOpenFilter"
+          label="displaykey.Java.Workplan.AllOpenExternalActivities"/>
+        <ToolbarFilterOption
+          filter="filterSet.MyNotReviewExternalOpenFilter"
+          label="displaykey.Java.Workplan.MyOpenExternalActivities"/>
+      </ToolbarFilter>
+      <Row>
+        <Cell
+          enableSort="false"
+          icon="&quot;new.png&quot;"
+          iconLabel="displaykey.LV.Activity.Updated.Tip"
+          id="Updated"
+          printWidth="0.02"
+          tooltip="displaykey.LV.Activity.Updated.Tip"
+          value="activity.UpdatedSinceLastViewed"/>
+        <Cell
+          enableSort="false"
+          icon="&quot;escalated.png&quot;"
+          iconLabel="displaykey.LV.Activity.Escalated.Tip"
+          id="Escalated"
+          printWidth="0.02"
+          tooltip="displaykey.LV.Activity.Escalated.Tip"
+          value="activity.Escalated"/>
+        <DateCell
+          fontColor="activity.Overdue ? &quot;Red&quot; : &quot;&quot;"
+          id="DueDate"
+          label="displaykey.LV.Activity.ServiceRequest.Activities.DueDate"
+          printWidth="0.1"
+          sortOrder="2"
+          value="activity.TargetDate"/>
+        <TypeKeyCell
+          id="Priority"
+          label="displaykey.LV.Activity.ServiceRequest.Activities.Priority"
+          printWidth="0.1"
+          sortOrder="1"
+          value="activity.Priority"/>
+        <Cell
+          id="Status"
+          label="displaykey.LV.Activity.ServiceRequest.Activities.Status"
+          printWidth="0.1"
+          sortBy="activity.Status"
+          value="activity.ActivityStatus"/>
+        <Cell
+          action="openWorksheet(activity)"
+          available="perm.Activity.view(activity)"
+          id="Subject"
+          label="displaykey.LV.Activity.ServiceRequest.Activities.Subject"
+          printWidth="0.18"
+          sortBy="activity.Subject"
+          value="String.isEmpty(activity.Subject) ? displaykey.LV.Activity.Activities.NoSubject : activity.Subject"/>
+        <Cell
+          id="Assigner"
+          label="displaykey.LV.Activity.ServiceRequest.Activities.Assigner"
+          printWidth="0"
+          sortBy="activity.AssignedByUser.Contact"
+          value="(activity.AssignedByUser.Contact == null) ? displaykey.Java.Activity.AssignedByUser.SystemUser : activity.AssignedByUser.Contact.DisplayName"/>
+        <Cell
+          id="AssignedUser"
+          label="displaykey.LV.Activity.ServiceRequest.Activities.AssignedUser"
+          printWidth="0.10"
+          sortBy="activity.AssignmentStatus, activity.AssignedUser, activity.AssignedQueue"
+          value="activity.AssigneeDisplayString"/>
+      </Row>
+    </RowIterator>
+    <Code><![CDATA[function openWorksheet(act : Activity) {
+  if(not gw.api.activity.ActivityUtil.isWorksheetOpen(act.ID)) {
+    gw.api.activity.ActivityUtil.markActivityAsViewed(act)
+    ActivityDetailViaClaimWorksheet.goInWorkspace(act.Claim, act)
+  }
+}]]></Code>
+  </ListViewPanel>
+</PCF>

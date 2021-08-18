@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!-- Extension to activity table -->
+<extension xmlns="http://guidewire.com/datamodel" entityName="Activity">
+    <index desc="Covering index to help speed up the most expensive of the Team stats batch process queries"
+           expectedtobecovering="true" name="activitycc6">
+        <indexcol keyposition="1" name="Type"/>
+        <indexcol keyposition="2" name="Status"/>
+        <indexcol keyposition="3" name="Retired"/>
+        <indexcol keyposition="4" name="CloseDate"/>
+        <indexcol keyposition="5" name="AssignedGroupID"/>
+        <indexcol keyposition="6" name="TargetDate"/>
+        <indexcol keyposition="7" name="AssignmentStatus"/>
+        <indexcol keyposition="8" name="AssignedUserID"/>
+    </index>
+
+    <!-- This index was moved from the base DM file (dm_cc_activity.xml) to the extensions.xml file in the ClaimCenter
+         5.0.5 release so that 2 new columns could be added (As described below), while also allowing customers to undo
+         the change if desired. -->
+    <index name="activityccu4" unique="true" trackUsage="true"
+           desc="Compound index to speed up the team group activity and activity calendar pages"
+           expectedtobecovering="true">
+        <indexcol name="AssignedGroupId" keyposition="1"/>
+        <indexcol name="Status" keyposition="2"/>
+        <indexcol name="Retired" keyposition="3"/>
+        <indexcol name="TargetDate" keyposition="4"/>
+        <indexcol name="ID" keyposition="5"/>
+        <indexcol name="Type" keyposition="6"/>
+        <indexcol name="Importance" keyposition="7"/>
+        <indexcol name="AssignmentStatus" keyposition="8"/>
+        <!-- These two columns have been added to this index in order to help the performance
+             of the Team Group Activities screen.  However, they can be removed if they
+             unexpectedly lead to performance issues with other areas of ClaimCenter. -->
+        <indexcol name="ClaimID" keyposition="9"/>
+        <indexcol name="Priority" keyposition="10"/>
+    </index>
+    <index name="activityccu6" unique="true" trackUsage="true"
+           desc="Compound index to speed up query for claims related to a specified catastrophe"
+           expectedtobecovering="true">
+        <indexcol name="ClaimID" keyposition="1"/>
+        <indexcol name="ActivityPatternID" keyposition="2"/>
+        <indexcol name="Status" keyposition="3"/>
+        <indexcol name="Retired" keyposition="4"/>
+        <indexcol name="ID" keyposition="5"/>
+    </index>
+</extension>

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <ListViewPanel
+    id="AggregateLimitCoveragesLV">
+    <ExposeIterator
+      valueType="entity.CoverageLineLimit"
+      widget="AggregateLimitCoveragesLV"/>
+    <Require
+      name="AggregateLimitHelper"
+      type="admin.AggregateLimitHelper"/>
+    <Require
+      name="Policy"
+      type="Policy"/>
+    <Require
+      name="AggregateLimit"
+      type="AggregateLimit"/>
+    <RowIterator
+      editable="true"
+      elementName="CoverageLineLimit"
+      hideCheckBoxesIfReadOnly="true"
+      toAdd="AggregateLimit.addToCoverageLines(CoverageLineLimit);"
+      toRemove="AggregateLimit.removeFromCoverageLines(CoverageLineLimit)"
+      value="AggregateLimit.CoverageLines">
+      <Row>
+        <RangeCell
+          editable="true"
+          id="CoverageType"
+          label="displaykey.LV.Policy.AggregateLimitCoverages.CoverageType"
+          required="true"
+          sortOrder="1"
+          value="new util.lvwrapper.CoverageLineLimitLVWrapper(AggregateLimitHelper, CoverageLineLimit).CoverageType"
+          valueRange="gw.api.exposure.NewExposureMenuUtil.getCoverageTypesForClaim(Policy.Claim)">
+          <PostOnChange
+            target="DATA_ONLY"/>
+        </RangeCell>
+        <RangeCell
+          editable="true"
+          id="LOBCoverageSubtype"
+          label="displaykey.LV.Policy.AggregateLimitCoverages.LOBCoverageSubtype"
+          value="new util.lvwrapper.CoverageLineLimitLVWrapper(AggregateLimitHelper, CoverageLineLimit).LOBCoverageSubtype"
+          valueRange="AggregateLimitHelper.getFilteredLOBCoverageSubtypeList(CoverageLineLimit.CoverageLine.CoverageType)">
+          <PostOnChange
+            target="DATA_ONLY"/>
+        </RangeCell>
+        <RangeCell
+          editable="true"
+          id="CoveredItem"
+          label="displaykey.LV.Policy.AggregateLimitCoverages.CoveredItem"
+          optionLabel="VALUE.getCoveredItemString(Policy)"
+          value="new util.lvwrapper.CoverageLineLimitLVWrapper(AggregateLimitHelper, CoverageLineLimit).CoverageLine"
+          valueRange="AggregateLimitHelper.getFilteredList(AggregateLimit, Policy, CoverageLineLimit.CoverageLine.CoverageType, CoverageLineLimit.CoverageLine.LOBCoverageSubtype)"/>
+        <Cell
+          formatType="currency"
+          id="Realized"
+          label="displaykey.LV.Policy.AggregateLimitCoverages.Realized"
+          value="CoverageLineLimit.LimitUsed"
+          visible="not CurrentLocation.InEditMode or gw.api.print.PrintUtil.isPrintingPDF()"/>
+      </Row>
+    </RowIterator>
+  </ListViewPanel>
+</PCF>

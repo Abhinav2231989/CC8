@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<typelist xmlns="http://guidewire.com/typelists" desc="A relative level of importance assigned to an entity" final="false" subpackage="claim" name="ImportanceLevel">
+  <typecode code="notOnCalendar" desc="Not Showing on Calendar" name="Not On Calendar" priority="100"/>
+</typelist>

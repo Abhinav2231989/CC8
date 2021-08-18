@@ -1,0 +1,24 @@
+package rules.Validation.TransactionSetValidationRules_dir.TXV15000FinancialHolds_dir
+
+@gw.rules.RuleName("TXV15200 - Incident Only")
+internal class TXV15200IncidentOnly {
+  static function doCondition(transactionSet : entity.TransactionSet) : boolean {
+    
+/*start00rule*/
+return transactionSet.Claim.IncidentReport
+/*end00rule*/
+
+  }
+
+  static function doAction(transactionSet : entity.TransactionSet, actions : gw.rules.Action) {
+
+/*start00rule*/
+if (exists (t in transactionSet.Transactions where t.CostType == "claimcost")) {
+  transactionSet.reject("payment", displaykey.Rules.Validation.Transaction.FinancialHolds.IncidentOnlyError, null, null)
+} else {
+  transactionSet.reject(null, null, "payment", displaykey.Rules.Validation.Transaction.FinancialHolds.IncidentOnlyWarning)
+}
+/*end00rule*/
+
+  }
+}

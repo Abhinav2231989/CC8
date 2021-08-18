@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<entity xmlns="http://guidewire.com/datamodel" desc="PolicyLocationSummaryJoin" entity="PolicyLocationSummaryJoin" exportable="true" extendable="true" final="true" subpackage="catastrophe" platform="false" table="policylocationsummaryjoin" type="editable">
+  <implementsEntity name="Extractable"/>
+  <fulldescription>
+Join table between Claim and PolicyLocationSummary.  It exists to improve performance.
+  </fulldescription>
+
+  <foreignkey columnName="PolicyLocationSummaryID" desc="Associated PolicyLocationSummary" fkentity="PolicyLocationSummary" name="PolicyLocationSummary" nullok="false"/>
+  <foreignkey columnName="ClaimID" desc="Associated claim." fkentity="Claim" name="Claim" nullok="false"/>
+</entity>

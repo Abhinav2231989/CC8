@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <Screen
+    id="ClaimSnapshotVehicleIncidentScreen"
+    mode="700">
+    <Require
+      name="Claim"
+      type="Claim"/>
+    <Require
+      name="IncidentParam"
+      type="Object"/>
+    <Require
+      name="SnapshotParam"
+      type="Object"/>
+    <Variable
+      initialValue="IncidentParam as snapshot.v700.VehicleIncident"
+      name="VehicleIncident"
+      type="snapshot.v700.VehicleIncident"/>
+    <Toolbar/>
+    <PanelRef
+      def="ClaimSnapshotVehicleIncident700DV(Claim, IncidentParam as snapshot.v700.VehicleIncident)"/>
+  </Screen>
+</PCF>

@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <Screen
+    id="ClaimSnapshotExposuresScreen"
+    mode="800">
+    <Require
+      name="Claim"
+      type="Claim"/>
+    <Require
+      name="SnapshotParam"
+      type="Object"/>
+    <Toolbar/>
+    <ListDetailPanel
+      selectionName="SelectedExposure"
+      selectionType="snapshot.v800.Exposure">
+      <ListViewPanel
+        id="ClaimSnapshotExposuresLV">
+        <RowIterator
+          editable="false"
+          elementName="Exposure"
+          value="(SnapshotParam as snapshot.v800.Claim).Exposures as snapshot.v800.Exposure[]">
+          <Row>
+            <Cell
+              id="Number"
+              label="displaykey.Web.ClaimSnapshotExposuresScreen.Number"
+              sortOrder="1"
+              value="Exposure.ClaimOrder"/>
+            <Cell
+              id="Type"
+              label="displaykey.Web.ClaimSnapshotExposuresScreen.Type"
+              value="Exposure.ExposureType"/>
+            <Cell
+              id="Coverage"
+              label="displaykey.Web.ClaimSnapshotExposuresScreen.Coverage"
+              value="Exposure.PrimaryCoverage"/>
+            <Cell
+              id="Claimant"
+              label="displaykey.Web.ClaimSnapshotExposuresScreen.Claimant"
+              value="util.Snapshot.renderValue(Exposure.Claimant)"/>
+            <!-- <Cell
+              id="Reserves"
+              label="displaykey.Web.ClaimSnapshotExposuresScreen.Reserves"
+              value="Exposure.ExposureRpt.RemainingReserves"/> -->
+            <!-- <Cell
+              id="FuturePayments"
+              label="displaykey.Web.ClaimSnapshotExposuresScreen.FuturePayments"
+              value="Exposure.ExposureRpt.FuturePayments"/> -->
+            <!-- <Cell
+              id="TotalPayments"
+              label="displaykey.Web.ClaimSnapshotExposuresScreen.TotalPayments"
+              value="Exposure.ExposureRpt.TotalPayments"/> -->
+          </Row>
+        </RowIterator>
+      </ListViewPanel>
+      <CardViewPanel>
+        <Card
+          id="ClaimSnapshotExposuresCard"
+          title="displaykey.Web.ClaimSnapshotExposureDV.CardName">
+          <PanelRef
+            def="ClaimSnapshotExposure800DV(Claim, SelectedExposure)"
+            mode="SelectedExposure.ExposureType.Code"/>
+        </Card>
+        <Card
+          id="WageBenefits"
+          title="displaykey.Web.ClaimSnapshotExposure.WageBenefits.CardName"
+          visible="SelectedExposure.ExposureType.Code == &quot;PIPDamages&quot;">
+          <PanelRef
+            def="ClaimSnapshotExposureWageBenefits800DV(SelectedExposure)"/>
+        </Card>
+        <Card
+          id="ReplacementServices"
+          title="displaykey.Web.ClaimSnapshotExposure.ReplacementServices.CardName"
+          visible="SelectedExposure.ExposureType.Code == &quot;PIPDamages&quot;">
+          <PanelRef
+            def="ClaimSnapshotExposureReplacementServices800DV(SelectedExposure)"
+            mode="ClaimSnapshotExposure800DV"/>
+        </Card>
+        <Card
+          id="VocationalBenefits"
+          title="displaykey.Web.ClaimSnapshotExposure.VocationalBenefits.CardName"
+          visible="SelectedExposure.ExposureType.Code == &quot;PIPDamages&quot;">
+          <PanelRef
+            def="ClaimSnapshotExposuresVocationalBenefits800DV(SelectedExposure)"/>
+        </Card>
+        <Card
+          id="DeathBenefits"
+          title="displaykey.Web.ClaimSnapshotExposure.DeathBenefits.CardName"
+          visible="SelectedExposure.ExposureType.Code == &quot;PIPDamages&quot;">
+          <PanelRef
+            def="ClaimSnapshotExposureDeathBenefits800DV(SelectedExposure)"/>
+        </Card>
+      </CardViewPanel>
+    </ListDetailPanel>
+  </Screen>
+</PCF>

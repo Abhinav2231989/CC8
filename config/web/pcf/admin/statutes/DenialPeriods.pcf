@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Page
+    canEdit="perm.System.wcrefmanage"
+    canVisit="perm.System.wcrefview"
+    id="DenialPeriods"
+    title="displaykey.Web.Admin.DenialPeriods">
+    <LocationEntryPoint
+      signature="DenialPeriods()"/>
+    <Variable
+      initialValue="gw.api.database.Query.make(entity.WCDenialPeriod).select()"
+      name="WCDenialPeriods"
+      type="WCDenialPeriodQuery"/>
+    <Screen
+      id="DenialPeriodsScreen">
+      <TitleBar
+        appendListViewPaging="true"
+        title="displaykey.Web.Admin.DenialPeriods"/>
+      <Toolbar
+        visible="true">
+        <ToolbarButton
+          action="DenialPeriodPopup.push()"
+          id="CustomAdd"
+          label="displaykey.Button.Add"/>
+        <IteratorButtons
+          addVisible="false"
+          hideIfReadOnly="false"
+          iterator="DenialPeriodsLV.DenialPeriodsLV"
+          removeVisible="true"/>
+      </Toolbar>
+      <PanelRef
+        def="DenialPeriodsLV(WCDenialPeriods)"/>
+    </Screen>
+  </Page>
+</PCF>

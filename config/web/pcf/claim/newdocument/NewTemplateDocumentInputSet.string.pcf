@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <InputSet
+    id="NewTemplateDocumentInputSet"
+    mode="string">
+    <Require
+      name="DocumentCreationInfo"
+      type="gw.document.DocumentCreationInfo"/>
+    <Require
+      name="Document"
+      type="Document"/>
+    <Require
+      name="Claim"
+      type="Claim"/>
+    <Require
+      name="dynamicWidgetInfo"
+      type="gw.document.DocumentCreationInfo.DynamicWidgetInfo"/>
+    <TextInput
+      editable="true"
+      id="DynamicInput"
+      label="dynamicWidgetInfo.DisplayName"
+      required="!dynamicWidgetInfo.ShowNoneSelected"
+      value="DocumentCreationInfo.ContextObjectValueMap[dynamicWidgetInfo.Name]"
+      visible="true"/>
+  </InputSet>
+</PCF>

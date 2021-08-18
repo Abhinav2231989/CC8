@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <!-- This file automatically generated from nvv_financials.xml -->
+  <DetailViewPanel
+          id="NewPaymentInstructionsDV"
+    mode="single">
+    <Require
+      name="Check"
+      type="Check"/>
+    <Require
+      name="Wizard"
+      type="financials.CheckWizardInfo"/>
+    <InputColumn>
+      <InputSetRef
+        def="CheckWizardCheckSummaryInputSet(Check, Wizard)"/>
+      <InputDivider/>
+      <InputSetRef
+        def="ServiceRequestInvoiceInputSet(Wizard, false)"
+        mode="Wizard.Check.ServiceRequestInvoices.Count == 1 ? &quot;single&quot; : &quot;multiple&quot;"
+        visible="Wizard.Check.LinkedToServiceRequests"/>
+      <Label
+        label="displaykey.NVV.Financials.NewPaymentInstructionsSingle.Check.Instructions"/>
+      <TypeKeyInput
+        filter="VALUE !=  PaymentMethod.TC_MANUAL"
+        id="PaymentMethod"
+        label="displaykey.NVV.Financials.NewPaymentInstructionsSingle.Check.PaymentMethod"
+        value="Check.PaymentMethod"/>
+      <TypeKeyInput
+        editable="true"
+        id="CheckBatching"
+        label="displaykey.NVV.Financials.NewPaymentInstructionsSingle.Check.CheckBatching"
+        value="Check.CheckBatching"/>
+      <DateInput
+        editable="true"
+        id="ScheduledSendDate"
+        label="displaykey.NVV.Financials.NewPaymentInstructionsSingle.Check.ScheduledSendDate"
+        validationExpression="Check.New and Check.ScheduledSendDate.before(DateTime.Today) ? displaykey.Java.Validation.Date.ForbidPast : null"
+        value="Check.ScheduledSendDate"/>
+      <TypeKeyInput
+        editable="true"
+        id="CheckInstructions"
+        label="displaykey.NVV.Financials.NewPaymentInstructionsSingle.Check.CheckInstructions"
+        value="Check.CheckInstructions"/>
+    </InputColumn>
+  </DetailViewPanel>
+</PCF>

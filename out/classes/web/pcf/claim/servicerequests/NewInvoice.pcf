@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Page
+    afterCancel="pcf.ClaimServiceRequests.go(serviceRequest.Claim, serviceRequest)"
+    afterCommit="pcf.ClaimServiceRequests.go(serviceRequest.Claim, serviceRequest, invoice)"
+    beforeCommit="finishSetup()"
+    canEdit="true"
+    id="NewInvoice"
+    parent="Claim(serviceRequest.Claim)"
+    startInEditMode="true"
+    title="displaykey.Web.ServiceRequest.StateTransition.AddInvoicePopup.Title">
+    <LocationEntryPoint
+      signature="NewInvoice(serviceRequest: ServiceRequest)"/>
+    <Variable
+      initialValue="initializeInvoice()"
+      name="invoice"
+      type="ServiceRequestInvoice"/>
+    <Variable
+      name="serviceRequest"
+      type="ServiceRequest"/>
+    <Screen>
+      <Toolbar
+        visible="true">
+        <EditButtons
+          showUpdateConfirmMessage="false"/>
+      </Toolbar>
+      <PanelRef
+        def="StatementDV(invoice, null, true)"
+        mode="&quot;invoice&quot;"/>
+      <PanelRef
+        def="StatementDocumentsLV(invoice, true)"
+        visible="true">
+        <TitleBar
+          title="displaykey.Web.ServiceRequest.Invoice.Documents"/>
+        <Toolbar>
+          <PickerToolbarButton
+            action="PickExistingDocumentPopup.push(serviceRequest.Claim)"
+            id="Link"
+            label="displaykey.Web.ServiceRequest.Statement.LinkDocument"
+            onPick="invoice.linkDocumentForUI(PickedValue, false)"
+            visible="perm.System.viewdocs"/>
+          <ToolbarButton
+            action="AttachStatementDocumentPopup.push(invoice)"
+            id="AttachDocument"
+            label="displaykey.Web.ServiceRequest.Statement.AttachDocument"/>
+        </Toolbar>
+      </PanelRef>
+    </Screen>
+    <Code><![CDATA[function initializeInvoice() : ServiceRequestInvoice{
+  var statement = new ServiceRequestInvoice()
+  statement.ServiceRequest = serviceRequest
+  return statement
+}
+
+function finishSetup() {
+  // Validate at least one document is attached to the Invoice
+  if (invoice.Documents.Empty) {
+    throw new gw.api.util.DisplayableException(displaykey.Web.ServiceRequest.Invoice.MissingInvoiceDocuments)
+  }
+  invoice.finishSetup(false)
+}]]></Code>
+  </Page>
+</PCF>

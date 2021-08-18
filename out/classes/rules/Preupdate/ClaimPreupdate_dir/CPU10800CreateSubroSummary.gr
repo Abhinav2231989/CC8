@@ -1,0 +1,22 @@
+package rules.Preupdate.ClaimPreupdate_dir
+
+@gw.rules.RuleName("CPU10800 - Create Subro Summary")
+internal class CPU10800CreateSubroSummary {
+  static function doCondition(claim : entity.Claim) : boolean {
+    
+/*start00rule*/
+return claim.SubrogationSummary == null and claim.ActivateSubroModule()
+
+/*end00rule*/
+
+  }
+
+  static function doAction(claim : entity.Claim, actions : gw.rules.Action) {
+
+/*start00rule*/
+claim.createSubrogationSummaryIdempotently()
+
+/*end00rule*/
+
+  }
+}

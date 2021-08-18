@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <PanelSet
+    id="ClaimSnapshotIncidentRelatedExposuresPanelSet"
+    mode="800">
+    <Require
+      name="claim"
+      type="Claim"/>
+    <Require
+      name="snapshot"
+      type="Object"/>
+    <PanelRef>
+      <TitleBar
+        title="displaykey.Web.ClaimSnapshot.ClaimSnapshotIncidentRelatedExposures.RelatedExposures"/>
+      <Toolbar/>
+      <ListViewPanel>
+        <RowIterator
+          editable="false"
+          elementName="exposure"
+          value="(snapshot as snapshot.v800.Claim).Exposures as snapshot.v800.Exposure[]">
+          <Row>
+            <Cell
+              id="ClaimOrder"
+              label="displaykey.Web.ClaimSnapshot.ClaimSnapshotIncidentRelatedExposures.ClaimOrder"
+              sortOrder="1"
+              value="exposure.ClaimOrder"/>
+            <FormatCell
+              id="Overview"
+              label="displaykey.Web.ClaimSnapshot.ClaimSnapshotIncidentRelatedExposures.Exposure">
+              <ContentInput
+                id="Coverage">
+                <Link
+                  id="CoverageLink"
+                  label="exposure.PrimaryCoverage"/>
+              </ContentInput>
+              <TextInput
+                id="Assignee"
+                value="exposure.AssigneeDisplayString"/>
+            </FormatCell>
+            <FormatCell
+              id="Financials"
+              label="displaykey.Web.ClaimSnapshot.ClaimSnapshotIncidentRelatedExposures.Financials">
+              <TextInput
+                id="Paid"
+                label="displaykey.Web.IncidentExposures.Paid"
+                value="(exposure.ExposureRpt as snapshot.v800.ExposureRpt).TotalPayments"
+                visible="perm.Claim.viewpayments(claim)"/>
+              <TextInput
+                id="RemainingReserves"
+                label="displaykey.Web.IncidentExposures.RemainingReserves"
+                value="(exposure.ExposureRpt as snapshot.v800.ExposureRpt).RemainingReserves"
+                visible="perm.Claim.viewreserves(claim)"/>
+            </FormatCell>
+          </Row>
+        </RowIterator>
+      </ListViewPanel>
+    </PanelRef>
+  </PanelSet>
+</PCF>

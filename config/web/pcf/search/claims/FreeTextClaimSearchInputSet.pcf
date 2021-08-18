@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <InputSet
+    id="FreeTextClaimSearchInputSet">
+    <Require
+      name="ClaimSearchCriteria"
+      type="ClaimSearchCriteria"/>
+    <Variable
+      name="searchType"
+      type="String"/>
+    <Label
+      label="displaykey.NVV.Search.FreeTextSearchParameters"/>
+    <InputDivider/>
+    <TypeKeyInput
+      editable="true"
+      id="Role"
+      label="displaykey.JSP.ClaimSearch.Claims.Role"
+      required="true"
+      value="ClaimSearchCriteria.FreeTextNameSearchType"/>
+    <TextInput
+      editable="true"
+      id="FullName"
+      label="displaykey.LV.Claim.ClaimSearchResults.Claims.FullName"
+      value="ClaimSearchCriteria.NameCriteria.Name"/>
+    <Input
+      editable="true"
+      id="Phone"
+      label="displaykey.JSP.ClaimSearch.Search.Phone"
+      requestValidationExpression="return gw.api.util.PhoneUtil.isViableNumberWithExtension(VALUE) ? null : displaykey.JSP.ClaimSearch.Search.Phone.Invalid(VALUE)"
+      required="false"
+      value="ClaimSearchCriteria.NameCriteria.Phone"/>
+    <Input
+      editable="true"
+      id="Address"
+      label="displaykey.JSP.ClaimSearch.Claims.Address"
+      required="false"
+      value="ClaimSearchCriteria.AddressCriteria.AddressLine1"/>
+    <Input
+      editable="true"
+      id="City"
+      label="displaykey.JSP.ClaimSearch.Claims.City"
+      required="false"
+      value="ClaimSearchCriteria.AddressCriteria.City"/>
+  </InputSet>
+</PCF>

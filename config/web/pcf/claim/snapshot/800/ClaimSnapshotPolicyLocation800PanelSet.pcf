@@ -1,0 +1,235 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <PanelSet
+    id="ClaimSnapshotPolicyLocation800PanelSet">
+    <Require
+      name="Claim"
+      type="Claim"/>
+    <Require
+      name="PolicyLocation"
+      type="snapshot.v800.PolicyLocation"/>
+    <ListDetailPanel
+      selectionName="RU"
+      selectionType="snapshot.v800.LocationBasedRU">
+      <PanelRef>
+        <Toolbar/>
+        <ListViewPanel
+          id="RUSnapshotLV">
+          <RowIterator
+            editable="false"
+            elementName="RU"
+            hasCheckBoxes="true"
+            hideCheckBoxesIfReadOnly="true"
+            id="LocationBasedRUIterator"
+            value="PolicyLocation.LocationBasedRisks">
+            <Row>
+              <Cell
+                id="RUNumber"
+                label="displaykey.NVV.Policy.LocationDetail.Property.Risks.Number"
+                value="RU.RUNumber"/>
+              <Cell
+                id="RUDescription"
+                label="displaykey.NVV.Policy.LocationDetail.Property.Risks.Description"
+                value="RU.Description"/>
+              <Cell
+                id="RUType"
+                label="displaykey.NVV.Policy.LocationDetail.Property.Risks.Type"
+                value="RU.Subtype"/>
+              <Cell
+                id="BuildingNumber"
+                label="displaykey.NVV.Policy.LocationDetail.Property.Building.Number"
+                value="RU.Building.BuildingNumber"
+                visible="Claim.Policy.PolicyType != PolicyType.TC_WORKERSCOMP"/>
+              <Cell
+                id="Lienholders"
+                label="displaykey.LV.Policy.Locations.Lienholders"
+                value="util.Snapshot.renderValue(getRULienHolders(RU))"
+                visible="Claim.Policy.PolicyType != PolicyType.TC_WORKERSCOMP"/>
+            </Row>
+          </RowIterator>
+        </ListViewPanel>
+      </PanelRef>
+      <CardViewPanel>
+        <Card
+          id="RiskDetail"
+          title="displaykey.NVV.Policy.LocationDetail.Property.Risks.Details"
+          visible="true">
+          <DetailViewPanel
+            id="RUSnapshotDV">
+            <InputColumn>
+              <Input
+                id="Number"
+                label="displaykey.Web.ClaimSnapshotPolicyLocationDV.Number"
+                value="RU.RUNumber"/>
+              <Input
+                id="OtherRiskType"
+                label="displaykey.Web.ClaimSnapshotPolicyLocationDV.OtherRiskType"
+                value="RU.OtherRiskType"
+                visible="(RU.Subtype as String).contains(typekey.RiskUnit.TC_LOCATIONMISCRU.DisplayName)"/>
+              <Input
+                id="Description"
+                label="displaykey.Web.ClaimSnapshotPolicyLocationDV.Description"
+                value="RU.Description"/>
+            </InputColumn>
+            <InputColumn>
+              <InputSet
+                visible="RU.Building != null and Claim.Policy.PolicyType != PolicyType.TC_WORKERSCOMP">
+                <Label
+                  label="displaykey.Web.ClaimSnapshotPolicyLocationDV.Building"/>
+                <Input
+                  id="BuildingNumber"
+                  label="displaykey.Web.ClaimSnapshotPolicyLocationDV.Building.Number"
+                  value="RU.Building.BuildingNumber"/>
+                <Input
+                  id="Notes"
+                  label="displaykey.Web.ClaimSnapshotPolicyLocationDV.Building.Notes"
+                  value="RU.Building.Notes"/>
+              </InputSet>
+              <InputDivider
+                visible="RU.Building != null"/>
+              <ListViewInput
+                boldLabel="true"
+                label="displaykey.Web.ClaimSnapshotPolicyLocationDV.Lienholders"
+                labelAbove="true"
+                visible="Claim.Policy.PolicyType != PolicyType.TC_WORKERSCOMP">
+                <Toolbar/>
+                <ListViewPanel
+                  id="LienholdersLV">
+                  <RowIterator
+                    editable="false"
+                    elementName="PropertyOwner"
+                    type="snapshot.v800.PropertyOwner"
+                    value="RU.Lienholders">
+                    <Row>
+                      <Cell
+                        id="Lienholder"
+                        label="displaykey.Web.ClaimSnapshotPolicyLocationDV.Lienholder"
+                        value="util.Snapshot.renderValue(PropertyOwner.Lienholder)"/>
+                      <Cell
+                        id="OwnerType"
+                        label="displaykey.Web.ClaimSnapshotPolicyLocationDV.OwnerType"
+                        value="util.Snapshot.renderValue(PropertyOwner.OwnerType)"/>
+                    </Row>
+                  </RowIterator>
+                </ListViewPanel>
+              </ListViewInput>
+              <InputGroup
+                allowToggle="false"
+                childrenVisible="RU.ClassCode != null"
+                id="ClassCodeInputGroup"
+                label="displaykey.NVV.Policy.WCLocationDetail.Property.ClassCodes"
+                visible="Claim.Policy.PolicyType == PolicyType.TC_WORKERSCOMP">
+                <InputSet
+                  id="ClassCodeInputSet">
+                  <Input
+                    id="Code"
+                    label="displaykey.LV.Policy.EditableClassCodes.ClassCode"
+                    value="RU.ClassCode.Code"/>
+                  <TextAreaInput
+                    id="Description"
+                    label="displaykey.LV.Policy.EditableClassCodes.Description"
+                    numRows="4"
+                    value="RU.ClassCode.Description"/>
+                  <TextAreaInput
+                    id="Comments"
+                    label="displaykey.LV.Policy.EditableClassCodes.Comments"
+                    numRows="4"
+                    value="RU.ClassCode.Comments"/>
+                </InputSet>
+              </InputGroup>
+            </InputColumn>
+          </DetailViewPanel>
+        </Card>
+        <Card
+          id="LocationCoverages"
+          title="displaykey.NVV.Policy.PolicyVehicleDetail.Vehicle.Coverages"
+          visible="true">
+          <ListDetailPanel
+            id="ClaimSnapshotPolicyLocation800LDP"
+            selectionName="SelectedCoverage"
+            selectionType="snapshot.v800.Coverage">
+            <PanelRef>
+              <TitleBar
+                title="displaykey.Web.ClaimSnapshotPolicyLocationDV.Coverages"/>
+              <Toolbar/>
+              <ListViewPanel
+                id="CoveragesLV">
+                <RowIterator
+                  editable="false"
+                  elementName="PropertyCoverage"
+                  type="snapshot.v800.PropertyCoverage"
+                  value="RU.Coverages">
+                  <Row>
+                    <Cell
+                      id="CoverageType"
+                      label="displaykey.Web.ClaimSnapshotPolicyLocationDV.CoverageType"
+                      sortOrder="1"
+                      value="PropertyCoverage.Type"/>
+                    <Cell
+                      id="Currency"
+                      label="displaykey.Web.ClaimSnapshotPolicyLocationDV.Currency"
+                      sortOrder="1"
+                      value="PropertyCoverage.Currency"
+                      visible="gw.api.util.CurrencyUtil.MultiCurrencyMode"/>
+                    <Cell
+                      formatType="currency"
+                      id="Deductible"
+                      label="displaykey.Web.ClaimSnapshotPolicyLocationDV.Deductible"
+                      value="PropertyCoverage.Deductible"/>
+                    <Cell
+                      formatType="currency"
+                      id="ExposureLimit"
+                      label="displaykey.Web.ClaimSnapshotPolicyLocationDV.ExposureLimit"
+                      value="PropertyCoverage.ExposureLimit"/>
+                    <Cell
+                      formatType="currency"
+                      id="IncidentLimit"
+                      label="displaykey.Web.ClaimSnapshotPolicyLocationDV.IncidentLimit"
+                      value="PropertyCoverage.IncidentLimit"/>
+                    <Cell
+                      id="Coinsurance"
+                      label="displaykey.Web.ClaimSnapshotPolicyLocationDV.Coinsurance"
+                      value="PropertyCoverage.Coinsurance"/>
+                    <Cell
+                      id="CoverageBasis"
+                      label="displaykey.Web.ClaimSnapshotPolicyLocationDV.CoverageBasis"
+                      value="PropertyCoverage.CoverageBasis"/>
+                    <Cell
+                      id="LimitsIndicator"
+                      label="displaykey.Web.ClaimSnapshotPolicyLocationDV.LimitsIndicator"
+                      value="PropertyCoverage.LimitsIndicator"/>
+                    <Cell
+                      id="CoverageNotes"
+                      label="displaykey.Web.ClaimSnapshotPolicyLocationDV.CoverageNotes"
+                      value="PropertyCoverage.Notes"/>
+                  </Row>
+                </RowIterator>
+              </ListViewPanel>
+            </PanelRef>
+            <PanelRef
+              def="ClaimSnapshotPolicyCovTermsCV(SelectedCoverage)"
+              mode="800"/>
+          </ListDetailPanel>
+        </Card>
+      </CardViewPanel>
+    </ListDetailPanel>
+    <Code><![CDATA[function getRULienHolders(ru : snapshot.v800.LocationBasedRU) : snapshot.v800.PropertyOwner[] {
+  var list = new java.util.ArrayList<snapshot.v800.PropertyOwner>()
+  for (lienHolder in (ru.Lienholders as snapshot.v800.PropertyOwner[])) {
+    list.add(lienHolder)
+  }
+  var result = new snapshot.v800.PropertyOwner[list.size()]
+  return list.toArray(result)
+}
+
+    function getClassCodeAsArray(riskUnit : snapshot.v800.LocationBasedRU) : snapshot.v800.ClassCode[] {
+      if(riskUnit.ClassCode != null) {
+        return new snapshot.v800.ClassCode[] {riskUnit.ClassCode}
+      } else {
+        return new snapshot.v800.ClassCode[] { }
+      }
+    }]]></Code>
+  </PanelSet>
+</PCF>

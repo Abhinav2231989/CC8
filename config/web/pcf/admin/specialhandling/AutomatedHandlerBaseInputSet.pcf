@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <InputSet
+    id="AutomatedHandlerBaseInputSet">
+    <Require
+      name="automatedHandler"
+      type="AutomatedHandler"/>
+    <Input
+      id="AutomatedHandlerType"
+      label="displaykey.Web.Admin.AutomatedHandlerBase.Category"
+      required="true"
+      value="displaykey.Web.Admin.AutomatedHandlerBase.Category[(typeof automatedHandler.Trigger).DisplayName]"/>
+    <TypeKeyInput
+      editable="true"
+      hideIfReadOnly="true"
+      id="AutomatedHandlerPolicyType"
+      label="displaykey.Web.Admin.AutomatedHandlerBase.PolicyType"
+      noneSelectedLabel="displaykey.Web.Admin.AutomatedHandlerBase.AllPolicyTypes"
+      required="false"
+      value="automatedHandler.PolicyType"/>
+    <TextInput
+      editable="true"
+      hideIfEditable="true"
+      id="AutomatedHandlerPolicyTypeReadOnly"
+      label="displaykey.Web.Admin.AutomatedHandlerBase.PolicyType"
+      outputConversion="if (null == VALUE) {return displaykey.Web.Admin.AutomatedHandlerBase.AllPolicyTypes} else {return VALUE.DisplayName}"
+      required="false"
+      value="automatedHandler.PolicyType"/>
+  </InputSet>
+</PCF>

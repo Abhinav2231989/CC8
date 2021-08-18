@@ -1,0 +1,24 @@
+package rules.Validation.ClaimValidationRules_dir.CLV09000ISOValidation_dir
+
+@gw.rules.RuleName("CLV09800 - State")
+internal class CLV09800State {
+  static function doCondition(claim : entity.Claim) : boolean {
+    
+/*start00rule*/
+return claim.LossLocation.State == null
+and (claim.LossLocation.Country == null 
+     or claim.LossLocation.Country == "US"  
+     or claim.LossLocation.Country == "CA")
+/*end00rule*/
+
+  }
+
+  static function doAction(claim : entity.Claim, actions : gw.rules.Action) {
+
+/*start00rule*/
+claim.rejectField("LossLocation.State", "iso",
+                  displaykey.Rules.Validation.Claim.LossLocationStateNotNull, null, null)
+/*end00rule*/
+
+  }
+}

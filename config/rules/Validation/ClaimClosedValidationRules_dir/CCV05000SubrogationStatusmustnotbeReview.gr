@@ -1,0 +1,21 @@
+package rules.Validation.ClaimClosedValidationRules_dir
+
+@gw.rules.RuleName("CCV05000 - Subrogation Status must not be Review")
+internal class CCV05000SubrogationStatusmustnotbeReview {
+  static function doCondition(claim : entity.Claim) : boolean {
+    
+/*start00rule*/
+return claim.SubrogationStatus == "review"
+/*end00rule*/
+
+  }
+
+  static function doAction(claim : entity.Claim, actions : gw.rules.Action) {
+
+/*start00rule*/
+var ruleName = gw.api.util.StringUtil.substring(actions.getRule() as java.lang.String, 0, 8)
+claim.reject("newloss",displaykey.Subrogation.Validation.ClaimClosed.OtherSubroStatus(ruleName), null, null)
+/*end00rule*/
+
+  }
+}

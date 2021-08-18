@@ -1,0 +1,2 @@
+<?xml version="1.0"?>
+<viewEntity xmlns="http://guidewire.com/datamodel" desc="Vacation Exposure view entity." entity="ExposureVacationView" exportable="false" subpackage="exposure" primaryEntity="Exposure" supertypeEntity="ExposureAssignmentView"/>

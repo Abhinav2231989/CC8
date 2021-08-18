@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<!-- CCAssignable Delegate - This delegate contains all the methods that Assignable should have in CC. -->
+<delegate xmlns="http://guidewire.com/datamodel" subpackage="assignment" name="CCAssignable">
+    <implementsEntity name="Assignable"/>
+</delegate>

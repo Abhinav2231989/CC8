@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><nonPersistentEntity xmlns="http://guidewire.com/datamodel" desc="Defines a set of ClaimUserModels" entity="ClaimUserModelSet" subpackage="claim">
+  <fulldescription>
+      Contains an array of ClaimUserModel entities.  Each array member represents a single user-to-group pair on the claim.
+      The system does not store ClaimUserModelSet entities.
+    
+    </fulldescription>
+  <foreignkey columnName="ClaimID" fkentity="Claim" name="Claim" nullok="true"/>
+  <array arrayentity="ClaimUserModel" name="ClaimUserModels"/>
+</nonPersistentEntity>

@@ -1,0 +1,3 @@
+<?xml version="1.0"?>
+<!-- SuitType -->
+<typelist xmlns="http://guidewire.com/typelists" desc="Legal suit type." final="false" subpackage="matter" name="SuitType"/>

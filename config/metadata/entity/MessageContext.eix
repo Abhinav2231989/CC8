@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<internalExtension xmlns="http://guidewire.com/datamodel" entityName="MessageContext">
+  <description>
+        Non-persistent entity which provides convenience methods for creating integration {@link Message} entities.
+        &lt;code&gt;MessageContext&lt;/code&gt; also provides additional information for use by the event fired rules when constructing a message.
+      
+    </description>
+</internalExtension>

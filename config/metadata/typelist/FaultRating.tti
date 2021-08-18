@@ -1,0 +1,2 @@
+<?xml version="1.0"?>
+<typelist xmlns="http://guidewire.com/typelists" desc="Who is at fault, for example insured, third party" final="false" subpackage="claim" name="FaultRating"/>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <InputSet
+    id="ExposureWorkloadInputSet"
+    visible="gw.api.system.CCConfigParameters.WeightedAssignmentEnabled.Value and perm.System.wwlview">
+    <Require
+      name="exposure"
+      type="Exposure"/>
+    <Variable
+      initialValue="exposure.findMatchingClassification()"
+      name="classification"
+      recalculateOnRefresh="true"/>
+    <InputDivider/>
+    <Label
+      label="displaykey.NVV.Exposure.SubView.Workload"/>
+    <Input
+      id="Classification"
+      label="displaykey.NVV.Exposure.SubView.Workload.Classification"
+      value="classification"
+      visible="not exposure.Closed"/>
+    <Input
+      id="ClassificationWorkload"
+      label="displaykey.NVV.Exposure.SubView.Workload.ClassificationWeight"
+      value="classification.Weight"
+      visible="not exposure.Closed"/>
+    <Input
+      editable="perm.System.wwlmanage"
+      id="SupplementalWorkloadWeight"
+      label="displaykey.NVV.Exposure.SubView.Workload.SupplementalWeight"
+      value="exposure.SupplementalWorkloadWeight"/>
+    <Input
+      id="TotalWorkloadWeight"
+      label="displaykey.NVV.Exposure.SubView.Workload.TotalWeight"
+      value="exposure.WorkloadWeight"/>
+  </InputSet>
+</PCF>

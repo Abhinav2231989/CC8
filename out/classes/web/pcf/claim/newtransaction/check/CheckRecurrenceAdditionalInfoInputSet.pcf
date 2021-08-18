@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <InputSet
+    id="CheckRecurrenceAdditionalInfoInputSet">
+    <Require
+      name="recurrenceHelper"
+      type="gw.financials.CheckRecurrenceUIHelper"/>
+    <Input
+      editable="true"
+      id="TotalNumOfChecks"
+      label="displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.AdditionalInfo.NumChecks"
+      numCols="3"
+      required="true"
+      validationExpression="if(recurrenceHelper.CheckRecurrence.NumChecks &lt; 2) {return displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.AdditionalInfo.NumChecks.LessThanTwo}"
+      value="recurrenceHelper.CheckRecurrence.NumChecks">
+      <PostOnChange/>
+    </Input>
+    <Input
+      formatType="currency"
+      id="TotalRecurrenceAmount"
+      label="displaykey.Wizard.NewCheckWizard.CheckInstructions.Recurrence.AdditionalInfo.RecurrenceAmt"
+      value="recurrenceHelper.TotalAmount"/>
+  </InputSet>
+</PCF>

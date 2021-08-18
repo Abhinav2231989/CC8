@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><nonPersistentEntity xmlns="http://guidewire.com/datamodel" entity="ActivitySubjectSearchCriteria" extendable="true" subpackage="activity">
+  <fulldescription>&lt;p&gt;A component of ActivitySearchCriteria, which encapsulates the search criteria for the activity subject line.&lt;/p&gt;
+    </fulldescription>
+  <typekey name="SubjectSearchType" nullok="true" typelist="ActivitySubjectSearchType"/>
+  <column name="Subject" nullok="true" type="shorttext"/>
+  <foreignkey columnName="PatternID" desc="Activity pattern to match against" fkentity="ActivityPattern" name="Pattern" nullok="true"/>
+</nonPersistentEntity>

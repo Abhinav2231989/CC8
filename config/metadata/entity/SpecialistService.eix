@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<internalExtension xmlns="http://guidewire.com/datamodel"
+                   entityName="SpecialistService">
+  <!-- ClaimCenter-specific user settings -->
+  <array name="CompatibleIncidentTypes"
+         arrayentity="SpecialistServiceCompatibleIncidentType"
+         desc="The SpecialistServiceCompatibleIncidentTypes indicating the Incident types with which this service is compatible."
+         cascadeDelete="true" />
+  <array name="CompatibleKinds"
+         arrayentity="SpecialistServiceCompatibleServiceRequestKind"
+         desc="The SpecialistServiceCompatibleServiceRequestKinds indicating the Kinds with which this service is compatible."
+         cascadeDelete="true" />
+  <dbcheckbuilder className="com.guidewire.cc.domain.vendormanagement.dbchecks.SpecialistServiceDBCheckBuilder"/>
+</internalExtension>

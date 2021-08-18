@@ -1,0 +1,27 @@
+package rules.Validation.ExposureValidationRules_dir
+
+@gw.rules.RuleDisabled
+@gw.rules.RuleName("EXV04000 - Coverage not null")
+internal class EXV04000Coveragenotnull {
+  static function doCondition(exposure : entity.Exposure) : boolean {
+    
+/*start00rule*/
+return exposure.Claim.Policy.PolicyType == "WorkersComp"
+and exposure.Coverage == null
+
+/* Use this rule to restrict user from writing a check for Workers' Comp
+ * exposures that have no appropriate coverage in the policy.
+ */
+/*end00rule*/
+
+  }
+
+  static function doAction(exposure : entity.Exposure, actions : gw.rules.Action) {
+
+/*start00rule*/
+exposure.rejectField("Coverage", "payment", 
+                     displaykey.Rules.Validation.Exposure.SpecifyCoverage, null, null)
+/*end00rule*/
+
+  }
+}

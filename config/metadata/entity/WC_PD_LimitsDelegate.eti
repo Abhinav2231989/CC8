@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<delegate
+  xmlns="http://guidewire.com/datamodel"
+  name="WC_PD_LimitsDelegate"
+  subpackage="exposure">
+  <typekey
+    desc="Jurisdiction State. The Jurisdiction must be associated with JurisdictionType.TC_INSURANCE."
+    name="JurisdictionState"
+    nullok="true"
+    typelist="Jurisdiction"/>
+  <column
+    desc="PD Benefit Effective Date"
+    name="PD_BenefitStartDate"
+    nullok="true"
+    type="datetime"/>
+  <column
+    desc="PD Benefit Expiration Date"
+    name="PD_BenefitEndDate"
+    nullok="true"
+    type="datetime"/>
+  <column
+    desc="Additional comments."
+    name="RateComments"
+    nullok="true"
+    type="mediumtext"/>
+</delegate>

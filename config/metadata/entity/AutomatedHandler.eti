@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<entity xmlns="http://guidewire.com/datamodel"
+        entity="AutomatedHandler"
+        subpackage="specialhandling"
+        table="automatedhandler"
+        type="retireable"
+        extendable="true"
+        final="false"
+        loadable="false"
+        admin="true"
+        abstract="true">
+    <fulldescription>
+        This entity is the superclass for the two types of Special Handling automated handlers, one for generating email notifications and one for generating activities.
+    </fulldescription>
+    <implementsInterface iface="gw.api.specialhandling.AutomatedHandlerMethods"
+                         impl="gw.specialhandling.AutomatedHandlerMethodsImpl"/>
+    <typekey name="PolicyType"
+             typelist="PolicyType"
+             nullok="true"
+             desc="If non-null, then this handler will only apply to Claims created for Policies that have this particular Policy Type"/>
+    <foreignkey fkentity="SpecialHandling"
+                name="SpecialHandling"
+                columnName="SpecialHandlingID"
+                nullok="false"
+                desc="The instance of Special Handling that owns this Automated Handler"/>
+</entity>

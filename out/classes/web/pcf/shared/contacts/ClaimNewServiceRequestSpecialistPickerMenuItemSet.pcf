@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="pcf.xsd">
+  <MenuItemSet
+    desc="A set of MenuItems for creating a new contact that can perform a service on a service request."
+    id="ClaimNewServiceRequestSpecialistPickerMenuItemSet">
+    <Require
+      name="requiredContactType"
+      type="Type"/>
+    <Require
+      name="parentContact"
+      type="Contact"/>
+    <Require
+      name="claim"
+      type="Claim"/>
+    <MenuItem
+      id="NewVendor"
+      label="displaykey.Web.NewContactMenu.NewVendor">
+      <MenuItem
+        action="NewContactPopup.push(typekey.Contact.TC_AUTOREPAIRSHOP, parentContact, claim)"
+        id="NewAutoRepairShop"
+        label="displaykey.Web.NewContactMenu.AutoRepairShop"/>
+      <MenuItem
+        action="NewContactPopup.push(typekey.Contact.TC_AUTOTOWINGAGCY, parentContact, claim)"
+        id="NewAutoTowingAgency"
+        label="displaykey.Web.NewContactMenu.AutoTowingAgcy"/>
+      <MenuItem
+        action="NewContactPopup.push(typekey.Contact.TC_DOCTOR, parentContact, claim)"
+        id="NewDoctor"
+        label="displaykey.Web.NewContactMenu.Doctor"/>
+      <MenuItem
+        action="NewContactPopup.push(typekey.Contact.TC_MEDICALCAREORG, parentContact, claim)"
+        id="NewMedicalCareOrg"
+        label="displaykey.Web.NewContactMenu.MedicalCareOrg"/>
+      <MenuItem
+        action="NewContactPopup.push(typekey.Contact.TC_COMPANYVENDOR, parentContact, claim)"
+        id="NewCompanyVendor"
+        label="displaykey.Web.NewContactMenu.CompanyVendor"/>
+      <MenuItem
+        action="NewContactPopup.push(typekey.Contact.TC_PERSONVENDOR, parentContact, claim)"
+        id="NewPersonVendor"
+        label="displaykey.Web.NewContactMenu.PersonVendor"/>
+    </MenuItem>
+    <MenuItem
+      id="NewLegal"
+      label="displaykey.Web.NewContactMenu.NewLegal">
+      <MenuItem
+        action="NewContactPopup.push(typekey.Contact.TC_ADJUDICATOR, parentContact, claim)"
+      id="NewAdjudicator"
+      label="displaykey.Web.NewContactMenu.Adjudicator"/>
+      <MenuItem
+        action="NewContactPopup.push(typekey.Contact.TC_ATTORNEY, parentContact, claim)"
+      id="NewAttorney"
+      label="displaykey.Web.NewContactMenu.Attorney"/>
+      <MenuItem
+        action="NewContactPopup.push(typekey.Contact.TC_LAWFIRM, parentContact, claim)"
+      id="NewLawFirm"
+      label="displaykey.Web.NewContactMenu.LawFirm"/>
+    </MenuItem>
+  </MenuItemSet>
+</PCF>

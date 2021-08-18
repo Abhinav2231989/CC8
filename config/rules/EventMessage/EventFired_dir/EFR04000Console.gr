@@ -1,0 +1,20 @@
+package rules.EventMessage.EventFired_dir
+
+@gw.rules.RuleName("EFR04000 - Console")
+internal class EFR04000Console {
+  static function doCondition(messageContext : entity.MessageContext) : boolean {
+    
+/*start00rule*/
+return messageContext.DestID == 68
+/*end00rule*/
+
+  }
+
+  static function doAction(messageContext : entity.MessageContext, actions : gw.rules.Action) {
+
+/*start00rule*/
+messageContext.createMessage(displaykey.Rules.EventFired(messageContext.EventName))
+/*end00rule*/
+
+  }
+}

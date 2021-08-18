@@ -1,0 +1,22 @@
+package rules.Validation.RIAgreementValidationRules_dir
+
+@gw.rules.RuleName("RIAV02000 - Unique Agreement Name")
+internal class RIAV02000UniqueAgreementName {
+  static function doCondition(rIAgreement : entity.RIAgreement) : boolean {
+    
+/*start00rule*/
+return rIAgreement.RIAgreementGroup != null and
+(rIAgreement.RIAgreementGroup.Agreements.countWhere(\ r -> r.matches(rIAgreement)) > 1)
+/*end00rule*/
+
+  }
+
+  static function doAction(rIAgreement : entity.RIAgreement, actions : gw.rules.Action) {
+
+/*start00rule*/
+rIAgreement.rejectField("AgreementName", "newloss", 
+  displaykey.Rules.Validation.RIAgreement.AgreementNameMustBeUnique, null, null)
+/*end00rule*/
+
+  }
+}

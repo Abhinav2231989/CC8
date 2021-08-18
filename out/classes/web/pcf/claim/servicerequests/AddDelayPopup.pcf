@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Popup
+    beforeCommit="serviceRequest.setExpectedCompletionDateAndRecordChange(newExpectedCompletionDate.moveToEndOfDay(), delayReason, false, isService, stateHandler)"
+    canEdit="true"
+    id="AddDelayPopup"
+    startInEditMode="true"
+    title="null">
+    <LocationEntryPoint
+      signature="AddDelayPopup(serviceRequest: ServiceRequest)"/>
+    <Variable
+      name="serviceRequest"
+      type="ServiceRequest"/>
+    <Variable
+      initialValue="serviceRequest.createStateHandler()"
+      name="stateHandler"
+      type="gw.vendormanagement.servicerequeststate.ServiceRequestStateHandler"/>
+    <Variable
+      initialValue="serviceRequest.nextExpectedCompletionDate(stateHandler)"
+      name="newExpectedCompletionDate"/>
+    <Variable
+      name="delayReason"
+      type="String"/>
+    <Variable
+      initialValue="serviceRequest.nextExpectedCompletionDate(stateHandler)"
+      name="originalExpectedCompletionDate"/>
+    <Variable
+      initialValue="serviceRequest.expectedServiceCompletionDateApplies(stateHandler)"
+      name="isService"/>
+    <Screen>
+      <TitleBar
+        title="displaykey.Web.ServiceRequest.StateTransition.AddDelayPopup.Title(isService ? displaykey.Web.ServiceRequest.ExpectedServiceCompletionDate : displaykey.Web.ServiceRequest.ExpectedQuoteCompletionDate)"/>
+      <Toolbar>
+        <EditButtons/>
+      </Toolbar>
+      <DetailViewPanel>
+        <InputColumn>
+          <DateInput
+            dateFormat="short"
+            editable="true"
+            id="ExpectedCompletionDate"
+            label="isService ? displaykey.Web.ServiceRequest.ExpectedServiceCompletionDate : displaykey.Web.ServiceRequest.ExpectedQuoteCompletionDate"
+            required="true"
+            validationExpression="validateDelayDate()"
+            value="newExpectedCompletionDate"/>
+          <TextAreaInput
+            editable="true"
+            id="ReasonForAddingDelay"
+            label="displaykey.Web.ServiceRequest.StateTransition.AddDelayPopup.ChangeDescription"
+            numRows="4"
+            value="delayReason"/>
+        </InputColumn>
+      </DetailViewPanel>
+    </Screen>
+    <Code><![CDATA[function validateDelayDate() : String {
+  if (newExpectedCompletionDate < gw.api.util.DateUtil.currentDate().trimToMidnight()) {
+    return displaykey.Web.ServiceRequest.DateInPast
+  } else if (newExpectedCompletionDate == originalExpectedCompletionDate) {
+    return displaykey.Web.ServiceRequest.StateTransition.AddDelayPopup.NoChangesError
+  } else {
+    return null
+  }
+}]]></Code>
+  </Popup>
+</PCF>

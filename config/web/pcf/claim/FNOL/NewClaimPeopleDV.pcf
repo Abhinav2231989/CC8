@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <!-- The next name value view controls screen 4 of the claim wizard where we enter the contacts for a claim.
+There is an outstanding reqques to differentiate these by business line.
+    This file automatically generated from nvv_claim.xml -->
+  <DetailViewPanel
+    id="NewClaimPeopleDV">
+    <Require
+      name="claim"
+      type="Claim"/>
+    <InputColumn>
+      <Label
+        label="displaykey.NVV.Claim.NewClaimPeople.Claim.ReportedBy"/>
+      <ClaimContactInput
+        claim="claim"
+        editable="true"
+        id="ReportedBy_Name"
+        label="displaykey.NVV.Claim.NewClaimPeople.Claim.ReportedBy.Name"
+        newContactMenu="ClaimNewPersonOnlyPickerMenuItemSet"
+        required="true"
+        value="claim.reporter"
+        valueRange="claim.RelatedPersonArray">
+        <PostOnChange
+          onChange="if (claim.reporter == claim.Insured) claim.ReportedByType = PersonRelationType.TC_SELF"
+          target="Claim_ReportedByType"/>
+      </ClaimContactInput>
+      <TypeKeyInput
+        editable="true"
+        id="Claim_ReportedByType"
+        label="displaykey.NVV.Claim.NewClaimPeople.Claim.ReportedByType"
+        required="true"
+        value="claim.ReportedByType"/>
+      <Input
+        id="ReportedBy_PrimaryPhone"
+        label="displaykey.NVV.Claim.NewClaimPeople.Claim.ReportedBy.WorkPhone"
+        value="claim.reporter.PrimaryPhoneValue"/>
+      <Input
+        id="ReportedBy_Address"
+        label="displaykey.NVV.Claim.NewClaimPeople.Claim.ReportedBy.Address"
+        value="claim.reporter.PrimaryAddressDisplayValue"/>
+      <InputDivider/>
+      <Label
+        label="displaykey.NVV.Claim.NewClaimPeople.Claim.MainContact"/>
+      <ClaimContactInput
+        claim="claim"
+        editable="true"
+        id="MainContact_Name"
+        label="displaykey.NVV.Claim.NewClaimPeople.Claim.MainContact.Name"
+        newContactMenu="ClaimNewPersonOnlyPickerMenuItemSet"
+        value="claim.maincontact"
+        valueRange="claim.RelatedPersonArray">
+        <PostOnChange
+          onChange="if (claim.maincontact == claim.Insured) claim.MainContactType = PersonRelationType.TC_SELF"
+          target="MainContact_Type"/>
+      </ClaimContactInput>
+      <HiddenInput
+        id="HiddenInsured"
+        inputConversion="tools.KeyEncoder.decodeFromString(VALUE)"
+        outputConversion="VALUE == null ? null : tools.KeyEncoder.encodeIdToString(VALUE)"
+        value="claim.Insured"/>
+      <TypeKeyInput
+        editable="true"
+        id="MainContact_Type"
+        label="displaykey.NVV.Claim.NewClaimPeople.Claim.MainContactType"
+        value="claim.MainContactType"/>
+      <Input
+        id="MainContact_PrimaryPhone"
+        label="displaykey.NVV.Claim.NewClaimPeople.Claim.MainContact.WorkPhone"
+        value="claim.maincontact.PrimaryPhoneValue"/>
+      <Input
+        id="MainContact_Address"
+        label="displaykey.NVV.Claim.NewClaimPeople.Claim.MainContact.Address"
+        value="claim.maincontact.PrimaryAddressDisplayValue"/>
+      <InputDivider/>
+      <Label
+        label="displaykey.NVV.Claim.NewClaimPeople.Policy.Insured"/>
+      <ClaimContactInput
+        claim="claim"
+        id="Insured_Name"
+        label="displaykey.NVV.Claim.NewClaimPeople.Policy.Insured.Name"
+        value="claim.Insured"
+        valueRange="claim.RelatedContacts">
+        <PostOnChange/>
+      </ClaimContactInput>
+      <Input
+        id="Insured_PrimaryPhone"
+        label="displaykey.NVV.Claim.NewClaimPeople.Policy.Insured.WorkPhone"
+        value="claim.Insured.PrimaryPhoneValue"/>
+      <Input
+        id="Insured_Address"
+        label="displaykey.NVV.Claim.NewClaimPeople.Policy.Insured.Address"
+        value="claim.Insured.PrimaryAddressDisplayValue"/>
+    </InputColumn>
+  </DetailViewPanel>
+</PCF>

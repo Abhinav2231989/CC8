@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><delegate xmlns="http://guidewire.com/datamodel" extendable="true" name="MoneyMetricLimitDelegate" subpackage="metric">
+  <fulldescription>Delegate used by money claim and exposure metric limits
+    </fulldescription>
+  <column desc="Money field to store the target value." name="MoneyTargetValue" nullok="true" type="currencyamount">
+    <columnParam name="currencyProperty" value="MoneyCurrency"/>
+  </column>
+  <column desc="Money field to store the yellow value." name="MoneyYellowValue" nullok="true" type="currencyamount">
+    <columnParam name="currencyProperty" value="MoneyCurrency"/>
+  </column>
+  <column desc="Money field to store the red value." name="MoneyRedValue" nullok="true" type="currencyamount">
+    <columnParam name="currencyProperty" value="MoneyCurrency"/>
+  </column>
+</delegate>

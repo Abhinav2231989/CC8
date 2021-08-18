@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!-- PolicyCoverage -->
+<subtype xmlns="http://guidewire.com/datamodel" desc="Coverage associated directly with a policy." entity="PolicyCoverage" final="false" subpackage="policy" supertype="Coverage">
+  <fulldescription>
+A &lt;code&gt;Coverage&lt;/code&gt; associated directly with a &lt;code&gt;Policy&lt;/code&gt;, as
+opposed to being associated with a vehicle or property.
+    </fulldescription>
+</subtype>

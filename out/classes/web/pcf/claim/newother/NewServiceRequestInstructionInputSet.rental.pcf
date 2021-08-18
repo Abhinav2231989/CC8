@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <InputSet
+    id="NewServiceRequestInstructionInputSet"
+    mode="rental">
+    <Require
+      name="serviceRequest"
+      type="entity.ServiceRequest"/>
+    <Require
+      name="serviceAddressLabel"
+      type="String"/>
+    <Require
+      name="quoteOrServiceAlternativeLabel"
+      type="String"/>
+    <Variable
+      initialValue="false"
+      name="showAddressFields"
+      type="boolean"/>
+    <TextAreaInput
+      editable="true"
+      focusOnStartEditing="false"
+      id="InstructionText"
+      label="displaykey.Web.ServiceRequest.Instructions"
+      numRows="4"
+      required="false"
+      value="InstructionText"/>
+    <ClaimContactInput
+      claim="serviceRequest.Claim"
+      editable="true"
+      id="CustomerContact"
+      label="displaykey.Web.ServiceRequest.CustomerContact"
+      required="true"
+      value="serviceRequest.Instruction.CustomerContact"
+      valueRange="serviceRequest.Claim.Contacts*.Contact"/>
+    <RangeInput
+      editable="true"
+      hideIfReadOnly="true"
+      id="ServiceAddressPicker"
+      label="serviceAddressLabel == null ? displaykey.Web.ServiceRequest.ServiceAddress : serviceAddressLabel"
+      newValue="serviceRequest.Instruction.ServiceAddressOwner.getOrCreateNewAddress()"
+      optionLabel="gw.util.RangeInputUtil.formatLabel(serviceRequest.Instruction.ServiceAddressOwner.getOrCreateNewAddress(), VALUE)"
+      required="true"
+      sortValueRange="false"
+      value="serviceRequest.Instruction.ServiceAddressOwner.Address"
+      valueRange="serviceRequest.Instruction.ServiceAddressOwner.ServiceAddresses">
+      <PostOnChange
+        onChange="showAddressFields = serviceRequest.Instruction.ServiceAddressOwner.Address.New &amp;&amp; not serviceRequest.Instruction.ServiceAddressOwner.NonEditableAddresses.contains(serviceRequest.Instruction.ServiceAddressOwner.Address)"/>
+    </RangeInput>
+    <Input
+      id="ServiceAddressName"
+      label="CurrentLocation.InEditMode ? null  : (serviceAddressLabel == null ? displaykey.Web.ServiceRequest.ServiceAddress : serviceAddressLabel)"
+      value="serviceRequest.Instruction.ServiceAddressOwner.Address"
+      visible="not showAddressFields"/>
+    <InputSetRef
+      def="CCAddressInputSet(serviceRequest.Instruction.ServiceAddressOwner)"
+      editable="true"
+      id="ServiceAddressFields"
+      visible="showAddressFields"/>
+    <Code><![CDATA[uses gw.vendormanagement.ServiceRequestPrefixedAdditionalInstructionsTextHelper
+uses com.guidewire.pl.system.util.DateFormatUtil
+uses com.guidewire.pl.system.util.CurrencyFormatUtil
+
+property get VehicleIncident() : VehicleIncident {
+  return serviceRequest.Incident as VehicleIncident
+}
+
+property get InstructionText() : String {
+  return ServiceRequestPrefixedAdditionalInstructionsTextHelper.getStrippedDisplayText(serviceRequest)
+}
+
+property set InstructionText(text : String) {
+  ServiceRequestPrefixedAdditionalInstructionsTextHelper.updateInstructionText(serviceRequest,  getInstructionTextPrefix(), text)
+}
+
+private function getInstructionTextPrefix() : String {
+  var dateFormat = DateFormatUtil.getOutputDateFormat(null, null)
+  var currencyFormat = CurrencyFormatUtil.getCurrencyFormat(VehicleIncident.RentalDailyRate.Currency)
+  return displaykey.Web.VehicleIncidentRentalDV.InstructionPrefix(dateFormat.format(VehicleIncident.RentalBeginDate), dateFormat.format(VehicleIncident.RentalEndDate), currencyFormat.render(VehicleIncident.RentalDailyRate, false))
+}]]></Code>
+  </InputSet>
+</PCF>

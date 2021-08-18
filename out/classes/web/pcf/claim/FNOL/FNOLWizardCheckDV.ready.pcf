@@ -1,0 +1,231 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <DetailViewPanel
+    id="FNOLWizardCheckDV"
+    mode="ready">
+    <Require
+      name="claim"
+      type="Claim"/>
+    <Require
+      name="Wizard"
+      type="claim.NewClaimWizardInfo"/>
+    <Variable
+      initialValue="Wizard.Check"
+      name="check"
+      type="gw.api.claim.NewClaimCheck"/>
+    <InputColumn>
+      <Label
+        label="displaykey.Web.FNOLWizard.CheckReady.Financials"/>
+      <TypeKeyRadioInput
+        editable="true"
+        filter="VALUE != PaymentMethod.TC_MANUAL"
+        id="PaymentMethod"
+        label="displaykey.Web.FNOLWizard.CheckReady.PaymentMethod"
+        value="check.PaymentMethod">
+        <PostOnChange/>
+      </TypeKeyRadioInput>
+      <ClaimContactInput
+        claim="claim"
+        editable="true"
+        id="Payee_Picker"
+        label="displaykey.NVV.Exposure.SubView.NewQuickClaimClaimGL.Exposure.Claimant.Picker"
+        required="true"
+        value="check.Payee"
+        valueRange="claim.PayeeCandidates">
+        <PostOnChange/>
+      </ClaimContactInput>
+      <InputSet
+        id="EFTDataInputSet"
+        visible="IsEFT">
+        <RangeInput
+          editable="true"
+          id="EFTRecords"
+          label="displaykey.Web.FNOLWizard.CheckReady.BankData.SelectEFT"
+          value="check.EFTData"
+          valueRange="check.Payee.EFTRecords"/>
+        <TextAreaInput
+          editable="true"
+          id="PayTo"
+          label="displaykey.Web.FNOLWizard.CheckReady.BankData.BankAcctHolderName"
+          numRows="1"
+          required="true"
+          value="check.PayTo">
+          <Reflect
+            triggerIds="EFTRecords"
+            value="VALUE.AccountName"/>
+        </TextAreaInput>
+        <Input
+          editable="true"
+          id="BankName"
+          label="displaykey.Web.FNOLWizard.CheckReady.BankData.BankName"
+          value="check.BankName">
+          <Reflect
+            triggerIds="EFTRecords"
+            value="VALUE.BankName"/>
+        </Input>
+        <RangeRadioInput
+          editable="true"
+          id="BankAccountType"
+          label="displaykey.Web.FNOLWizard.CheckReady.BankData.BankAccountType"
+          required="true"
+          value="check.BankAccountType"
+          valueRange="BankAccountType.getTypeKeys( false )">
+          <Reflect
+            triggerIds="EFTRecords"
+            value="VALUE.BankAccountType"/>
+        </RangeRadioInput>
+        <PrivacyInput
+          editable="true"
+          encryptionExpression="gw.api.privacy.EncryptionMaskExpressions.maskBankAccountNumber(VALUE)"
+          id="BankAccountNumber"
+          label="displaykey.Web.FNOLWizard.CheckReady.BankData.BankAccountNumber"
+          required="true"
+          value="check.BankAccountNumber">
+          <Reflect
+            triggerIds="EFTRecords"
+            value="VALUE.BankAccountNumber"/>
+        </PrivacyInput>
+        <Input
+          editable="true"
+          id="BankRoutingNumber"
+          label="displaykey.Web.FNOLWizard.CheckReady.BankData.BankRoutingNumber"
+          required="true"
+          value="check.BankRoutingNumber">
+          <Reflect
+            triggerIds="EFTRecords"
+            value="VALUE.BankRoutingNumber"/>
+        </Input>
+      </InputSet>
+      <RangeInput
+        editable="true"
+        id="PayeeRole"
+        label="displaykey.Web.FNOLWizard.CheckReady.PayeeType"
+        required="true"
+        value="check.PayeeRole"
+        valueRange="claim.getAllowedPayeeTypes( check.Payee)"/>
+      <Input
+        editable="true"
+        id="CheckInvoiceNumber"
+        label="displaykey.Web.FNOLWizard.CheckReady.InvoiceNumber"
+        value="check.InvoiceNumber"/>
+      <TypeKeyInput
+        editable="true"
+        id="Payment_Currency"
+        label="displaykey.Web.NewCheckWizard.NewPaymentDetail.Currency"
+        required="true"
+        value="check.TransactionCurrency"
+        visible="util.CurrencyUtil.isMultiCurrencyMode()">
+        <PostOnChange/>
+      </TypeKeyInput>
+      <BooleanRadioInput
+        editable="perm.ExchangeRate.edit"
+        falseLabel="displaykey.Financials.Multicurrency.Automatic"
+        id="Payment_ExchangeRateOverride"
+        label="displaykey.Financials.Multicurrency.ExchangeRateMode"
+        trueLabel="displaykey.Financials.Multicurrency.Manual"
+        value="check.OverrideExchangeRate"
+        visible="UseExchangeRate">
+        <PostOnChange/>
+      </BooleanRadioInput>
+      <TextInput
+        editable="check.OverrideExchangeRate"
+        format="return &quot;1 &quot; + check.TransactionCurrency.DisplayName + &quot; = #.###### &quot; + claim.Currency.DisplayName;"
+        id="Payment_ExchangeRate"
+        label="displaykey.Financials.Multicurrency.ExchangeRate"
+        numCols="8"
+        value="check.ExchangeRate"
+        visible="UseExchangeRate">
+        <PostOnChange/>
+      </TextInput>
+      <Input
+        editable="check.OverrideExchangeRate"
+        id="Payment_RateSet_Description"
+        label="displaykey.Financials.Multicurrency.RateSetDescription"
+        value="check.ExchangeRateDescription"
+        visible="UseExchangeRate"/>
+      <DateInput
+        id="RateSet_Date"
+        label="displaykey.Financials.Multicurrency.ExchangeRateDate"
+        value="check.UpdateTime"
+        visible="UseExchangeRate"/>
+      <Input
+        editable="true"
+        id="CheckAmount"
+        label="displaykey.Web.FNOLWizard.CheckReady.Amount"
+        required="true"
+        validationExpression="validateCheckAmount()"
+        value="check.TransactionAmount">
+        <PostOnChange/>
+      </Input>
+      <BooleanRadioInput
+        editable="true"
+        id="ApplyDeductible"
+        label="displaykey.NVV.Financials.NewPaymentDetail.Transaction.ApplyDeductible"
+        value="check.ApplyDeductible"
+        visible="claim.Exposures[0].Coverage.ClaimDeductible != null">
+        <PostOnChange/>
+      </BooleanRadioInput>
+      <Input
+        id="CheckTotalAmount"
+        label="displaykey.Web.FNOLWizard.AutoFirstAndFinal.TotalAmount"
+        value="check.CheckAmount"
+        visible="claim.Exposures[0].Coverage.ClaimDeductible != null and check.ApplyDeductible"/>
+      <TypeKeyInput
+        editable="true"
+        id="DeliveryMethod"
+        label="displaykey.NVV.Financials.NewCheckPayee.Check.DeliveryMethod"
+        required="false"
+        value="check.DeliveryMethod"
+        visible="!IsEFT"/>
+      <Input
+        editable="true"
+        id="CheckMailTo"
+        label="displaykey.Web.FNOLWizard.CheckReady.MailTo"
+        required="true"
+        value="check.MailTo"
+        visible="!IsEFT"/>
+      <Input
+        editable="true"
+        id="CheckMailToAddr"
+        label="displaykey.Web.FNOLWizard.CheckReady.MailToAddress"
+        validationExpression="checkMailToAddress()"
+        value="check.MailToAddress"
+        visible="!IsEFT"/>
+      <DateInput
+        editable="true"
+        id="ScheduledDeliveryDate"
+        label="displaykey.Web.FNOLWizard.CheckReady.ScheduledSendDate"
+        required="false"
+        validationExpression="check.ScheduledSendDate.before(com.guidewire.pl.system.util.DateTimeUtil.getTodaysDate()) ? displaykey.Java.Validation.Date.ForbidPast : null"
+        value="check.ScheduledSendDate"/>
+    </InputColumn>
+    <Code><![CDATA[property get UseExchangeRate() : boolean {
+  return util.CurrencyUtil.isMultiCurrencyMode() and check.TransactionCurrency != claim.Currency
+}
+
+property get IsEFT() : boolean {
+  return check.PaymentMethod == PaymentMethod.TC_EFT
+}
+
+function checkMailToAddress() : String {
+  if (check.DeliveryMethod == DeliveryMethod.TC_SEND){
+    if (check.MailToAddress == null){
+      return displaykey.Web.FNOLWizard.CheckReady.SendingErrorMessage        
+    } else if (check.ScheduledSendDate == null){
+      return displaykey.Web.FNOLWizard.CheckReady.SendingErrorNoScheduledDate           
+    }
+  }
+  return null
+}
+
+function validateCheckAmount() : String {
+  if (check.deductibleExceedsCheckAmount()) {
+    return displaykey.Deductible.DeductibleAmountExccedsFNOLAmount
+  }
+  
+  return null
+}]]></Code>
+  </DetailViewPanel>
+</PCF>

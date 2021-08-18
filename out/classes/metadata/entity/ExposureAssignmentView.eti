@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<viewEntity xmlns="http://guidewire.com/datamodel" desc="Exposure view entity with assignment detail attributes." entity="ExposureAssignmentView" exportable="false" final="false" subpackage="exposure" primaryEntity="Exposure" supertypeEntity="ExposureDesktopView">
+  <viewEntityTypekey name="AssignmentStatus" path="AssignmentStatus"/>
+  <viewEntityName name="AssignedUser" path="AssignedUser"/>
+  <viewEntityName name="AssignedQueue" path="AssignedQueue"/>
+</viewEntity>

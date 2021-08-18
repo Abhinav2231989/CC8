@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<subtype xmlns="http://guidewire.com/datamodel" desc="Proportional reinsurance agreement." entity="ProportionalRIAgreement"
+        abstract="true" subpackage="reinsurance" supertype="RIAgreement">
+    <column name="ProportionalShare" type="ripercentagedec" desc="Proportional Share" nullok="false">
+    </column>
+</subtype>

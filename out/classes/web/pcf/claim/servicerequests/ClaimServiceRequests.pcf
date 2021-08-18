@@ -1,0 +1,677 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Page
+    beforeCommit="operationCallbackHelper.BeforeCommitAction()"
+    canEdit="true"
+    canVisit="perm.Claim.view(claim)"
+    id="ClaimServiceRequests"
+    parent="Claim(claim)"
+    title="displaykey.JSP.ClaimPageLinks.PageLink.ServiceRequests">
+    <LocationEntryPoint
+      signature="ClaimServiceRequests(claim : Claim)"/>
+    <LocationEntryPoint
+      signature="ClaimServiceRequests(claim : Claim, initialServiceRequest : ServiceRequest)"/>
+    <LocationEntryPoint
+      signature="ClaimServiceRequests(claim : Claim, initialServiceRequest : ServiceRequest, initialInvoice: ServiceRequestInvoice)"/>
+    <Variable
+      name="claim"
+      type="Claim"/>
+    <Variable
+      initialValue="null"
+      name="initialServiceRequest"
+      type="ServiceRequest"/>
+    <Variable
+      initialValue="null"
+      name="initialInvoice"
+      type="ServiceRequestInvoice"/>
+    <Variable
+      initialValue="new gw.vendormanagement.ServiceRequestOperationCallbackHelper()"
+      name="operationCallbackHelper"
+      type="gw.vendormanagement.ServiceRequestOperationCallbackHelper"/>
+    <Screen>
+      <ListDetailPanel
+        selectionName="selectedServiceRequest"
+        selectionOnEnter="initialServiceRequest"
+        selectionType="ServiceRequest">
+        <PanelRef
+          def="ServiceRequestLV(claim, false, operationCallbackHelper)"
+          id="ServiceRequestList">
+          <Toolbar/>
+        </PanelRef>
+        <CardViewPanel>
+          <Variable
+            initialValue="selectedServiceRequest?.createStateHandler()"
+            name="stateHandler"
+            recalculateOnRefresh="true"/>
+          <Card
+            id="Details"
+            selectOnNewEntry="true"
+            title="displaykey.Web.ServiceRequest.DetailsTab">
+            <PanelRef
+              id="SelectedServiceRequestDV">
+              <Toolbar
+                id="StateToolbar"
+                visible="not selectedServiceRequest.AlreadyPromoted">
+                <ToolbarButton
+                  action="operationCallbackHelper.performServiceRequestOperation(CurrentLocation, selectedServiceRequest, TC_SUBMITINSTRUCTION, stateHandler)"
+                  available="true"
+                  id="SubmitInstruction"
+                  label="displaykey.Web.ServiceRequest.StateTransition.SubmitInstruction"
+                  showConfirmMessage="false"
+                  visible="selectedServiceRequest.operationAvailable(TC_SUBMITINSTRUCTION, false, stateHandler)"/>
+                <ToolbarButton
+                  action="OperationReasonPromptPopup.push(selectedServiceRequest, TC_CANCELSERVICEREQUEST)"
+                  available="true"
+                  id="Cancel"
+                  label="displaykey.Web.ServiceRequest.StateTransition.Cancel"
+                  showConfirmMessage="false"
+                  visible="selectedServiceRequest.operationAvailable(TC_CANCELSERVICEREQUEST, false, stateHandler)"/>
+                <ToolbarButton
+                  action="AssignServiceRequestPopup.push(new gw.api.vendormanagement.ServiceRequestAssignmentPopup({selectedServiceRequest}))"
+                  id="AssignService"
+                  label="displaykey.Web.ServiceRequest.Assign.Title"/>
+                <ToolbarButton
+                  action="confirmCanPromoteQuote(selectedServiceRequest); PromoteQuoteOnly.go(selectedServiceRequest)"
+                  available="true"
+                  id="CreateNewService"
+                  label="displaykey.Web.ServiceRequest.QuoteOnly.InstructServiceFromQuote"
+                  showConfirmMessage="false"
+                  visible="selectedServiceRequest.IsPromotableQuoteOnly"/>
+                <ToolbarDivider/>
+                <ToolbarButton
+                  available="true"
+                  id="UpdateStateButton"
+                  label="displaykey.Web.ServiceRequest.UpdateState.Button"
+                  showConfirmMessage="false">
+                  <MenuItem
+                    action="operationCallbackHelper.performServiceRequestOperation(CurrentLocation, selectedServiceRequest, TC_SPECIALISTRESUMEDWORK, stateHandler)"
+                    available="true"
+                    id="SpecialistResumedWork"
+                    label="displaykey.Web.ServiceRequest.StateTransition.SpecialistResumedWork"
+                    showConfirmMessage="false"
+                    visible="selectedServiceRequest.operationAvailable(TC_SPECIALISTRESUMEDWORK, false, stateHandler)"/>
+                  <MenuItem
+                    action="OperationReasonPromptPopup.push(selectedServiceRequest, TC_SPECIALISTWAITING)"
+                    available="true"
+                    id="SpecialistWaiting"
+                    label="displaykey.Web.ServiceRequest.StateTransition.SpecialistWaiting"
+                    showConfirmMessage="false"
+                    visible="selectedServiceRequest.operationAvailable(TC_SPECIALISTWAITING, false, stateHandler)"/>
+                  <MenuItem
+                    action="AcceptedWorkPopup.push(selectedServiceRequest)"
+                    available="true"
+                    id="SpecialistAcceptedWork"
+                    label="displaykey.Web.ServiceRequest.StateTransition.SpecialistAcceptedWork"
+                    showConfirmMessage="false"
+                    visible="selectedServiceRequest.operationAvailable(TC_SPECIALISTACCEPTEDWORK, false, stateHandler)"/>
+                  <MenuItem
+                    action="operationCallbackHelper.performServiceRequestOperation(CurrentLocation, selectedServiceRequest, TC_SPECIALISTCOMPLETEDWORK, stateHandler)"
+                    available="true"
+                    id="SpecialistCompletedWork"
+                    label="displaykey.Web.ServiceRequest.StateTransition.SpecialistCompletedWork"
+                    showConfirmMessage="false"
+                    visible="selectedServiceRequest.operationAvailable(TC_SPECIALISTCOMPLETEDWORK, false, stateHandler)"/>
+                  <MenuItem
+                    action="OperationReasonPromptPopup.push(selectedServiceRequest, TC_SPECIALISTDECLINED)"
+                    available="true"
+                    id="SpecialistDeclined"
+                    label="displaykey.Web.ServiceRequest.StateTransition.SpecialistDeclined"
+                    showConfirmMessage="false"
+                    visible="selectedServiceRequest.operationAvailable(TC_SPECIALISTDECLINED, false, stateHandler)"/>
+                  <MenuItem
+                    action="OperationReasonPromptPopup.push(selectedServiceRequest, TC_SPECIALISTCANCELED)"
+                    available="true"
+                    id="SpecialistCanceled"
+                    label="displaykey.Web.ServiceRequest.StateTransition.SpecialistCanceled"
+                    showConfirmMessage="false"
+                    visible="selectedServiceRequest.operationAvailable(TC_SPECIALISTCANCELED, false, stateHandler)"/>
+                  <MenuItem
+                    action="AddDelayPopup.push(selectedServiceRequest)"
+                    available="true"
+                    id="AddDelay"
+                    label="displaykey.Web.ServiceRequest.StateTransition.SpecialistDelayed"
+                    showConfirmMessage="false"
+                    visible="selectedServiceRequest.expectedQuoteCompletionDateApplies(stateHandler) or selectedServiceRequest.expectedServiceCompletionDateApplies(stateHandler)"/>
+                  <MenuItem
+                    action="EditReferenceNumberPopup.push(selectedServiceRequest)"
+                    available="true"
+                    id="UpdateReferenceNumber"
+                    label="displaykey.Web.ServiceRequest.UpdateState.UpdateReferenceNumber"
+                    showConfirmMessage="false"/>
+                </ToolbarButton>
+              </Toolbar>
+              <PanelRow
+                columnDivider="true"
+                id="ServiceRequestPanelRow">
+                <PanelColumn>
+                  <PanelRef
+                    def="ServiceRequestDV(selectedServiceRequest, stateHandler)"
+                    editable="false"/>
+                </PanelColumn>
+                <PanelColumn
+                  editable="false">
+                  <PanelSet
+                    editable="false"
+                    id="QuotePanelSet"
+                    visible="selectedServiceRequest.quoteAllowed(stateHandler)">
+                    <DetailViewPanel
+                      editable="false">
+                      <InputColumn>
+                        <Input
+                          boldLabel="true"
+                          id="ActiveQuoteLabel"
+                          label="selectedServiceRequest.QuoteLabel"
+                          value="&quot;&quot;"
+                          visible="true"/>
+                        <ContentInput
+                          labelAbove="true"
+                          visible="selectedServiceRequest.QuoteStatus == ServiceRequestQuoteStatus.TC_WAITINGFORAPPROVAL and selectedServiceRequest.actionRequiredVisible(stateHandler)">
+                          <Link
+                            icon="gw.vendormanagement.ServiceRequestStatus.ATTENTION.Icon"
+                            id="WaitingForQuoteApprovalAlert"/>
+                          <Link
+                            id="WaitingForQuoteApprovalAlertText"
+                            label="displaykey.Web.ServiceRequest.Quote.WaitingForApprovalAlert"/>
+                        </ContentInput>
+                      </InputColumn>
+                    </DetailViewPanel>
+                    <PanelRef
+                      id="QuoteStatusToolbar"
+                      visible="selectedServiceRequest.anyOperationAvailable({TC_ADDQUOTE, TC_APPROVEQUOTE, TC_REQUESTREQUOTE}, stateHandler)">
+                      <DetailViewPanel
+                        available="true">
+                        <InputColumn>
+                          <ContentInput
+                            available="true"
+                            labelAbove="true">
+                            <Link
+                              action="ApproveQuotePopup.push(selectedServiceRequest)"
+                              available="true"
+                              id="ApproveQuote"
+                              label="displaykey.Web.ServiceRequest.StateTransition.ApproveQuote"
+                              showConfirmMessage="false"
+                              styleClass="bigButton"
+                              visible="selectedServiceRequest.operationAvailable(TC_APPROVEQUOTE, false, stateHandler)"/>
+                            <Link
+                              action="RequestRequotePopup.push(selectedServiceRequest)"
+                              available="true"
+                              id="RequestRequote"
+                              label="displaykey.Web.ServiceRequest.StateTransition.RequestRequote"
+                              showConfirmMessage="false"
+                              styleClass="bigButton"
+                              visible="selectedServiceRequest.operationAvailable(TC_REQUESTREQUOTE, false, stateHandler)"/>
+                            <Link
+                              action="AddReviseQuotePopup.push(selectedServiceRequest)"
+                              id="AddQuote"
+                              label="displaykey.Web.ServiceRequest.StateTransition.AddQuote"
+                              showConfirmMessage="false"
+                              styleClass="bigButton"
+                              visible="selectedServiceRequest.operationAvailable(TC_ADDQUOTE, false, stateHandler) and selectedServiceRequest.LatestQuote == null"/>
+                            <Link
+                              action="AddReviseQuotePopup.push(selectedServiceRequest, selectedServiceRequest.LatestQuote)"
+                              id="ReviseQuote"
+                              label="displaykey.Web.ServiceRequest.StateTransition.ReviseQuote"
+                              showConfirmMessage="false"
+                              styleClass="bigButton"
+                              visible="selectedServiceRequest.operationAvailable(TC_ADDQUOTE, false, stateHandler) and selectedServiceRequest.LatestQuote != null"/>
+                          </ContentInput>
+                        </InputColumn>
+                      </DetailViewPanel>
+                    </PanelRef>
+                    <PanelRef
+                      def="StatementDV(selectedServiceRequest.LatestQuote, null, false)"
+                      editable="false"
+                      mode="&quot;quote&quot;"/>
+                    <PanelRef
+                      def="StatementDocumentsLV(selectedServiceRequest.LatestQuote, false)"
+                      visible="true">
+                      <TitleBar
+                        title="displaykey.Web.ServiceRequest.Quote.Documents"
+                        visible="selectedServiceRequest.LatestQuote.Documents.HasElements"/>
+                      <Toolbar/>
+                    </PanelRef>
+                  </PanelSet>
+                  <DetailViewPanel
+                    visible="selectedServiceRequest.invoiceAllowed(stateHandler)">
+                    <InputHeaderSection>
+                      <Input
+                        boldLabel="true"
+                        id="InvoicesLabel"
+                        label="displaykey.Web.ServiceRequest.Invoices.Label"
+                        value="&quot;&quot;"
+                        visible="true"/>
+                      <InputSet>
+                        <ContentInput
+                          available="true"
+                          labelAbove="true">
+                          <Link
+                            action="NewInvoice.go(selectedServiceRequest)"
+                            id="AddInvoice"
+                            label="displaykey.Web.ServiceRequest.StateTransition.AddInvoice"
+                            showConfirmMessage="false"
+                            styleClass="bigButton"
+                            visible="selectedServiceRequest.operationAvailable(TC_ADDINVOICE, false, stateHandler)"/>
+                          <Link
+                            action="ClaimServiceRequestForward.go(claim, selectedServiceRequest, selectedServiceRequest.Invoices.orderByDescending(\i -&gt; i.StatementCreationTime).firstWhere( \ i -&gt; i.ActionRequiredVisible == true))"
+                            available="true"
+                            id="ViewInvoices"
+                            label="displaykey.Web.ServiceRequest.Invoices.ViewInvoices"
+                            showConfirmMessage="false"
+                            styleClass="bigButton"
+                            visible="selectedServiceRequest.Invoices.hasMatch(\ i -&gt; i.ActionRequiredVisible) "/>
+                        </ContentInput>
+                      </InputSet>
+                      <ContentInput
+                        labelAbove="true"
+                        visible="selectedServiceRequest.Invoices.hasMatch(\ i -&gt; i.ActionRequiredVisible) ">
+                        <Link
+                          icon="gw.vendormanagement.ServiceRequestStatus.ATTENTION.Icon"
+                          id="WaitingForInvoiceApprovalAlert"/>
+                        <Link
+                          id="WaitingForInvoiceApprovalAlertText"
+                          label="displaykey.Web.ServiceRequest.Invoices.WaitingForApprovalAlert"/>
+                      </ContentInput>
+                      <ContentInput
+                        labelAbove="true"
+                        visible="isInvoiceWarningMessageVisible(selectedServiceRequest, stateHandler) and selectedServiceRequest.LatestQuote == null">
+                        <Link
+                          icon="gw.vendormanagement.ServiceRequestStatus.ATTENTION.Icon"
+                          id="InvoiceWithNoQuoteAlert"/>
+                        <Link
+                          id="InvoiceWithNoQuoteMessage"
+                          label="displaykey.Web.ServiceRequest.Invoices.InvoiceWithNoQuoteMessage"/>
+                      </ContentInput>
+                      <ContentInput
+                        labelAbove="true"
+                        visible="isInvoiceWarningMessageVisible(selectedServiceRequest, stateHandler) and selectedServiceRequest.LatestQuote != null and selectedServiceRequest.QuoteStatus == ServiceRequestQuoteStatus.TC_WAITINGFORAPPROVAL">
+                        <Link
+                          icon="gw.vendormanagement.ServiceRequestStatus.ATTENTION.Icon"
+                          id="InvoiceWithWaitingForApprovalQuoteAlert"/>
+                        <Link
+                          id="InvoiceWithWaitingForApprovalQuoteMessage"
+                          label="displaykey.Web.ServiceRequest.Invoices.InvoiceWithWaitingForApprovalQuoteMessage"/>
+                      </ContentInput>
+                      <ContentInput
+                        labelAbove="true"
+                        visible="isInvoiceWarningMessageVisible(selectedServiceRequest, stateHandler) and selectedServiceRequest.LatestQuote != null and selectedServiceRequest.QuoteStatus == ServiceRequestQuoteStatus.TC_WAITINGFORQUOTE">
+                        <Link
+                          icon="gw.vendormanagement.ServiceRequestStatus.ATTENTION.Icon"
+                          id="InvoiceWithWaitingForRevisedQuoteAlert"/>
+                        <Link
+                          id="InvoiceWithWaitingForRevisedQuoteMessage"
+                          label="displaykey.Web.ServiceRequest.Invoices.InvoiceWithWaitingForRevisedQuoteMessage"/>
+                      </ContentInput>
+                    </InputHeaderSection>
+                    <InputColumn>
+                      <Input
+                        id="NoInvoicesMessage"
+                        label="displaykey.Web.ServiceRequest.Invoice.NoInvoiceMessage"
+                        labelAbove="true"
+                        value="&quot;&quot;"
+                        visible="selectedServiceRequest.Invoices.IsEmpty"/>
+                      <Input
+                        formatType="currency"
+                        id="OutstandingInvoicesAmount"
+                        label="displaykey.Web.ServiceRequest.Invoices.OutstandingInvoices"
+                        value="selectedServiceRequest.OutstandingInvoicesAmount"
+                        visible="not selectedServiceRequest.Invoices.IsEmpty"/>
+                      <Input
+                        formatType="currency"
+                        id="ActiveChecksAmount"
+                        label="selectedServiceRequest.ActiveChecksAmountIncludesNonExclusiveChecks ? displaykey.Web.ServiceRequest.Invoices.ActiveChecksAmountStar : displaykey.Web.ServiceRequest.Invoices.ActiveChecksAmount"
+                        value="selectedServiceRequest.ActiveChecksAmount"
+                        visible="not selectedServiceRequest.Invoices.IsEmpty"/>
+                      <InputDivider
+                        visible="not selectedServiceRequest.Invoices.IsEmpty"/>
+                      <Input
+                        formatType="currency"
+                        id="TotalInvoiced"
+                        label="displaykey.Web.ServiceRequest.Invoices.TotalInvoiced"
+                        value="selectedServiceRequest.OutstandingInvoicesAmount.add(selectedServiceRequest.ActiveChecksAmount)"
+                        visible="not selectedServiceRequest.Invoices.IsEmpty"/>
+                    </InputColumn>
+                    <InputColumn>
+                      <Input
+                        formatType="currency"
+                        id="RejectedAndWithdrawnInvoicesAmount"
+                        label="displaykey.Web.ServiceRequest.Invoices.TotalRejectedOrWithdrawn"
+                        value="selectedServiceRequest.RejectedAndWithdrawnInvoicesAmount"
+                        visible="not selectedServiceRequest.Invoices.IsEmpty"/>
+                    </InputColumn>
+                    <InputFooterSection>
+                      <Input
+                        id="ActiveChecksAmountIncludesNonExclusiveChecksMessage"
+                        label="displaykey.Web.ServiceRequest.Invoices.ActiveChecksAmountIncludesNonExclusiveChecks"
+                        labelAbove="true"
+                        value="&quot;&quot;"
+                        visible="selectedServiceRequest.ActiveChecksAmountIncludesNonExclusiveChecks"/>
+                    </InputFooterSection>
+                  </DetailViewPanel>
+                  <DetailViewPanel>
+                    <InputColumn>
+                      <Input
+                        boldLabel="true"
+                        id="MetricsLabel"
+                        label="displaykey.Web.ServiceRequest.Metrics.Label"
+                        value="&quot;&quot;"
+                        visible="true"/>
+                    </InputColumn>
+                  </DetailViewPanel>
+                  <PanelRef
+                    id="MetricPanel">
+                    <ListViewPanel
+                      id="MetricsLV">
+                      <RowIterator
+                        editable="false"
+                        elementName="metric"
+                        pageSize="0"
+                        value="selectedServiceRequest.ServiceRequestMetrics.sortBy(\ m -&gt; m.Subtype.Priority)"
+                        visible="true">
+                        <Row
+                          visible="doKindAndMetricSubtypeMatch(selectedServiceRequest, metric.Subtype)">
+                          <Cell
+                            enableSort="false"
+                            icon="metric.Status.Icon"
+                            id="MetricStatus"
+                            label="displaykey.Web.ServiceRequest.Metrics.StatusHeader"
+                            showHeaderIcon="false"
+                            value="true"/>
+                          <TypeKeyCell
+                            enableSort="false"
+                            id="MetricName"
+                            label="displaykey.Web.ServiceRequest.Metrics.SubtypeHeader"
+                            value="metric.Subtype"/>
+                          <Cell
+                            align="center"
+                            enableSort="false"
+                            fontColor="metric.DisplayColor"
+                            id="MetricValue"
+                            label="displaykey.Web.ServiceRequest.Metrics.ValueHeader"
+                            value="metric.DisplayValue"/>
+                          <Cell
+                            align="center"
+                            enableSort="false"
+                            id="MetricTargetValue"
+                            label="displaykey.Web.ServiceRequest.Metrics.MetricTargetValueHeader"
+                            value="metric.DisplayTargetValue"
+                            wrapLabel="true"/>
+                        </Row>
+                      </RowIterator>
+                    </ListViewPanel>
+                  </PanelRef>
+                </PanelColumn>
+              </PanelRow>
+            </PanelRef>
+          </Card>
+          <Card
+            id="History"
+            title="displaykey.Web.ServiceRequest.HistoryTab">
+            <PanelRef
+              def="ServiceRequestHistoryLV(selectedServiceRequest)">
+              <Toolbar/>
+            </PanelRef>
+          </Card>
+          <Card
+            id="Activities"
+            title="displaykey.Web.ServiceRequest.ActivitiesTab">
+            <PanelRef
+              def="ServiceRequestActivityLV(gw.api.database.Query.make(entity.Activity).compare(&quot;ServiceRequest&quot;, Equals, selectedServiceRequest).select())">
+              <Toolbar
+                visible="not selectedServiceRequest.AlreadyPromoted">
+                <CheckedValuesToolbarButton
+                  allCheckedRowsAction="pushAssignmentPopup(CheckedValues)"
+                  flags="all CanAssignActivity"
+                  id="AssignButton"
+                  iterator="ServiceRequestActivityLV.Iterator"
+                  label="displaykey.Button.Activity.Assign"
+                  shortcut="G"/>
+                <CheckedValuesToolbarButton
+                  checkedRowAction="CheckedValue.skip()"
+                  flags="all CanSkipActivity"
+                  id="SkipButton"
+                  iterator="ServiceRequestActivityLV.Iterator"
+                  label="displaykey.Button.Activity.Skip"
+                  shortcut="I"/>
+                <CheckedValuesToolbarButton
+                  checkedRowAction="CheckedValue.complete()"
+                  flags="all CanCompleteActivity"
+                  id="CompleteButton"
+                  iterator="ServiceRequestActivityLV.Iterator"
+                  label="displaykey.Button.Activity.Complete"
+                  shortcut="L"/>
+                <ToolbarDivider/>
+                <CheckedValuesToolbarButton
+                  checkedRowAction="CheckedValue.approve()"
+                  flags="all CanApproveActivity"
+                  id="ApproveButton"
+                  iterator="ServiceRequestActivityLV.Iterator"
+                  label="displaykey.JSP.ClaimWorkplan.Toolbar.Approve"
+                  shortcut="P"/>
+                <CheckedValuesToolbarButton
+                  checkedRowAction="CheckedValue.reject()"
+                  flags="all CanApproveActivity"
+                  id="RejectButton"
+                  iterator="ServiceRequestActivityLV.Iterator"
+                  label="displaykey.JSP.ClaimWorkplan.Toolbar.Reject"
+                  shortcut="J"/>
+              </Toolbar>
+            </PanelRef>
+          </Card>
+          <Card
+            id="Documents"
+            title="displaykey.Web.ServiceRequest.DocumentsTab">
+            <PanelRef
+              def="ServiceRequestDocumentsLV(selectedServiceRequest)">
+              <Toolbar
+                visible="not selectedServiceRequest.AlreadyPromoted">
+                <ToolbarInput
+                  id="SendToSpecialistLabel"
+                  label="displaykey.Web.ServiceRequest.DocumentsTab.SendToSpecialist"
+                  labelAbove="true"
+                  value="&quot;&quot;"/>
+                <PickerToolbarButton
+                  action="PickExistingDocumentPopup.push(selectedServiceRequest.Claim)"
+                  id="LinkAndSend"
+                  label="displaykey.Web.ServiceRequest.DocumentsTab.LinkAndSend"
+                  onPick="selectedServiceRequest.linkDocumentForUI(PickedValue, true)"
+                  visible="perm.System.viewdocs"/>
+                <ToolbarButton
+                  action="AttachDocumentPopup.push(selectedServiceRequest, true)"
+                  id="AttachAndSendDocument"
+                  label="displaykey.Web.ServiceRequest.DocumentsTab.AttachAndSend"/>
+                <ToolbarDivider/>
+                <ToolbarInput
+                  id="DoNotSendToSpecialistLabel"
+                  label="displaykey.Web.ServiceRequest.DocumentsTab.DoNotSendToSpecialist"
+                  labelAbove="true"
+                  value="&quot;&quot;"/>
+                <PickerToolbarButton
+                  action="PickExistingDocumentPopup.push(selectedServiceRequest.Claim)"
+                  id="Link"
+                  label="displaykey.Web.ServiceRequest.DocumentsTab.Link"
+                  onPick="selectedServiceRequest.linkDocumentForUI(PickedValue, false)"
+                  visible="perm.System.viewdocs"/>
+                <ToolbarButton
+                  action="AttachDocumentPopup.push(selectedServiceRequest, false)"
+                  id="AttachDocument"
+                  label="displaykey.Web.ServiceRequest.DocumentsTab.Attach"/>
+              </Toolbar>
+            </PanelRef>
+          </Card>
+          <Card
+            id="Notes"
+            title="displaykey.Web.ServiceRequest.NotesTab">
+            <PanelRef
+              def="ServiceRequestNotesLV(selectedServiceRequest.NotesWithPermCheck)">
+              <Toolbar>
+                <ToolbarButton
+                  action="NewNotePopup.push(selectedServiceRequest)"
+                  id="AddNote"
+                  label="displaykey.Web.ServiceRequest.StateTransition.AddNote"/>
+                <CheckedValuesToolbarButton
+                  checkedRowAction="gw.api.note.NotesUtilBase.deleteNote(CheckedValue)"
+                  flags="all CanDelete"
+                  id="DeleteButton"
+                  iterator="ServiceRequestNotesLV.NoteIterator"
+                  label="displaykey.Web.Note.Delete"
+                  visible="not selectedServiceRequest.AlreadyPromoted"/>
+                <CheckedValuesToolbarButton
+                  checkedRowAction="print.PrintNoteAction.printNote(CheckedValue)"
+                  download="true"
+                  flags="one CanPrint"
+                  id="PrintButton"
+                  iterator="ServiceRequestNotesLV.NoteIterator"
+                  label="displaykey.Java.Note.Print"/>
+              </Toolbar>
+            </PanelRef>
+          </Card>
+          <Card
+            id="Invoices"
+            selectOnEnter="initialInvoice != null"
+            title="displaykey.Web.ServiceRequest.InvoicesTab"
+            visible="selectedServiceRequest?.invoiceAllowed(stateHandler)">
+            <ListDetailPanel
+              selectionName="selectedInvoice"
+              selectionOnEnter="initialInvoice"
+              selectionType="ServiceRequestInvoice">
+              <PanelRef>
+                <Toolbar
+                  id="InvoiceTabToolbar">
+                  <ToolbarButton
+                    action="NewInvoice.go(selectedServiceRequest)"
+                    id="AddInvoice"
+                    label="displaykey.Web.ServiceRequest.StateTransition.AddInvoice"
+                    visible="selectedServiceRequest.operationAvailable(TC_ADDINVOICE, false, stateHandler)"/>
+                </Toolbar>
+                <ListViewPanel
+                  id="ServiceRequestInvoicesLV"
+                  visible="selectedServiceRequest?.invoiceAllowed(stateHandler) and not selectedServiceRequest.Invoices.IsEmpty">
+                  <RowIterator
+                    editable="false"
+                    elementName="invoice"
+                    value="selectedServiceRequest.Invoices">
+                    <Row>
+                      <Cell
+                        id="ReferenceNumber"
+                        label="displaykey.LV.Claim.ServiceRequest.Invoice.ReferenceNumber"
+                        value="invoice.ReferenceNumber"/>
+                      <Cell
+                        icon="invoice.ActionRequiredIcon.Icon"
+                        iconLabel="invoice.ActionRequiredIcon.Label"
+                        id="ActionRequired"
+                        label="displaykey.LV.Claim.ServiceRequest.Invoice.ActionRequired"
+                        showHeaderIcon="false"
+                        value="true"/>
+                      <Cell
+                        id="SubmittedDate"
+                        label="displaykey.LV.Claim.ServiceRequest.Invoice.SubmittedDate"
+                        sortDirection="descending"
+                        sortOrder="1"
+                        value="invoice.StatementCreationTime"/>
+                      <Cell
+                        id="Amount"
+                        label="displaykey.LV.Claim.ServiceRequest.Invoice.Amount"
+                        value="invoice.Amount"/>
+                      <TypeKeyCell
+                        id="Status"
+                        label="displaykey.LV.Claim.ServiceRequest.Invoice.Status"
+                        value="invoice.Status"/>
+                      <Cell
+                        id="Description"
+                        label="displaykey.LV.Claim.ServiceRequest.Invoice.Description"
+                        value="invoice.Description.elide(28)"/>
+                      <Cell
+                        id="CheckNumber"
+                        label="displaykey.LV.Claim.ServiceRequest.Invoice.CheckNumber"
+                        value="invoice.Check.CheckNumber"/>
+                      <Cell
+                        id="CheckAmount"
+                        label="displaykey.LV.Claim.ServiceRequest.Invoice.CheckAmount"
+                        value="invoice.Check.GrossAmount"/>
+                      <TypeKeyCell
+                        id="CheckStatus"
+                        label="displaykey.LV.Claim.ServiceRequest.Invoice.CheckStatus"
+                        value="invoice.Check.Status"/>
+                    </Row>
+                  </RowIterator>
+                </ListViewPanel>
+              </PanelRef>
+              <CardViewPanel>
+                <Card
+                  id="InvoiceDetails"
+                  title="displaykey.Web.ServiceRequest.InvoicesTab.DetailsTab"
+                  visible="selectedServiceRequest.invoiceAllowed(stateHandler) and not selectedServiceRequest.Invoices.IsEmpty">
+                  <PanelRef
+                    def="InvoicePanelSet(selectedInvoice, stateHandler, operationCallbackHelper)"
+                    visible="true"/>
+                </Card>
+              </CardViewPanel>
+              <DetailViewPanel>
+                <InputColumn>
+                  <TextInput
+                    id="InvoiceTabNoInvoicesMessage"
+                    label="displaykey.Web.ServiceRequest.Invoice.NoInvoiceMessage"
+                    labelAbove="true"
+                    value="&quot;&quot;"
+                    visible="selectedServiceRequest.Invoices.IsEmpty"/>
+                </InputColumn>
+              </DetailViewPanel>
+            </ListDetailPanel>
+          </Card>
+          <Card
+            id="Messages"
+            title="displaykey.Web.ServiceRequest.MessageTab"
+            visible="selectedServiceRequest.Progress != ServiceRequestProgress.TC_DRAFT and selectedServiceRequest.SpecialistCommMethod == SpecialistCommMethod.TC_GWPORTAL">
+            <PanelRef
+              def="ServiceRequestMessagePanelSet(selectedServiceRequest.Messages)">
+              <Toolbar
+                id="MessageTabToolbar"
+                visible="not selectedServiceRequest.AlreadyPromoted">
+                <ToolbarButton
+                  action="ServiceRequestMessagePopup.push(selectedServiceRequest)"
+                  id="SendMessage"
+                  label="displaykey.Web.ServiceRequest.Message.SendMessage"/>
+              </Toolbar>
+            </PanelRef>
+          </Card>
+        </CardViewPanel>
+      </ListDetailPanel>
+    </Screen>
+    <Code><![CDATA[uses com.sun.net.httpserver.Authenticator.Success
+uses java.lang.Throwable
+uses java.lang.Exception
+uses gw.vendormanagement.servicerequeststate.ServiceRequestStateHandler
+
+function pushAssignmentPopup(Activities : Activity[]){
+  var popup = new activity.ActivityAssignmentPopup(Activities);
+  AssignActivitiesPopup.push(popup)
+}
+
+// does some checking for various states before attempting to enter the promote quote popup
+function confirmCanPromoteQuote(serviceRequest : ServiceRequest) {
+  for (docLink in serviceRequest.DocumentLinks){
+    if (docLink.LinkedDocument == null) {
+      throw new util.DisplayableException(displaykey.Web.ServiceRequest.CannotPromoteQuote)
+    }
+  }
+}
+
+function doKindAndMetricSubtypeMatch(selectedServiceRequest : ServiceRequest, subType : typekey.ServiceRequestMetric) : boolean {
+  if (selectedServiceRequest.Kind == TC_QUOTEONLY and (subType == typekey.ServiceRequestMetric.TC_SERVICETIMELINESSSERVICEREQUESTMETRIC or subType == typekey.ServiceRequestMetric.TC_INVOICEVARIANCEVSQUOTESERVICEREQUESTMETRIC)) {
+    return false
+  }
+  if (selectedServiceRequest.Kind == TC_SERVICEONLY and (subType == typekey.ServiceRequestMetric.TC_QUOTETIMELINESSSERVICEREQUESTMETRIC or subType == typekey.ServiceRequestMetric.TC_INVOICEVARIANCEVSQUOTESERVICEREQUESTMETRIC)) {
+    return false
+  }
+  return true
+}
+
+function isInvoiceWarningMessageVisible(selectedServiceRequest: ServiceRequest, sh : ServiceRequestStateHandler): boolean {
+  return selectedServiceRequest.Invoices.HasElements and 
+          selectedServiceRequest.quoteAllowed(sh) and 
+          selectedServiceRequest.IsActive
+}]]></Code>
+  </Page>
+</PCF>

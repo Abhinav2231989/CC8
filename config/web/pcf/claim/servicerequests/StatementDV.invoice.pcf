@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <DetailViewPanel
+    id="StatementDV"
+    mode="invoice">
+    <Require
+      name="currentInvoice"
+      type="ServiceRequestStatement"/>
+    <Require
+      name="previousTotal"
+      type="gw.api.financials.CurrencyAmount"/>
+    <Require
+      name="readOnly"
+      type="boolean"/>
+    <InputColumn>
+      <Input
+        editable="currentInvoice.New"
+        id="ReferenceNumber"
+        label="displaykey.Web.ServiceRequest.Invoice.ReferenceNumber"
+        required="false"
+        value="currentInvoice.ReferenceNumber"
+        visible="currentInvoice != null or CurrentLocation.InEditMode"/>
+      <TypeKeyInput
+        id="InvoiceStatus"
+        label="displaykey.Web.ServiceRequest.Invoice.InvoiceStatus"
+        value="(currentInvoice as ServiceRequestInvoice).Status"
+        visible="currentInvoice != null and not CurrentLocation.InEditMode"/>
+      <Input
+        editable="currentInvoice.New"
+        formatType="currency"
+        id="Amount"
+        label="displaykey.Web.ServiceRequest.Invoice.TotalAmount"
+        required="true"
+        validationExpression="(currentInvoice.Amount.Amount &gt; 0) ? null : displaykey.Web.ServiceRequest.Statement.NegativeAmountValidation"
+        value="currentInvoice.Amount"
+        visible="currentInvoice != null or CurrentLocation.InEditMode"/>
+      <TextAreaInput
+        editable="currentInvoice.New"
+        id="Description"
+        label="displaykey.Web.ServiceRequest.Invoice.Description"
+        numRows="2"
+        required="true"
+        value="currentInvoice.Description"
+        visible="currentInvoice != null or CurrentLocation.InEditMode"/>
+    </InputColumn>
+  </DetailViewPanel>
+</PCF>

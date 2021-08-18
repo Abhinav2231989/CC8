@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <ListViewPanel
+    editable="false"
+    id="AllPolicyLocationLienHoldersLV">
+    <Require
+      name="PolicyLocation"
+      type="PolicyLocation"/>
+    <RowIterator
+      editable="false"
+      elementName="PropertyOwner"
+      hasCheckBoxes="true"
+      hideCheckBoxesIfReadOnly="true"
+      value="PolicyLocation.Lienholders">
+      <Row>
+        <ClaimContactCell
+          claim="PropertyOwner.Property.Policy.Claim"
+          id="Lienholder"
+          label="displaykey.LV.Policy.EditablePropertyLienholders.Lienholder"
+          required="true"
+          sortOrder="1"
+          sortValueRange="false"
+          value="PropertyOwner.Lienholder"
+          valueRange="PropertyOwner.Property.Policy.Claim.RelatedContacts"/>
+        <TypeKeyCell
+          id="OwnerType"
+          label="displaykey.LV.Policy.EditablePropertyLienholders.OwnerType"
+          required="true"
+          value="PropertyOwner.OwnerType"/>
+        <Cell
+          id="AssociatedWith"
+          label="displaykey.LV.Policy.EditablePropertyLienholders.AssociatedWith"
+          required="true"
+          value="((PropertyOwner.LocationBasedRU != null) ? PropertyOwner.LocationBasedRU.Description : displaykey.LV.Policy.EditablePropertyLienholders.PolicyLocation)"/>
+      </Row>
+    </RowIterator>
+  </ListViewPanel>
+</PCF>

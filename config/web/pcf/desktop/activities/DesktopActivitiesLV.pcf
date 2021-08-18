@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <!-- ### ============================================================================
+###  ListViewDef instances
+### ============================================================================
+  This file automatically generated from lv_activity.xml -->
+  <ListViewPanel
+    id="DesktopActivitiesLV">
+    <ExposeIterator
+      flags="CanAssignActivity,CanSkipActivity,CanCompleteActivity,CanApproveActivity"
+      valueType="entity.ActivityDesktopView"
+      widget="DesktopActivitiesLV"/>
+    <Require
+      name="ActivityDesktopViewList"
+      type="ActivityDesktopViewQuery"/>
+    <Variable
+      initialValue="new desktop.DesktopActivityFilterSet()"
+      name="FilterSet"
+      type="desktop.DesktopActivityFilterSet"/>
+    <RowIterator
+      editable="false"
+      elementName="ActivityDesktopView"
+      hasCheckBoxes="true"
+      value="ActivityDesktopViewList">
+      <ToolbarFlag
+        condition="ActivityDesktopView.canAssign() &amp;&amp; !gw.api.activity.ActivityUtil.isWorksheetOpen(ActivityDesktopView.ID)"
+        name="CanAssignActivity"/>
+      <ToolbarFlag
+        condition="ActivityDesktopView.canSkip() &amp;&amp; !gw.api.activity.ActivityUtil.isWorksheetOpen(ActivityDesktopView.ID)"
+        name="CanSkipActivity"/>
+      <ToolbarFlag
+        condition="ActivityDesktopView.canComplete() &amp;&amp; !gw.api.activity.ActivityUtil.isWorksheetOpen(ActivityDesktopView.ID)"
+        name="CanCompleteActivity"/>
+      <ToolbarFlag
+        condition="ActivityDesktopView.canApprove() &amp;&amp; !gw.api.activity.ActivityUtil.isWorksheetOpen(ActivityDesktopView.ID)"
+        name="CanApproveActivity"/>
+      <ToolbarFilter
+        name="DesktopActivitiesFilter">
+        <ToolbarFilterOption
+          filter="FilterSet.NotReviewOpenDueTodayFilter"
+          label="displaykey.Java.ToolBar.Activities.CurrentOpen"
+          selectOnEnter="true"/>
+        <ToolbarFilterOption
+          filter="FilterSet.getNotReviewOpenDueInNDaysFilter(7)"
+          label="displaykey.Java.ToolBar.Activities.DueNDays(7)"/>
+        <ToolbarFilterOption
+          filter="FilterSet.NotReviewOpenFilter"
+          label="displaykey.Java.ToolBar.Activities.AllOpen"/>
+        <ToolbarFilterOption
+          filter="FilterSet.NotReviewOpenOverdueFilter"
+          label="displaykey.Java.ToolBar.Activities.Overdue"/>
+        <ToolbarFilterOption
+          filter="FilterSet.NotReviewExternalOpenFilter"
+          label="displaykey.Java.ToolBar.Activities.AllOpenExternal"/>
+        <ToolbarFilterOption
+          filter="FilterSet.getNotReviewCompletedLastNDaysFilter(30)"
+          label="displaykey.Java.ToolBar.Activities.ClosedLastNDays(30)"/>
+      </ToolbarFilter>
+      <Row>
+        <Cell
+          enableSort="false"
+          icon="&quot;new.png&quot;"
+          iconLabel="displaykey.LV.Activity.Updated.Tip"
+          id="Updated"
+          printWidth="0.02"
+          tooltip="displaykey.LV.Activity.Updated.Tip"
+          value="ActivityDesktopView.UpdatedSinceLastViewed"/>
+        <Cell
+          enableSort="false"
+          icon="&quot;escalated.png&quot;"
+          iconLabel="displaykey.LV.Activity.Escalated.Tip"
+          id="Escalated"
+          printWidth="0.02"
+          tooltip="displaykey.LV.Activity.Escalated.Tip"
+          value="ActivityDesktopView.Escalated"/>
+        <DateCell
+          fontColor="ActivityDesktopView.Overdue ? &quot;Red&quot; : &quot;&quot;"
+          id="DueDate"
+          label="displaykey.LV.Activity.Activities.DueDate"
+          printWidth="0.1"
+          sortOrder="2"
+          value="ActivityDesktopView.TargetDate"/>
+        <TypeKeyCell
+          id="Priority"
+          label="displaykey.LV.Activity.Activities.Priority"
+          printWidth="0.1"
+          sortOrder="1"
+          value="ActivityDesktopView.Priority"/>
+        <Cell
+          action="goToActivity(ActivityDesktopView)"
+          id="Subject"
+          label="displaykey.LV.Activity.Activities.Subject"
+          printWidth="0.30"
+          value="ActivityDesktopView.Subject"/>
+        <Cell
+          action="pcf.Claim.go(ActivityDesktopView.Claim)"
+          id="CaseID"
+          label="displaykey.LV.Activity.Activities.CaseID"
+          printWidth="0.16"
+          sortOrder="3"
+          value="ActivityDesktopView.ClaimNumber"/>
+        <Cell
+          action="ClaimContactDetailPopup.push(ActivityDesktopView.ClaimInsured, ActivityDesktopView.Claim)"
+          id="Insured"
+          label="displaykey.LV.Activity.Activities.Insured"
+          printWidth="0.2"
+          value="ActivityDesktopView.ClaimInsuredName"/>
+        <TextCell
+          enableSort="false"
+          id="Exposure"
+          label="displaykey.LV.Activity.Activities.Exposure"
+          maxChars="120"
+          printWidth="0"
+          value="ActivityDesktopView.Exposure"/>
+        <Cell
+          id="ExternallyOwned"
+          label="displaykey.LV.Activity.Activities.ExternallyOwned"
+          printWidth="0.1"
+          value="ActivityDesktopView.ExternallyOwned"/>
+        <TypeKeyCell
+          id="LOB"
+          label="displaykey.LV.Activity.Activities.LOB"
+          printWidth="0"
+          value="ActivityDesktopView.LOBCode"/>
+        <TypeKeyCell
+          id="State"
+          label="displaykey.LV.Activity.Activities.State"
+          printWidth="0"
+          value="ActivityDesktopView.JurisdictionState"/>
+      </Row>
+    </RowIterator>
+    <Code><![CDATA[/**
+ * For performance reasons, we cannot just disable the activity subject link if the user cannot view the activity - it
+ * would require us to read in every activity and claim on the page. Instead we only check permissions if the user actually
+ * clicks on the activity subject link (so we only load the claim and activity for the entry that is clicked on)
+ */
+function goToActivity(activityView : ActivityDesktopView) {
+  if (perm.Claim.view(activityView.Claim) and perm.Activity.view(activityView.Activity)) {
+    ClaimWorkplan.go(activityView.Claim)
+    if (not gw.api.activity.ActivityUtil.isWorksheetOpen(activityView.Activity.ID)) {
+      ActivityDetailForward.goInWorkspace(activityView.Claim, activityView.Activity)
+    }
+  } else {
+    throw new gw.api.util.DisplayableException(displaykey.Web.DesktopActivities.CannotView)
+  }
+}]]></Code>
+  </ListViewPanel>
+</PCF>

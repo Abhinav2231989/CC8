@@ -1,0 +1,27 @@
+package rules.Segmentation.ExposureSegmentationRules_dir.ESG04000GL_dir
+
+@gw.rules.RuleName("ESG04200 - GL Medium")
+internal class ESG04200GLMedium {
+  static function doCondition(exposure : entity.Exposure) : boolean {
+    
+/*start00rule*/
+return exposure.LossParty == "third_party"  
+or exposure.Incident.Severity == "moderate-gen"
+/*end00rule*/
+
+  }
+
+  static function doAction(exposure : entity.Exposure, actions : gw.rules.Action) {
+
+/*start00rule*/
+uses gw.api.util.Logger
+
+exposure.Segment = "liab_mid" 
+Logger.logDebug(displaykey.Rules.Segmentation.Exposure(actions.ShortRuleName))
+Logger.logDebug(displaykey.Rules.Segmentation.Exposure.SegmentedTo(exposure.Segment))
+actions.exit()
+
+/*end00rule*/
+
+  }
+}

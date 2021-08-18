@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <DetailViewPanel
+    id="UserSearchDV">
+    <Require
+      name="SearchCriteria"
+      type="UserSearchCriteria"/>
+    <Require
+      name="proximitySearchPageHelper"
+      type="contact.CCProximitySearchPageHelper"/>
+    <InputColumn>
+      <Input
+        editable="true"
+        id="Username"
+        label="displaykey.Web.UserSearch.Username"
+        value="SearchCriteria.Username"/>
+      <InputSetRef
+        def="GlobalPersonNameInputSet( new gw.api.name.SearchNameOwner(SearchCriteria.Contact))"
+        mode="gw.api.name.NameLocaleSettings.PCFMode"/>
+      <Label
+        label="displaykey.JSP.UserGroupFields.Search.AdditionalRestrictions"/>
+      <InputDivider/>
+      <RangeInput
+        editable="true"
+        id="Role"
+        label="displaykey.Web.UserSearch.Role"
+        value="SearchCriteria.Role"
+        valueRange="SearchCriteria.getAllRoles()"/>
+    </InputColumn>
+    <InputColumn>
+      <InputSetRef
+        def="CCAddressBookSearchLocationInputSet(SearchCriteria.Contact)"/>
+    </InputColumn>
+    <InputColumn>
+      <InputSetRef
+        def="CCAddressBookSearchProximityAddressInputSet(SearchCriteria.Contact, proximitySearchPageHelper, null)"
+        visible="proximitySearchPageHelper.useGeocodeUILocally()"/>
+    </InputColumn>
+    <InputFooterSection>
+      <InputSetRef
+        def="SearchAndResetInputSet()"/>
+    </InputFooterSection>
+  </DetailViewPanel>
+</PCF>

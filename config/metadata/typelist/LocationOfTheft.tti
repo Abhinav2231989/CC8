@@ -1,0 +1,3 @@
+<?xml version="1.0"?>
+<!-- PropertyContentsIncident-related typelists -->
+<typelist xmlns="http://guidewire.com/typelists" desc="To describe the Location where the property was stolen" final="false" subpackage="exposure" name="LocationOfTheft"/>

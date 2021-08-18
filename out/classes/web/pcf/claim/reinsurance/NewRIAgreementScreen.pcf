@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Screen
+    id="NewRIAgreementScreen">
+    <Require
+      name="claim"
+      type="Claim"/>
+    <Require
+      name="agreement"
+      type="RIAgreement"/>
+    <Toolbar>
+      <ToolbarButton
+        action="claim.setReinsuranceNotificationIfGrossTotalIncurredOverThreshold(); CurrentLocation.commit(); ReinsuranceSummary.go(claim)"
+        id="UpdateButton"
+        label="displaykey.Button.Update"/>
+      <ToolbarButton
+        action="CurrentLocation.cancel();ReinsuranceSummary.go(claim)"
+        id="CancelButton"
+        label="displaykey.Button.Cancel"/>
+    </Toolbar>
+    <DetailViewPanel>
+      <InputColumn>
+        <InputSetRef
+          def="RISubtypeAndGroupInputSet( claim, agreement)"
+          visible="true"/>
+      </InputColumn>
+    </DetailViewPanel>
+    <PanelRef
+      def="AgreementDetailsDV(agreement)"
+      mode="agreement.Subtype"/>
+    <DetailViewPanel>
+      <InputColumn>
+        <InputDivider/>
+        <ListViewInput
+          boldLabel="true"
+          label="displaykey.Web.Claim.Reinsurance.RelatedAgreements"
+          labelAbove="true">
+          <Toolbar/>
+          <ListViewPanel>
+            <RowIterator
+              editable="false"
+              elementName="relatedAgreement"
+              id="relatedAgreementIter"
+              value="getRelatedAgreements(agreement.RIAgreementGroup)">
+              <Row>
+                <Cell
+                  id="AgreementNumber"
+                  label="displaykey.Web.Claim.Reinsurance.AgreementNumber"
+                  value="relatedAgreement.AgreementNumber"/>
+                <Cell
+                  id="AgreementName"
+                  label="displaykey.Web.Claim.Reinsurance.AgreementName"
+                  value="relatedAgreement.AgreementName"/>
+              </Row>
+            </RowIterator>
+          </ListViewPanel>
+        </ListViewInput>
+        <InputDivider/>
+        <ListViewInput
+          boldLabel="true"
+          label="displaykey.Web.Claim.Reinsurance.RelatedExposures"
+          labelAbove="true">
+          <Toolbar/>
+          <ListViewPanel>
+            <RowIterator
+              editable="true"
+              elementName="relatedExposure"
+              id="relatedExposureIter"
+              value="agreement.RIAgreementGroup.Exposures">
+              <ToolbarFlag
+                name="assignedExposure"/>
+              <Row>
+                <Cell
+                  id="ExposureName"
+                  label="displaykey.entity.Exposure"
+                  value="relatedExposure.DisplayName"/>
+              </Row>
+            </RowIterator>
+          </ListViewPanel>
+        </ListViewInput>
+      </InputColumn>
+    </DetailViewPanel>
+    <Code><![CDATA[//filters out non-persistent (new) agreements
+function getRelatedAgreements(group:RIAgreementGroup) : RIAgreement[] {
+  if (group == null or group.Agreements == null)
+     return new RIAgreement[0]
+  return group.Agreements.where(\ a -> !a.New)
+}
+]]></Code>
+  </Screen>
+</PCF>

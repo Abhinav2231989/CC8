@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <ListViewPanel
+    alternateEntryStyle="false"
+    editable="true"
+    id="ReinsuranceSummaryLV">
+    <Require
+      name="claim"
+      type="Claim"/>
+    <RowIterator
+      canPick="false"
+      checkBoxVisible="false"
+      editable="false"
+      elementName="Header"
+      pageSize="0"
+      value="{1}">
+      <Row
+        useTitleStyle="true">
+        <Cell
+          id="AgreementHeaderRow2"
+          value="displaykey.Web.Claim.Reinsurance.ReinsuranceSummary.AgreementHeader"/>
+        <Cell
+          id="ShareHeaderRow2"
+          value="displaykey.Web.Claim.Reinsurance.ReinsuranceSummary.ShareHeader"
+          width="175"
+          wrapLabel="true"/>
+        <Cell
+          id="ExceedsNotThresholdHeaderRow2"
+          value="displaykey.Web.Claim.Reinsurance.ReinsuranceSummary.ExceedsNotThresholdHeader"
+          width="200"/>
+        <Cell
+          id="PaymentRecoverableHeaderRow2"
+          value="displaykey.Web.Claim.Reinsurance.ReinsuranceSummary.PaymentRecoverableHeader"/>
+        <Cell
+          id="CededReservesHeaderRow2"
+          value="displaykey.Web.Claim.Reinsurance.ReinsuranceSummary.OpenCededReservesHeader"/>
+        <Cell
+          id="EditAdjustmentsHeaderRow2"
+          visible="hasAdjustments()"/>
+      </Row>
+    </RowIterator>
+    <RowIterator
+      editable="true"
+      elementName="agreementGroup"
+      id="AgreementGroup"
+      value="claim.RIAgreementGroups.sortBy(\ r -&gt; r.PublicID)">
+      <Row
+        useTitleStyle="true">
+        <Cell
+          colspan="6"
+          id="GroupDescription"
+          value="agreementGroup.AgreementGroupSummaryString"/>
+      </Row>
+      <Row>
+        <Cell
+          bold="true"
+          id="Label"
+          value="agreementGroup.RiskName "
+          wrap="true"/>
+        <TextCell
+          align="center"
+          bold="true"
+          format="&quot;#.######'%'&quot;"
+          id="PropShareHeader"
+          value="agreementGroup.ProportionalShare"/>
+        <Cell
+          align="center"
+          bold="true"
+          id="ExceedsNotThreshHeader"/>
+        <Cell
+          align="center"
+          bold="true"
+          id="PaymentRecovHeader"
+          value="financials.FinancialsCalculations.getRITotalRecoverables().withClaim(claim).withRIAgreementGroup(agreementGroup).Amount"/>
+        <Cell
+          align="center"
+          bold="true"
+          id="CededReservesHeader"
+          value="financials.FinancialsCalculations.getRIOpenCededReserves().withClaim(claim).withRIAgreementGroup(agreementGroup).Amount"/>
+        <Cell
+          bold="true"
+          id="EditAdjustmentsHeaderRow"
+          visible="hasAdjustments()"/>
+      </Row>
+      <RowIterator
+        canPick="false"
+        editable="true"
+        elementName="agreement"
+        id="Agreement"
+        pageSize="0"
+        value="agreementGroup.Agreements"
+        visible="true">
+        <IteratorSort
+          sortBy="agreement.Subtype.Priority"
+          sortOrder="1"/>
+        <ToolbarFlag
+          name="Row"/>
+        <IteratorSort
+          sortBy="agreement.AttachmentPoint"
+          sortOrder="2"/>
+        <Row>
+          <FormatCell
+            id="agreementCell"
+            sortOrder="1"
+            wrap="true">
+            <ContentInput>
+              <Link
+                action="pcf.ReinsuranceAgreementDetails.push(agreement, claim)"
+                id="Agreement"
+                label="agreement.AgreementName"/>
+            </ContentInput>
+            <TextInput
+              id="AgreementDesc"
+              value="getAgreementDescription(agreement)"/>
+          </FormatCell>
+          <TextCell
+            align="center"
+            format="&quot;#.######'%'&quot;"
+            id="ProportionalShare"
+            value="agreement.ProportionalShare"/>
+          <Cell
+            align="center"
+            id="ExceedsNotificationThreshold"
+            value="agreement.ExceedsNotificationThreshold"/>
+          <Cell
+            align="center"
+            id="PaymentRecoverable"
+            value="financials.FinancialsCalculations.getRITotalRecoverables().withClaim(claim).withRIAgreement(agreement).Amount"/>
+          <Cell
+            align="center"
+            id="CededReserves"
+            value="financials.FinancialsCalculations.getRIOpenCededReserves().withClaim(claim).withRIAgreement(agreement).Amount"/>
+          <ButtonCell
+            action="pcf.AdjustRIRecoverablesPopup.push(agreement, claim)"
+            id="EditAdjustments"
+            value="displaykey.Button.Edit"
+            visible="hasAdjustments()"/>
+        </Row>
+      </RowIterator>
+    </RowIterator>
+    <Row
+      useTitleStyle="true">
+      <Cell
+        bold="true"
+        id="LabelFooter"
+        value="displaykey.Web.Claim.Reinsurance.ReinsuranceSummary.LVTotal"/>
+      <Cell
+        id="PropShareFooter"/>
+      <Cell
+        id="ExceedsNotThreshFooter"/>
+      <Cell
+        align="center"
+        bold="true"
+        id="PaymentRecovFooter"
+        value="financials.FinancialsCalculations.getRITotalRecoverables().withClaim(claim).Amount"/>
+      <Cell
+        align="center"
+        bold="true"
+        id="CededReservesFooter"
+        value="financials.FinancialsCalculations.getRIOpenCededReserves().withClaim(claim).Amount"/>
+      <Cell
+        id="EditButtonColumnFooter"/>
+    </Row>
+    <Code><![CDATA[uses gw.api.util.CurrencyUtil
+
+function getAgreementDescription (agreement : RIAgreement) : String {
+  if (agreement typeis entity.NonProportionalRIAgreement) {
+    return displaykey.Web.Claim.Reinsurance.ReinsuranceSummary.AttachmentPoint + CurrencyUtil.renderAsCurrency(agreement.AttachmentPoint)
+           + "  "
+           + displaykey.Web.Claim.Reinsurance.ReinsuranceSummary.TopOfLayer + CurrencyUtil.renderAsCurrency(agreement.TopOfLayer)
+  }
+  return ""
+}
+
+function hasAdjustments () : boolean {
+  return true;
+}]]></Code>
+  </ListViewPanel>
+</PCF>

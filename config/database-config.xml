@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<database-config xmlns="http://guidewire.com/database-config">
+  <!-- H2 (meant for demo/quickstart use only!) -->
+  <database name="ClaimCenterDatabase" dbtype="h2" autoupgrade="true">
+    <dbcp-connection-pool jdbc-url="jdbc:h2:file:/tmp/guidewire/cc"/>
+  </database>
+
+  <database name="ClaimCenterDatabase" dbtype="h2" autoupgrade="true" env="h2mem">
+    <dbcp-connection-pool jdbc-url="jdbc:h2:mem:/tmp/guidewire/cc"/>
+  </database>
+
+  <!-- Oracle
+  <database name="ClaimCenterDatabase" dbtype="oracle"
+            autoupgrade="false">
+    <dbcp-connection-pool jdbc-url="jdbc:oracle:thin:<USER>/<PASSWORD>@<HOSTNAME>:<PORT>:<ORACLE_SID>"/>
+    <upgrade collectstorageinstrumentation="false">
+      <ora-db-ddl>
+        <tablespaces admin="AB_ADMIN" index="AB_INDEX" op="AB_OP" staging="AB_STAGING" typelist="AB_TYPELIST"/>
+      </ora-db-ddl>
+      <versiontriggers dbmsperfinfothreshold="600"/>
+    </upgrade>
+  </database>
+-->
+
+  <!-- SQL Server
+  <database name="ClaimCenterDatabase" dbtype="sqlserver" autoupgrade="false">
+    <dbcp-connection-pool jdbc-url="jdbc:sqlserver://<HOSTNAME>:<PORT>;DatabaseName=<DBNAME>;User=<USER>;Password=<PASSWORD>" />
+    <upgrade collectstorageinstrumentation="false">
+      <versiontriggers dbmsperfinfothreshold="600" />
+    </upgrade>
+  </database>
+  -->
+
+  <!-- SQL Server with filegroups
+  <database name="ClaimCenterDatabase" dbtype="sqlserver" autoupgrade="true">
+    <dbcp-connection-pool
+        jdbc-url="jdbc:sqlserver://<HOSTNAME>:<PORT>;DatabaseName=<DBNAME>;User=<USER>;Password=<PASSWORD>"/>
+    <upgrade collectstorageinstrumentation="false">
+      <versiontriggers dbmsperfinfothreshold="600"/>
+      <mssql-db-ddl>
+        <mssql-filegroups admin="ADMINFG" index="INDEXFG" op="OPFG" staging="STAGINGFG" typelist="TYPELISTFG" lob="LOBSFG"/>
+      </mssql-db-ddl>
+    </upgrade>
+  </database>
+-->
+
+  <!--DB2 Database
+  <database name="ClaimCenterDatabase" dbtype="db2" autoupgrade="true">
+    <dbcp-connection-pool jdbc-url="jdbc:db2://<HOSTNAME>:<PORT-NUMBER>/<DBNAME>:user=<USER>;password=<PASSWORD>">
+      <reset-tool-params db2-instance="<INSTANCE>" system-username="<SYSTEM-USERNAME>"
+                         system-password="<SYSTEM-PASSWORD>"/>
+    </dbcp-connection-pool>
+    <upgrade collectstorageinstrumentation="false">
+      <db2-db-ddl>
+        <tablespaces admin="CC_ADMIN" index="CC_INDEX" op="CC_OP" staging="CC_STAGING" typelist="CC_TYPELIST"
+                     lob="CC_LOB"/>
+      </db2-db-ddl>
+    </upgrade>
+  </database>
+-->
+
+</database-config>

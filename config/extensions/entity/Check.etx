@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!-- Extension to check table -->
+<extension xmlns="http://guidewire.com/datamodel" entityName="Check">
+    <index name="checku7" unique="true" trackUsage="true" expectedtobecovering="true"
+           desc="Index used for CheckSearchPayeeLastName or CompanyName and enteredtime or issuedate or
+             date fo service - ID column is 1st as we expect contact/checkpayee to be
+             outer, claimid added for covering. Index can be dropped or modified based
+             on the type of check searches in the deployment. Indexes combined to include
+             different dates to reduce index count with column repitition">
+        <indexcol name="ID" keyposition="1"/>
+        <indexcol name="Retired" keyposition="2"/>
+        <indexcol name="EnteredTime" keyposition="3"/>
+        <indexcol name="IssueDate" keyposition="4"/>
+        <indexcol name="DateOfService" keyposition="5"/>
+        <indexcol name="ClaimID" keyposition="6"/>
+    </index>
+
+    <index name="checku8" unique="true" trackUsage="true" expectedtobecovering="true"
+           desc="Index used for CheckSearchPayeeLastName or CompanyName with Service Period start and end date -
+             ID column is 1st as we expect contact/checkpayee to be outer, claimid added for covering.
+             Index can be dropped or modified based on the type of check searches in the deployment.
+             Indexes combined to include different dates to reduce index count with column repitition">
+        <indexcol name="ID" keyposition="1"/>
+        <indexcol name="Retired" keyposition="2"/>
+        <indexcol name="ServicePdStart" keyposition="3"/>
+        <indexcol name="ServicePdEnd" keyposition="4"/>
+        <indexcol name="ClaimID" keyposition="5"/>
+    </index>
+</extension>

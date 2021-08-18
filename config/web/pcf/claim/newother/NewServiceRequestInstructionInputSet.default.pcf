@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <InputSet
+    id="NewServiceRequestInstructionInputSet"
+    mode="default">
+    <Require
+      name="serviceRequest"
+      type="entity.ServiceRequest"/>
+    <Require
+      name="serviceAddressLabel"
+      type="String"/>
+    <Require
+      name="quoteOrServiceAlternativeLabel"
+      type="String"/>
+    <Variable
+      initialValue="false"
+      name="showAddressFields"
+      type="boolean"/>
+    <TextAreaInput
+      editable="true"
+      id="InstructionText"
+      label="displaykey.Web.ServiceRequest.Instructions"
+      numRows="4"
+      required="false"
+      value="serviceRequest.Instruction.InstructionText"/>
+    <DateInput
+      dateFormat="short"
+      editable="true"
+      id="RequestedQuoteCompletionDate"
+      label="getCompletionDateLabel(displaykey.Web.ServiceRequest.RequestedQuoteCompletionDate)"
+      required="true"
+      validationExpression="serviceRequest.RequestedQuoteCompletionDate &lt; gw.api.util.DateUtil.currentDate().trimToMidnight() ? displaykey.Web.ServiceRequest.DateInPast : null"
+      value="serviceRequest.RequestedQuoteCompletionDateMoveToEndOfDay"
+      visible="ShowRequestedQuoteCompletionDate"/>
+    <DateInput
+      dateFormat="short"
+      editable="true"
+      id="RequestedServiceCompletionDate"
+      label="getCompletionDateLabel(displaykey.Web.ServiceRequest.RequestedServiceCompletionDate)"
+      required="true"
+      validationExpression="serviceRequest.RequestedServiceCompletionDate &lt; gw.api.util.DateUtil.currentDate().trimToMidnight() ? displaykey.Web.ServiceRequest.DateInPast : null"
+      value="serviceRequest.RequestedServiceCompletionDateMoveToEndOfDay"
+      visible="not ShowRequestedQuoteCompletionDate"/>
+    <ClaimContactInput
+      claim="serviceRequest.Claim"
+      editable="true"
+      id="CustomerContact"
+      label="displaykey.Web.ServiceRequest.CustomerContact"
+      required="true"
+      value="serviceRequest.Instruction.CustomerContact"
+      valueRange="serviceRequest.Claim.Contacts*.Contact"/>
+    <RangeInput
+      editable="true"
+      hideIfReadOnly="true"
+      id="ServiceAddressPicker"
+      label="serviceAddressLabel == null ? displaykey.Web.ServiceRequest.ServiceAddress : serviceAddressLabel"
+      newValue="serviceRequest.Instruction.ServiceAddressOwner.getOrCreateNewAddress()"
+      optionLabel="gw.util.RangeInputUtil.formatLabel(serviceRequest.Instruction.ServiceAddressOwner.getOrCreateNewAddress(), VALUE)"
+      required="true"
+      sortValueRange="false"
+      value="serviceRequest.Instruction.ServiceAddressOwner.Address"
+      valueRange="serviceRequest.Instruction.ServiceAddressOwner.ServiceAddresses">
+      <PostOnChange
+        onChange="showAddressFields = serviceRequest.Instruction.ServiceAddressOwner.Address.New &amp;&amp; not serviceRequest.Instruction.ServiceAddressOwner.NonEditableAddresses.contains(serviceRequest.Instruction.ServiceAddressOwner.Address)"/>
+    </RangeInput>
+    <Input
+      id="ServiceAddressName"
+      label="CurrentLocation.InEditMode ? null : (serviceAddressLabel == null ? displaykey.Web.ServiceRequest.ServiceAddress : serviceAddressLabel)"
+      value="serviceRequest.Instruction.ServiceAddressOwner.Address"
+      visible="not showAddressFields"/>
+    <InputSetRef
+      def="CCAddressInputSet(serviceRequest.Instruction.ServiceAddressOwner)"
+      editable="true"
+      id="ServiceAddressFields"
+      visible="showAddressFields"/>
+    <Code><![CDATA[property get ShowRequestedQuoteCompletionDate(): boolean{
+  return serviceRequest.Kind != ServiceRequestKind.TC_SERVICEONLY and not serviceRequest.IsPromotion
+}
+
+function getCompletionDateLabel(defaultLabel : String) : String {
+  return quoteOrServiceAlternativeLabel != null 
+    ? displaykey.Web.ServiceRequest.RequestedSomethingCompletionDate(quoteOrServiceAlternativeLabel)
+    : defaultLabel
+}]]></Code>
+  </InputSet>
+</PCF>

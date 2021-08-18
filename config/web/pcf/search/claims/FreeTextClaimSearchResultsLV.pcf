@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <!-- This file automatically generated from lv_claim.xml -->
+  <ListViewPanel
+    id="FreeTextClaimSearchResultsLV">
+    <Require
+      name="claimSearchResults"
+      type="search.FreeTextClaimSearchResults"/>
+    <ExposeIterator
+      flags="RetrievableClaim"
+      valueType="FreeTextClaimSearchEntity"
+      widget="FreeTextClaimSearchResultsIterator"/>
+    <Variable
+      initialValue="claimSearchResults == null ? null : claimSearchResults.getActiveClaimSearchResults()"
+      name="FreeTextClaimSearchViewList"
+      recalculateOnRefresh="true"
+      type="gw.api.database.IQueryBeanResult&lt;FreeTextClaimSearchEntity&gt;"/>
+    <Variable
+      initialValue="getHighestScore()"
+      name="highestScore"
+      recalculateOnRefresh="true"
+      type="java.math.BigDecimal"/>
+    <RowIterator
+      editable="false"
+      elementName="FreeTextClaimSearchView"
+      hasCheckBoxes="true"
+      id="FreeTextClaimSearchResultsIterator"
+      pickValue="FreeTextClaimSearchView"
+      value="FreeTextClaimSearchViewList">
+      <ToolbarFlag
+        condition="false"
+        name="RetrievableClaim"/>
+      <Row>
+        <Cell
+          id="Rank"
+          label="displaykey.LV.Claim.ClaimSearchResults.Claims.Rank"
+          printWidth="0.12"
+          value="FreeTextClaimSearchView.Rank"/>
+        <Cell
+          id="RelevanceNum"
+          label="displaykey.LV.Claim.ClaimSearchResults.Claims.Score"
+          sortBy="FreeTextClaimSearchView.Score"
+          sortDirection="descending"
+          value="getFormattedPercentageOfHighest(FreeTextClaimSearchView.Score)"/>
+        <Cell
+          action="FreeTextClaimForward.go(FreeTextClaimSearchView.ClaimNumber, ClaimSearchType.TC_ACTIVE)"
+          id="ClaimNumber"
+          label="displaykey.LV.Claim.ClaimSearchResults.Claims.ID"
+          printWidth="0.12"
+          value="FreeTextClaimSearchView.ClaimNumber"/>
+        <Cell
+          id="PolicyNumber"
+          label="displaykey.LV.Claim.ClaimSearchResults.Claims.PolicyNumber"
+          printWidth="0.12"
+          value="FreeTextClaimSearchView.PolicyNumber"/>
+        <Cell
+          id="Status"
+          label="displaykey.LV.Claim.ClaimSearchResults.Claims.Status"
+          printWidth="0.12"
+          value="FreeTextClaimSearchView.Status"/>
+        <Cell
+          id="Date"
+          label="displaykey.LV.Claim.ClaimSearchResults.Claims.Date"
+          printWidth="0.12"
+          value="FreeTextClaimSearchView.Date"/>
+        <TextCell
+          id="FullName"
+          label="displaykey.LV.Claim.ClaimSearchResults.Claims.FullName"
+          value="FreeTextClaimSearchView.FullName"/>
+        <Cell
+          id="Address"
+          label="displaykey.LV.Claim.ClaimSearchResults.Claims.Address"
+          printWidth="0.14"
+          value="FreeTextClaimSearchView.Address"/>
+        <Cell
+          id="City"
+          label="displaykey.LV.Claim.ClaimSearchResults.Claims.City"
+          printWidth="0.14"
+          value="FreeTextClaimSearchView.City"/>
+        <Cell
+          id="State"
+          label="displaykey.LV.Claim.ClaimSearchResults.Claims.State"
+          printWidth="0.14"
+          value="FreeTextClaimSearchView.State"/>
+        <Cell
+          id="PostalCode"
+          label="displaykey.LV.Claim.ClaimSearchResults.Claims.PostalCode"
+          printWidth="0.14"
+          value="FreeTextClaimSearchView.PostalCode"/>
+        <Cell
+          id="Phone"
+          label="displaykey.LV.Claim.ClaimSearchResults.Claims.Phone"
+          printWidth="0.14"
+          value="FreeTextClaimSearchView.Phone"/>
+        <Cell
+          id="Roles"
+          label="displaykey.LV.Claim.ClaimSearchResults.Claims.Roles"
+          printWidth="0.14"
+          value="FreeTextClaimSearchView.Roles"/>
+      </Row>
+    </RowIterator>
+    <Code><![CDATA[uses java.math.BigDecimal
+
+/**
+ * Returns the highest score for the search results.
+ */
+ function getHighestScore() : BigDecimal {
+   if(claimSearchResults==null) return 0
+   var activeScores = claimSearchResults.ActiveClaimSearchResults.map( \ fte -> {return fte.Score})
+   if (activeScores.Count == 0) return 0
+   var highScore = activeScores.max()
+   return highScore==null ? 0 : highScore
+ }
+ 
+ /**
+  * Calculate percentage of highest score for a given
+  * score. Returns 0-100, suitable for a progress widget.
+  */
+ function getPercentageOfHighest(score:BigDecimal) : float {
+   if(score==null) {
+     score = 0
+   }
+   // should never see high score of 0 here
+   return highestScore==0 ? 0d : score.divide(highestScore, BigDecimal.ROUND_DOWN).floatValue()
+ }
+
+ /**
+  * Calculate percentage of highest score for a given
+  * score, and format it as a percentage.
+  */
+ function getFormattedPercentageOfHighest(score:BigDecimal) : String {
+    var scorePercent = getPercentageOfHighest(score)
+    var nf = java.text.NumberFormat.getPercentInstance()
+    return nf.format(scorePercent)
+ }]]></Code>
+  </ListViewPanel>
+</PCF>

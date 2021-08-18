@@ -1,0 +1,22 @@
+<WidgetTemplate name="ActivitySubjectSearchWidget" inputWidgetName="ActivitySubjectSearchInput">
+
+  <ChoiceRadioButtonValue option="&quot;activitypattern&quot;" value="#{value}.SubjectSearchType"
+          editable="true" radioButtonGroup="#{id}RadioButtonGrp"
+          id="#{id}PatternChoiceRadioButton">
+    <PostOnChange/>
+    <ExpressionRangeValue id="#{id}PatternValueWidget" value="#{value}.Pattern"
+                valueRange="#{value}.AllActivityPatterns" editable="true" sortValueRange="true"
+                optionLabel="VALUE.Subject.HasContent ? VALUE.Subject : displaykey.Java.NewActivity.NoSubject"
+                available="#{value}.SubjectSearchType == &quot;activitypattern&quot;"/>
+  </ChoiceRadioButtonValue>
+  <BR/>
+  <ChoiceRadioButtonValue option="&quot;contains&quot;" value="#{value}.SubjectSearchType"
+          editable="true" radioButtonGroup="#{id}RadioButtonGrp"
+          id="#{id}SubjectChoiceWidget">
+    <PostOnChange/>
+    <TextValue id="#{id}SubjectLabel" value="displaykey.Java.ActivitySearch.Contains + &quot; &quot;" editable="false"/>
+    <TextValue id="#{id}SubjectWidget" value="#{value}.Subject"
+           editable="true" available="#{value}.SubjectSearchType == &quot;contains&quot;"/>
+  </ChoiceRadioButtonValue>
+
+</WidgetTemplate>

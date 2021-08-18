@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><nonPersistentEntity xmlns="http://guidewire.com/datamodel" desc="Non-persistent set of information for the archived claim." entity="ArchivedClaimInfo" extendable="true" subpackage="claim.archiving">
+  <column desc="Comment about the archived claim." name="Comment" nullok="true" type="shorttext"/>
+</nonPersistentEntity>

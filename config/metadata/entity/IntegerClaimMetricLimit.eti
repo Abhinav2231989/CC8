@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<subtype xmlns="http://guidewire.com/datamodel" desc="Integer based claim metric limit." entity="IntegerClaimMetricLimit" final="false" subpackage="claim.metric" priority="2" supertype="ClaimMetricLimit">
+  <implementsInterface iface="gw.api.metric.MetricLimitMethods" impl="gw.api.claim.metric.IntegerClaimMetricLimitMethodsImpl"/>
+  <implementsEntity name="IntegerMetricLimitDelegate"/>
+</subtype>

@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <DetailViewPanel
+    available="true"
+    editable="true"
+    id="StatementDV"
+    mode="quoterevision"
+    visible="true">
+    <Require
+      name="currentQuote"
+      type="ServiceRequestStatement"/>
+    <Require
+      name="previousTotal"
+      type="gw.api.financials.CurrencyAmount"/>
+    <Require
+      name="readOnly"
+      type="boolean"/>
+    <InputColumn>
+      <Input
+        editable="currentQuote.New"
+        id="ReferenceNumber"
+        label="displaykey.Web.ServiceRequest.Quote.ReferenceNumber"
+        required="false"
+        value="currentQuote.ReferenceNumber"
+        visible="currentQuote != null or CurrentLocation.InEditMode"/>
+      <Input
+        formatType="currency"
+        id="PreviousTotal"
+        label="displaykey.Web.ServiceRequest.Quote.PrevTotalAmount"
+        value="previousTotal"
+        visible="true"/>
+      <Input
+        editable="true"
+        formatType="currency"
+        id="Amount"
+        label="displaykey.Web.ServiceRequest.Quote.NewTotalAmount"
+        required="true"
+        validationExpression="(currentQuote.Amount.Amount &gt; 0) ? null : displaykey.Web.ServiceRequest.Statement.NegativeAmountValidation"
+        value="currentQuote.Amount"
+        visible="true"/>
+      <Input
+        editable="currentQuote.New"
+        formatType="exactNumber"
+        id="DaysToPerformService"
+        label="displaykey.Web.ServiceRequest.Quote.DaysToPerformService"
+        required="true"
+        validationExpression="((currentQuote as ServiceRequestQuote).ExpectedDaysToPerformService &gt;= 0) ? null : displaykey.Web.ServiceRequest.Quote.InvalidNumberOfDaysToPerformService"
+        value="(currentQuote as ServiceRequestQuote).ExpectedDaysToPerformService"
+        visible="currentQuote != null or CurrentLocation.InEditMode"/>
+      <TextAreaInput
+        editable="currentQuote.New"
+        id="Description"
+        label="displaykey.Web.ServiceRequest.Quote.Description"
+        numRows="2"
+        required="true"
+        value="currentQuote.Description"
+        visible="true"/>
+    </InputColumn>
+  </DetailViewPanel>
+</PCF>

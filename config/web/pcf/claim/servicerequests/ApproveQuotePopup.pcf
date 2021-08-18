@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Popup
+    beforeCommit="approveQuote()"
+    canEdit="true"
+    id="ApproveQuotePopup"
+    startInEditMode="true"
+    title="displaykey.Web.ServiceRequest.StateTransition.ApproveQuotePopup.Title">
+    <LocationEntryPoint
+      signature="ApproveQuotePopup(serviceRequest: ServiceRequest)"/>
+    <Variable
+      name="serviceRequest"
+      type="ServiceRequest"/>
+    <Variable
+      initialValue="java.util.Date.Today.addBusinessDays(serviceRequest.LatestQuote.ExpectedDaysToPerformService)"
+      name="requestedServiceCompletionDate"/>
+    <Screen>
+      <Toolbar>
+        <EditButtons/>
+      </Toolbar>
+      <DetailViewPanel>
+        <InputColumn>
+          <DateInput
+            dateFormat="short"
+            editable="true"
+            id="RequestedServiceCompletionDate"
+            label="displaykey.Web.ServiceRequest.RequestedServiceCompletionDate"
+            required="true"
+            validationExpression="requestedServiceCompletionDate &lt; gw.api.util.DateUtil.currentDate().trimToMidnight() ? displaykey.Web.ServiceRequest.DateInPast : null"
+            value="requestedServiceCompletionDate"/>
+        </InputColumn>
+      </DetailViewPanel>
+    </Screen>
+    <Code><![CDATA[uses gw.vendormanagement.servicerequeststate.ServiceRequestOperationDefinition
+function approveQuote () {
+  serviceRequest.performOperation(TC_APPROVEQUOTE,
+                                  new ServiceRequestOperationDefinition.OperationContext(){
+                                      :Statement = serviceRequest.LatestQuote, 
+                                      :RequestedCompletionDate = requestedServiceCompletionDate.moveToEndOfDay()}, 
+                                  false)
+}]]></Code>
+  </Popup>
+</PCF>

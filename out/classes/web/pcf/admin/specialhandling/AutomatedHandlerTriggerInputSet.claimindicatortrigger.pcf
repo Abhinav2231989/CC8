@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <InputSet
+    id="AutomatedHandlerTriggerInputSet"
+    mode="claimindicatortrigger">
+    <Require
+      name="automatedHandler"
+      type="AutomatedHandler"/>
+    <Variable
+      initialValue="automatedHandler.Trigger as ClaimIndicatorTrigger"
+      name="trigger"
+      type="ClaimIndicatorTrigger"/>
+    <RangeInput
+      editable="true"
+      id="AutomatedHandlerClaimIndicator"
+      label="displaykey.Web.Admin.AutomatedHandlerTrigger.ClaimIndicator.Indicator"
+      required="true"
+      sortValueRange="false"
+      value="trigger.ClaimIndicator"
+      valueRange="getClaimIndicatorOptions()"/>
+    <BooleanRadioInput
+      align="left"
+      editable="true"
+      falseLabel="displaykey.Web.Admin.AutomatedHandlerTrigger.ClaimIndicator.Event.TurnsOff"
+      id="AutomatedHandlerClaimIndicatorTriggeringValue"
+      label="displaykey.Web.Admin.AutomatedHandlerTrigger.ClaimIndicator.Event"
+      required="true"
+      stacked="true"
+      trueLabel="displaykey.Web.Admin.AutomatedHandlerTrigger.ClaimIndicator.Event.TurnsOn"
+      value="trigger.TriggeringValue"/>
+    <Code><![CDATA[function getClaimIndicatorOptions() : ClaimIndicatorIntSubtype[] {
+  var baseSet = ClaimIndicatorIntSubtype.getTypeKeys(false).disjunction({ClaimIndicatorIntSubtype.TC_CLAIMINDICATOR})
+  return baseSet.toArray(new ClaimIndicatorIntSubtype[baseSet.Count]).sortBy(\ c -> c.DisplayName)
+}]]></Code>
+  </InputSet>
+</PCF>

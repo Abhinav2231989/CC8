@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <DetailViewPanel
+    editable="false"
+    id="ServiceRequestDV">
+    <Require
+      name="serviceRequest"
+      type="entity.ServiceRequest"/>
+    <Require
+      name="stateHandler"
+      type="gw.vendormanagement.servicerequeststate.ServiceRequestStateHandler"/>
+    <InputColumn>
+      <Input
+        id="ServiceRequestNumber"
+        label="displaykey.Web.ServiceRequest.ServiceRequestNumber"
+        required="false"
+        value="serviceRequest.ServiceRequestNumber"/>
+      <Input
+        id="ServiceRequestReferenceNumber"
+        label="displaykey.Web.ServiceRequest.ServiceRequestReferenceNumber"
+        required="false"
+        value="serviceRequest.ServiceRequestReferenceNumber"/>
+      <TypeKeyInput
+        id="Progress"
+        label="displaykey.Web.ServiceRequest.Progress"
+        value="serviceRequest.Progress"/>
+      <TypeKeyInput
+        id="QuoteStatus"
+        label="displaykey.Web.ServiceRequest.QuoteStatus"
+        value="serviceRequest.QuoteStatus"
+        visible="serviceRequest.quoteAllowed(stateHandler)"/>
+      <Input
+        id="RequoteReason"
+        label="displaykey.Web.ServiceRequest.RequoteReason"
+        value="serviceRequest.LatestQuote.DeclinedReason"
+        visible="serviceRequest.LatestQuote.DeclinedReason != null"/>
+      <Input
+        id="NextAction"
+        label="displaykey.Web.ServiceRequest.NextAction"
+        value="serviceRequest.nextActionDefinition(stateHandler).NextAction.ActionName"/>
+      <Input
+        id="ActionOwner"
+        label="displaykey.Web.ServiceRequest.ActionOwner"
+        value="serviceRequest.nextActionDefinition(stateHandler).ActionOwnerString"/>
+      <Input
+        id="Incident"
+        label="displaykey.Web.ServiceRequest.RelatesTo"
+        value="serviceRequest.TypePrefixedIncidentName"/>
+      <DateInput
+        dateFormat="short"
+        id="RequestedQuoteCompletionDate"
+        label="displaykey.Web.ServiceRequest.RequestedQuoteCompletionDate"
+        required="true"
+        value="serviceRequest.RequestedQuoteCompletionDate"
+        visible="QuoteDatesVisible"/>
+      <DateInput
+        dateFormat="short"
+        id="RequestedServiceCompletionDate"
+        label="displaykey.Web.ServiceRequest.RequestedServiceCompletionDate"
+        required="true"
+        value="serviceRequest.RequestedServiceCompletionDate"
+        visible="ServiceDatesVisible"/>
+      <DateInput
+        dateFormat="short"
+        id="ExpectedQuoteCompletionDate"
+        label="displaykey.Web.ServiceRequest.ExpectedQuoteCompletionDate"
+        required="false"
+        value="serviceRequest.ExpectedQuoteCompletionDate"
+        visible="QuoteDatesVisible"/>
+      <DateInput
+        dateFormat="short"
+        id="ExpectedServiceCompletionDate"
+        label="displaykey.Web.ServiceRequest.ExpectedServiceCompletionDate"
+        required="false"
+        value="serviceRequest.ExpectedServiceCompletionDate"
+        visible="ServiceDatesVisible"/>
+      <DateInput
+        dateFormat="short"
+        id="CompletionDate"
+        label="displaykey.Web.ServiceRequest.CompletionDate"
+        required="false"
+        value="serviceRequest.CompletionDate"
+        visible="serviceRequest.CompletionDate != null"/>
+      <TypeKeyInput
+        id="Currency"
+        label="displaykey.Web.ServiceRequest.Currency"
+        value="serviceRequest.Currency"/>
+      <InputDivider/>
+      <Label
+        label="displaykey.Web.ServiceRequest.SpecialistHeading"/>
+      <Input
+        action="ClaimContactDetailPopup.push(serviceRequest.Specialist, serviceRequest.Claim)"
+        actionAvailable="serviceRequest.Specialist != null"
+        id="Specialist"
+        label="displaykey.Web.ServiceRequest.SpecialistName"
+        value="serviceRequest.SpecialistName"/>
+      <Input
+        id="SpecialistPhone"
+        label="displaykey.Web.ServiceRequest.SpecialistPhone"
+        value="serviceRequest.Specialist.PrimaryPhoneValue"/>
+      <TypeKeyInput
+        id="SpecialistCommMethod"
+        label="displaykey.Web.ServiceRequest.SpecialistCommMethod"
+        required="false"
+        value="serviceRequest.SpecialistCommMethod"/>
+      <InputDivider/>
+      <ListViewInput
+        def="InstructionServicesLV(serviceRequest, false)"
+        editable="false"
+        id="ServiceToPerform"
+        label="displaykey.Web.ServiceRequest.ServiceToPerform"
+        labelAbove="true"
+        mode="&quot;default&quot;">
+        <Toolbar/>
+      </ListViewInput>
+      <Input
+        id="Kind"
+        label="displaykey.Web.ServiceRequest.Kind"
+        outputConversion="VALUE.Label"
+        required="false"
+        value="serviceRequest.Kind"/>
+      <InputDivider/>
+      <Label
+        label="displaykey.Web.ServiceRequest.InstructionsForSpecialist"/>
+      <TextAreaInput
+        id="InstructionText"
+        label="displaykey.Web.ServiceRequest.Instructions"
+        numRows="4"
+        required="false"
+        value="serviceRequest.Instruction.InstructionText"
+        visible="serviceRequest.Instruction.InstructionText.HasContent"/>
+      <ClaimContactInput
+        claim="serviceRequest.Claim"
+        id="CustomerContact"
+        label="displaykey.Web.ServiceRequest.CustomerContact"
+        required="true"
+        value="serviceRequest.Instruction.CustomerContact"
+        valueRange="serviceRequest.Claim.Contacts*.Contact"/>
+      <Label
+        label="displaykey.Web.ServiceRequest.ServiceAddress"/>
+      <InputSetRef
+        def="CCAddressInputSet(serviceRequest.Instruction.ServiceAddressOwner)"
+        editable="false"
+        id="ServiceAddress"/>
+    </InputColumn>
+    <Code><![CDATA[property get QuoteDatesVisible(): boolean{
+  return serviceRequest.expectedQuoteCompletionDateApplies(stateHandler) or 
+    (serviceRequest.Progress == ServiceRequestProgress.TC_DRAFT 
+    and not serviceRequest.IsPromotion 
+    and serviceRequest.Kind != ServiceRequestKind.TC_SERVICEONLY)
+}
+
+property get ServiceDatesVisible(): boolean {
+  return serviceRequest.expectedServiceCompletionDateApplies(stateHandler) or 
+    (serviceRequest.Progress == ServiceRequestProgress.TC_DRAFT and serviceRequest.IsPromotion) or
+    (serviceRequest.Progress == ServiceRequestProgress.TC_DRAFT and serviceRequest.Kind == ServiceRequestKind.TC_SERVICEONLY) 
+}]]></Code>
+  </DetailViewPanel>
+</PCF>

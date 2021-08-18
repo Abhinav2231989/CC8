@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<subtype xmlns="http://guidewire.com/datamodel"
+        entity="AccountSpecialHandling"
+        supertype="SpecialHandling"
+        subpackage="specialhandling"
+        final="true"
+        desc="Special Handling for an Account">
+    <fulldescription>
+        The special handling to follow for claims linked to a given Account
+    </fulldescription>
+    <foreignkey fkentity="Account"
+                name="Account"
+                columnName="AccountID"
+                nullok="false"
+                desc="The Account that owns this instance of Special Handling.  Any Claims created for Policies associated with this Account will have these special handling instructions and triggers applied."/>
+</subtype>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><delegate xmlns="http://guidewire.com/datamodel" extendable="true" name="MoneyMetricDelegate" subpackage="metric">
+  <fulldescription>Delegate used by money claim, exposure, and service request metrics to store a money value
+    </fulldescription>
+  <column desc="Money field to store the money value." name="MoneyValue" nullok="true" type="currencyamount">
+    <columnParam name="currencyProperty" value="MoneyCurrency"/>
+  </column>
+</delegate>

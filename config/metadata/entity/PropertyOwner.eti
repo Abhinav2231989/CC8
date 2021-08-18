@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><entity xmlns="http://guidewire.com/datamodel" desc="Links a lienholder to a property." entity="PropertyOwner" exportable="true" platform="false" subpackage="policy" table="propertyowner" type="joinarray">
+  <implementsEntity name="Extractable"/>
+  <typekey desc="Whether the lienholder is a partial owner or the sole owner." name="OwnerType" nullok="true" typelist="OwnerType"/>
+  <foreignkey columnName="PropertyID" desc="The related property." exportable="false" fkentity="PolicyLocation" name="Property" nullok="false" triggersValidation="true"/>
+  <foreignkey columnName="LocationBasedRUID" desc="The related risk unit/building." exportable="false" fkentity="LocationBasedRU" name="LocationBasedRU" nullok="true" triggersValidation="true"/>
+  <foreignkey columnName="LienholderID"  desc="The relevant lienholder." fkentity="Contact" name="Lienholder" nullok="false" owner="true" triggersValidation="true"/>
+  <index desc="Enforce uniqueness, only one lienholder of a given type per property" name="propertyowneru1" unique="true">
+    <indexcol keyposition="1" name="PropertyID"/>
+    <indexcol keyposition="2" name="LienholderID"/>
+    <indexcol keyposition="3" name="OwnerType"/>
+	<indexcol keyposition="4" name="LocationBasedRUID"/>
+  </index>
+</entity>

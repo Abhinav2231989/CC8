@@ -1,0 +1,22 @@
+package rules.Validation.ExposureValidationRules_dir.EXV05000ISOValidation_dir
+
+@gw.rules.RuleName("EXV05200 - Primary Coverage")
+internal class EXV05200PrimaryCoverage {
+  static function doCondition(exposure : entity.Exposure) : boolean {
+    
+/*start00rule*/
+return exposure.PrimaryCoverage == null
+/*end00rule*/
+
+  }
+
+  static function doAction(exposure : entity.Exposure, actions : gw.rules.Action) {
+
+/*start00rule*/
+exposure.rejectField("PrimaryCoverage", "iso", 
+                     displaykey.Rules.Validation.Exposure.CoverageNotNull, null, null)
+
+/*end00rule*/
+
+  }
+}

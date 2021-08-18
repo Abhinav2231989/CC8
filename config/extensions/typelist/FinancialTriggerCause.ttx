@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<typelistextension xmlns="http://guidewire.com/typelists" desc="Types of occurences that can trigger a financial threshold event" name="FinancialTriggerCause">
+  <typecode code="reached" desc="Amount has reached or exceeded threshold" name="Reached"/>
+</typelistextension>

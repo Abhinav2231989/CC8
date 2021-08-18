@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <MenuItemSet
+    id="AddAgreementMenuItemSet">
+    <Require
+      name="claim"
+      type="Claim"/>
+    <MenuItem
+      id="TreatySubMenu"
+      label="displaykey.Web.Claim.Reinsurance.Treaty"
+      showConfirmMessage="false">
+      <MenuItemIterator
+        elementName="treatySubMenuItemIType"
+        id="TreatySubMenuIterator"
+        value="gw.reins.RIAgreementUIHelper.TreatySubtypes">
+        <MenuItem
+          action="NewRIAgreement.go(claim, treatySubMenuItemIType)"
+          id="treatySubMenuItem"
+          label="treatySubMenuItemIType.DisplayName"/>
+      </MenuItemIterator>
+    </MenuItem>
+    <MenuItem
+      id="FacultativeSubMenu"
+      label="displaykey.Web.Claim.Reinsurance.Facultative"
+      showConfirmMessage="false">
+      <MenuItemIterator
+        elementName="facSubMenuItemIType"
+        id="FacSubMenuIterator"
+        value="gw.reins.RIAgreementUIHelper.FacultativeSubtypes">
+        <MenuItem
+          action="NewRIAgreement.go(claim, facSubMenuItemIType)"
+          id="facSubMenuItem"
+          label="facSubMenuItemIType.DisplayName"/>
+      </MenuItemIterator>
+    </MenuItem>
+  </MenuItemSet>
+</PCF>

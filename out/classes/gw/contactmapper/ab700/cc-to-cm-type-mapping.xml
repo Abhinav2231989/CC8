@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file describes the entity name and type list mappings between ClaimCenter and ContactManager. It is used
+    to map ClaimCenter entity names and type lists into the values required by the XSD for sending data
+    to ContactManager.
+
+    Any entities that are transferred between ClaimCenter and ContactManager via the ABContactAPI, i.e. the
+    ab700 or newer plugin, should have entries in this file if the names are different in ClaimCenter and
+    ContactManager.
+
+    See type-mapping.xsd for the schema for this file.
+-->
+<TypeMapping
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="type-mapping.xsd">
+
+  <EntityMapping source="Contact" target="ABContact"/>
+  <EntityMapping source="Adjudicator" target="ABAdjudicator"/>
+  <EntityMapping source="Attorney" target="ABAttorney"/>
+  <EntityMapping source="AutoRepairShop" target="ABAutoRepairShop"/>
+  <EntityMapping source="AutoTowingAgcy" target="ABAutoTowingAgcy"/>
+  <EntityMapping source="Company" target="ABCompany"/>
+  <EntityMapping source="CompanyVendor" target="ABCompanyVendor"/>
+  <EntityMapping source="Doctor" target="ABDoctor"/>
+  <EntityMapping source="LawFirm" target="ABLawFirm"/>
+  <EntityMapping source="LegalVenue" target="ABLegalVenue"/>
+  <EntityMapping source="MedicalCareOrg" target="ABMedicalCareOrg"/>
+  <EntityMapping source="Person" target="ABPerson"/>
+  <EntityMapping source="PersonVendor" target="ABPersonVendor"/>
+  <EntityMapping source="Place" target="ABPlace"/>
+  <EntityMapping source="UserContact" target="ABUserContact"/>
+
+  <EntityMapping source="ContactTag" target="ABContactTag"/>
+
+  <EntityMapping source="ContactContact" target="ABContactContact"/>
+
+  <EntityMapping source="ContactAddress" target="ABContactAddress"/>
+
+  <EntityMapping source="ContactSearchCriteria" target="ABContactSearchCriteria"/>
+
+  <EntityMapping source="ContactCategoryScore" target="ABContactCategoryScore"/>
+
+</TypeMapping>

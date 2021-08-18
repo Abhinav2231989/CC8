@@ -1,0 +1,472 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Page
+    beforeCommit="removeOrVerifyNewAgreementGroups(reinsuranceAgreement); if(reinsuranceAgreement.isFieldChanged(&quot;NotificationThreshold&quot;) == true) {claim.setReinsuranceNotificationIfGrossTotalIncurredOverThreshold()};if(beforeCommitAction != null) {beforeCommitAction()}"
+    canEdit="perm.System.riedit and reinsuranceAgreement.isUserEditable"
+    canVisit="perm.System.riedit or perm.System.riview"
+    id="ReinsuranceAgreementDetails"
+    parent="ReinsuranceSummary(reinsuranceAgreement.Claim)"
+    startEditing="createNewAgreementGroup()"
+    title="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.AgreementDetails">
+    <LocationEntryPoint
+      signature="ReinsuranceAgreementDetails( reinsuranceAgreement:RIAgreement, claim:Claim)"/>
+    <Variable
+      name="reinsuranceAgreement"
+      type="RIAgreement"/>
+    <Variable
+      name="claim"
+      type="Claim"/>
+    <Variable
+      initialValue="null"
+      name="beforeCommitAction"
+      type="block()"/>
+    <Screen>
+      <Toolbar
+        visible="not gw.api.print.PrintUtil.PrintingPDF">
+        <EditButtons
+          cancelVisible="perm.System.riedit"
+          editVisible="perm.System.riedit"
+          id="EditButtons"/>
+        <ToolbarButton
+          action="ensureInEditMode(); beforeCommitAction = \ -&gt; deleteAgreementAndGroupIfLastAgreement(); CurrentLocation.commit()"
+          confirmMessage="reinsuranceAgreement.RIAgreementGroup.Agreements.Count == 1 ? displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.DeleteWillRemoveGroup : displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.DeleteConfirm"
+          id="DeleteButton"
+          label="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.Delete"
+          visible="(not CurrentLocation.InEditMode) and perm.System.riedit and reinsuranceAgreement.isUserDeletable"/>
+      </Toolbar>
+      <PanelRef
+        def="AgreementDetailsDV(reinsuranceAgreement)"
+        id="AgreementDetailsRef"
+        mode="reinsuranceAgreement.Subtype"/>
+      <DetailViewPanel
+        hideIfEditable="true">
+        <InputColumn>
+          <Label
+            id="TransactionDetailsLabel"
+            label="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.TransactionDetails"/>
+        </InputColumn>
+      </DetailViewPanel>
+      <ListViewPanel
+        alternateEntryStyle="false"
+        hideIfEditable="true">
+        <Row
+          id="HeaderRow1"
+          renderAsSmartHeader="true">
+          <Cell
+            align="center"
+            id="BlankHeader1"/>
+          <Cell
+            align="center"
+            colspan="2"
+            id="ClaimFinancialsHeader"
+            value="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.ClaimFinancials"/>
+          <Cell
+            align="center"
+            colspan="6"
+            id="RIFinancialsHeader"
+            value="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.RIFinancialsOnThisAgreement"/>
+        </Row>
+        <Row
+          id="HeaderRow2"
+          renderAsSmartHeader="true"
+          visible="shouldShowAdjustments()">
+          <Cell
+            align="center"
+            id="BlankHeader2"/>
+          <Cell
+            align="center"
+            id="BlankHeader3"/>
+          <Cell
+            align="center"
+            id="BlankHeader4"/>
+          <Cell
+            align="center"
+            colspan="3"
+            id="RIRecoverableHeader"
+            value="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.RIRecoverable"/>
+          <Cell
+            align="center"
+            colspan="3"
+            id="RICededReservesHeader"
+            value="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.OpenCededReserves"/>
+        </Row>
+        <RowIterator
+          editable="false"
+          elementName="ExposureRow"
+          id="ExposureIterator"
+          pageSize="0"
+          value="detailsRows().sortBy(\ r -&gt; r.Exposure.DisplayName )">
+          <Row
+            useTitleStyle="true">
+            <Cell
+              id="DisplayName"
+              label="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.ByExposure"
+              value="ExposureRow.Exposure.DisplayName + (ExposureRow.Exposure.Coverage.Type == null ? &quot;&quot; :  &quot; - &quot;  +  ExposureRow.Exposure.Coverage.Type.DisplayName)"/>
+            <Cell
+              enableSort="false"
+              id="NetPaid"
+              label="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.NetPaid"
+              showHeaderIcon="false"
+              value="financials.FinancialsCalculations.getNetPayments().withExposure(ExposureRow.Exposure).Amount"/>
+            <Cell
+              enableSort="false"
+              id="OpenReserves"
+              label="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.OpenReserves"
+              value="financials.FinancialsCalculations.getOpenReserves().withExposure(ExposureRow.Exposure).Amount"/>
+            <Cell
+              enableSort="false"
+              id="PaymentRecoverable"
+              label="shouldShowAdjustments() ? displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.Calculated : displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.RIRecoverable"
+              value="financials.FinancialsCalculations.getRITotalRecoverablesNonAdjustments().withExposure(ExposureRow.Exposure).withRIAgreement(reinsuranceAgreement).Amount"/>
+            <Cell
+              enableSort="false"
+              id="AdjustedPaymentRecoverable"
+              label="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.AdjustedPaymentRecoverable"
+              value="financials.FinancialsCalculations.getRITotalRecoverablesAdjustments().withExposure(ExposureRow.Exposure).withRIAgreement(reinsuranceAgreement).Amount"
+              visible="shouldShowAdjustments()"/>
+            <Cell
+              enableSort="false"
+              id="TotalPaymentRecoverable"
+              label="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.Total"
+              value="financials.FinancialsCalculations.getRITotalRecoverables().withExposure(ExposureRow.Exposure).withRIAgreement(reinsuranceAgreement).Amount"
+              visible="shouldShowAdjustments()"/>
+            <Cell
+              enableSort="false"
+              id="CededReserves"
+              label="shouldShowAdjustments() ? displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.Calculated : displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.OpenCededReserves"
+              value="financials.FinancialsCalculations.getRITotalCededReservesNonAdjustments().withExposure(ExposureRow.Exposure).withRIAgreement(reinsuranceAgreement).Amount"/>
+            <Cell
+              enableSort="false"
+              id="AdjustedCededReserves"
+              label="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.Adjustments"
+              value="financials.FinancialsCalculations.getRITotalCededReservesAdjustments().withExposure(ExposureRow.Exposure).withRIAgreement(reinsuranceAgreement).Amount"
+              visible="shouldShowAdjustments()"/>
+            <Cell
+              enableSort="false"
+              id="TotalCededReserves"
+              label="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.Total"
+              value="financials.FinancialsCalculations.getRIOpenCededReserves().withExposure(ExposureRow.Exposure).withRIAgreement(reinsuranceAgreement).Amount"
+              visible="shouldShowAdjustments()"/>
+          </Row>
+          <RowIterator
+            editable="false"
+            elementName="CostTypeRow"
+            pageSize="0"
+            value="ExposureRow.NextLevelRows.sortBy(\ r -&gt; r.CostType)">
+            <Row
+              useSubHeaderStyle="true">
+              <Cell
+                id="DisplayName"
+                value="&quot;  &quot; + CostTypeRow.CostType.DisplayName"/>
+              <Cell
+                id="NetPaid"
+                value="financials.FinancialsCalculations.getNetPayments().withExposure(CostTypeRow.Exposure).withCostType(CostTypeRow.CostType).Amount"/>
+              <Cell
+                id="OpenReserves"
+                value="financials.FinancialsCalculations.getOpenReserves().withExposure(CostTypeRow.Exposure).withCostType(CostTypeRow.CostType).Amount"/>
+              <Cell
+                id="PaymentRecoverable"
+                value="financials.FinancialsCalculations.getRITotalRecoverablesNonAdjustments().withExposure(CostTypeRow.Exposure).withRIAgreement(reinsuranceAgreement).withCostType(CostTypeRow.CostType).Amount"/>
+              <Cell
+                id="AdjustedPaymentRecoverable"
+                value="financials.FinancialsCalculations.getRITotalRecoverablesAdjustments().withExposure(CostTypeRow.Exposure).withCostType(CostTypeRow.CostType).withRIAgreement(reinsuranceAgreement).Amount"
+                visible="shouldShowAdjustments()"/>
+              <Cell
+                id="TotalPaymentRecoverable"
+                value="financials.FinancialsCalculations.getRITotalRecoverables().withExposure(CostTypeRow.Exposure).withCostType(CostTypeRow.CostType).withRIAgreement(reinsuranceAgreement).Amount"
+                visible="shouldShowAdjustments()"/>
+              <Cell
+                id="CededReserves"
+                value="financials.FinancialsCalculations.getRITotalCededReservesNonAdjustments().withExposure(CostTypeRow.Exposure).withCostType(CostTypeRow.CostType).withRIAgreement(reinsuranceAgreement).Amount"/>
+              <Cell
+                id="AdjustedCededReserves"
+                value="financials.FinancialsCalculations.getRITotalCededReservesAdjustments().withExposure(CostTypeRow.Exposure).withCostType(CostTypeRow.CostType).withRIAgreement(reinsuranceAgreement).Amount"
+                visible="shouldShowAdjustments()"/>
+              <Cell
+                id="TotalCededReserves"
+                value="financials.FinancialsCalculations.getRIOpenCededReserves().withExposure(CostTypeRow.Exposure).withCostType(CostTypeRow.CostType).withRIAgreement(reinsuranceAgreement).Amount"
+                visible="shouldShowAdjustments()"/>
+            </Row>
+            <RowIterator
+              editable="false"
+              elementName="CostCategoryRow"
+              pageSize="0"
+              value="CostTypeRow.NextLevelRows.sortBy(\ r -&gt; r.CostCategory )">
+              <Row>
+                <Cell
+                  id="DisplayName"
+                  value="&quot;    &quot; + CostCategoryRow.CostCategory.DisplayName"/>
+                <Cell
+                  id="NetPaid"
+                  value="financials.FinancialsCalculations.getNetPayments().withExposure(CostCategoryRow.Exposure).withCostType(CostCategoryRow.CostType).withCostCategory(CostCategoryRow.CostCategory).Amount"/>
+                <Cell
+                  id="OpenReserves"
+                  value="financials.FinancialsCalculations.getOpenReserves().withExposure(CostCategoryRow.Exposure).withCostType(CostCategoryRow.CostType).withCostCategory(CostCategoryRow.CostCategory).Amount"/>
+                <Cell
+                  id="PaymentRecoverable"
+                  value="financials.FinancialsCalculations.getRITotalRecoverablesNonAdjustments().withExposure(CostCategoryRow.Exposure).withRIAgreement(reinsuranceAgreement).withCostType(CostCategoryRow.CostType).withCostCategory(CostCategoryRow.CostCategory).Amount"/>
+                <Cell
+                  id="AdjustedPaymentRecoverable"
+                  value="financials.FinancialsCalculations.getRITotalRecoverablesAdjustments().withExposure(CostCategoryRow.Exposure).withCostType(CostCategoryRow.CostType).withCostCategory(CostCategoryRow.CostCategory).withRIAgreement(reinsuranceAgreement).Amount"
+                  visible="shouldShowAdjustments()"/>
+                <Cell
+                  id="TotalPaymentRecoverable"
+                  value="financials.FinancialsCalculations.getRITotalRecoverables().withExposure(CostCategoryRow.Exposure).withCostType(CostCategoryRow.CostType).withCostCategory(CostCategoryRow.CostCategory).withRIAgreement(reinsuranceAgreement).Amount"
+                  visible="shouldShowAdjustments()"/>
+                <Cell
+                  id="CededReserves"
+                  value="financials.FinancialsCalculations.getRITotalCededReservesNonAdjustments().withExposure(CostCategoryRow.Exposure).withCostType(CostCategoryRow.CostType).withCostCategory(CostCategoryRow.CostCategory).withRIAgreement(reinsuranceAgreement).Amount"/>
+                <Cell
+                  id="AdjustedCededReserves"
+                  value="financials.FinancialsCalculations.getRITotalCededReservesAdjustments().withExposure(CostCategoryRow.Exposure).withCostType(CostCategoryRow.CostType).withCostCategory(CostCategoryRow.CostCategory).withRIAgreement(reinsuranceAgreement).Amount"
+                  visible="shouldShowAdjustments()"/>
+                <Cell
+                  id="TotalCededReserves"
+                  value="financials.FinancialsCalculations.getRIOpenCededReserves().withExposure(CostCategoryRow.Exposure).withCostType(CostCategoryRow.CostType).withCostCategory(CostCategoryRow.CostCategory).withRIAgreement(reinsuranceAgreement).Amount"
+                  visible="shouldShowAdjustments()"/>
+              </Row>
+            </RowIterator>
+          </RowIterator>
+        </RowIterator>
+        <Row
+          useTitleStyle="true">
+          <Cell
+            bold="true"
+            id="DisplayNameFooter"
+            value="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.Total"/>
+          <Cell
+            bold="true"
+            id="NetPaidFooter"
+            value="financials.FinancialsCalculations.getNetPayments().withClaim(claim).withRIAgreement(reinsuranceAgreement).Amount"/>
+          <Cell
+            bold="true"
+            id="OpenReservesFooter"
+            value="financials.FinancialsCalculations.getOpenReserves().withClaim(claim).withRIAgreement(reinsuranceAgreement).Amount"/>
+          <Cell
+            bold="true"
+            id="PaymentRecoverableFooter"
+            value="financials.FinancialsCalculations.getRITotalRecoverablesNonAdjustments().withClaim(claim).withRIAgreement(reinsuranceAgreement).Amount"/>
+          <Cell
+            bold="true"
+            id="AdjustedPaymentRecoverableFooter"
+            value="financials.FinancialsCalculations.getRITotalRecoverablesAdjustments().withClaim(claim).withRIAgreement(reinsuranceAgreement).Amount"
+            visible="shouldShowAdjustments()"/>
+          <Cell
+            bold="true"
+            id="TotalPaymentRecoverableFooter"
+            value="financials.FinancialsCalculations.getRITotalRecoverables().withClaim(claim).withRIAgreement(reinsuranceAgreement).Amount"
+            visible="shouldShowAdjustments()"/>
+          <Cell
+            bold="true"
+            id="CededReservesFooter"
+            value="financials.FinancialsCalculations.getRITotalCededReservesNonAdjustments().withClaim(claim).withRIAgreement(reinsuranceAgreement).Amount"/>
+          <Cell
+            bold="true"
+            id="AdjustedCededReservesFooter"
+            value="financials.FinancialsCalculations.getRITotalCededReservesAdjustments().withClaim(claim).withRIAgreement(reinsuranceAgreement).Amount"
+            visible="shouldShowAdjustments()"/>
+          <Cell
+            bold="true"
+            id="TotalCededReservesFooter"
+            value="financials.FinancialsCalculations.getRIOpenCededReserves().withClaim(claim).withRIAgreement(reinsuranceAgreement).Amount"
+            visible="shouldShowAdjustments()"/>
+        </Row>
+        <Row
+          useTitleStyle="true">
+          <Cell
+            id="TotalClaimCostFooter"
+            value="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.TotalClaimCost"/>
+          <Cell
+            id="ClaimCostNetPaidFooter"
+            value="financials.FinancialsCalculations.getNetPayments().withClaim(claim).withRIAgreement(reinsuranceAgreement).withCostType(CostType.TC_CLAIMCOST).Amount"/>
+          <Cell
+            id="ClaimCostOpenReservesFooter"
+            value="financials.FinancialsCalculations.getOpenReserves().withClaim(claim).withRIAgreement(reinsuranceAgreement).withCostType(CostType.TC_CLAIMCOST).Amount"/>
+          <Cell
+            id="ClaimCostPaymentRecoverableFooter"
+            value="financials.FinancialsCalculations.getRITotalRecoverablesNonAdjustments().withClaim(claim).withRIAgreement(reinsuranceAgreement).withCostType(CostType.TC_CLAIMCOST).Amount"/>
+          <Cell
+            id="ClaimCostAdjustedPaymentRecoverableFooter"
+            value="financials.FinancialsCalculations.getRITotalRecoverablesAdjustments().withClaim(claim).withRIAgreement(reinsuranceAgreement).withCostType(CostType.TC_CLAIMCOST).Amount"
+            visible="shouldShowAdjustments()"/>
+          <Cell
+            id="ClaimCostTotalPaymentRecoverableFooter"
+            value="financials.FinancialsCalculations.getRITotalRecoverables().withClaim(claim).withCostType(CostType.TC_CLAIMCOST).withRIAgreement(reinsuranceAgreement).Amount"
+            visible="shouldShowAdjustments()"/>
+          <Cell
+            id="ClaimCostCededReservesFooter"
+            value="financials.FinancialsCalculations.getRITotalCededReservesNonAdjustments().withClaim(claim).withRIAgreement(reinsuranceAgreement).withCostType(CostType.TC_CLAIMCOST).Amount"/>
+          <Cell
+            id="ClaimCostAdjustedCededReservesFooter"
+            value="financials.FinancialsCalculations.getRITotalCededReservesAdjustments().withClaim(claim).withCostType(CostType.TC_CLAIMCOST).withRIAgreement(reinsuranceAgreement).Amount"
+            visible="shouldShowAdjustments()"/>
+          <Cell
+            id="ClaimCostTotalCededReservesFooter"
+            value="financials.FinancialsCalculations.getRIOpenCededReserves().withClaim(claim).withCostType(CostType.TC_CLAIMCOST).withRIAgreement(reinsuranceAgreement).Amount"
+            visible="shouldShowAdjustments()"/>
+        </Row>
+        <Row
+          useTitleStyle="true">
+          <Cell
+            id="TotalExpensesFooter"
+            value="displaykey.Web.Claim.Reinsurance.ReinsuranceAgreementDetails.TotalExpenses"/>
+          <Cell
+            align="right"
+            formatType="currency"
+            id="ExpensesNetPaidFooter"
+            value="getRIExpenses(financials.FinancialsCalculations.getNetPayments())"/>
+          <Cell
+            align="right"
+            formatType="currency"
+            id="ExpensesOpenReservesFooter"
+            value="getRIExpenses(financials.FinancialsCalculations.getOpenReserves())"/>
+          <Cell
+            align="right"
+            formatType="currency"
+            id="ExpensesPaymentRecoverableFooter"
+            value="getRIExpenses(financials.FinancialsCalculations.getRITotalRecoverablesNonAdjustments())"/>
+          <Cell
+            align="right"
+            formatType="currency"
+            id="ExpensesAdjustedPaymentRecoverableFooter"
+            value="getRIExpenses(financials.FinancialsCalculations.getRITotalRecoverablesAdjustments())"
+            visible="shouldShowAdjustments()"/>
+          <Cell
+            align="right"
+            formatType="currency"
+            id="ExpensesTotalPaymentRecoverableFooter"
+            value="getRIExpenses(financials.FinancialsCalculations.getRITotalRecoverables())"
+            visible="shouldShowAdjustments()"/>
+          <Cell
+            align="right"
+            formatType="currency"
+            id="ExpensesCededReservesFooter"
+            value="getRIExpenses(financials.FinancialsCalculations.getRITotalCededReservesNonAdjustments())"/>
+          <Cell
+            align="right"
+            formatType="currency"
+            id="ExpensesAdjustedCededReservesFooter"
+            value="getRIExpenses(financials.FinancialsCalculations.getRITotalCededReservesAdjustments())"
+            visible="shouldShowAdjustments()"/>
+          <Cell
+            align="right"
+            formatType="currency"
+            id="ExpensesTotalCededReservesFooter"
+            value="getRIExpenses(financials.FinancialsCalculations.getRIOpenCededReserves())"
+            visible="shouldShowAdjustments()"/>
+        </Row>
+      </ListViewPanel>
+    </Screen>
+    <Code><![CDATA[uses gw.reins.RIAgreementDetailsRow
+uses gw.api.financials.CurrencyAmount
+uses gw.api.financials.FinancialsCalculator
+uses gw.api.financials.FinancialsCalculations
+
+
+function ensureInEditMode() {
+  if(!CurrentLocation.InEditMode) {
+    CurrentLocation.startEditing()
+  }
+}
+
+function detailsRows() : RIAgreementDetailsRow[] {
+  return RIAgreementDetailsRow.createRows(reinsuranceAgreement)
+}
+
+/**
+ * Expenses calculations are simply the payments for the exposures claim minus the claim cost.  However, to get the correct indication that there are or are not 
+ * applicable transactions, it makes sense to sum up the various expenses.  I wanted to be sure that we get the correct amount, so I've built a check against
+ * the simple calculation
+ */
+function getRIExpenses(calculation : FinancialsCalculator) : CurrencyAmount {
+  var val = calculation.withClaim(claim).withCostType(CostType.TC_AOEXPENSE).withRIAgreement(reinsuranceAgreement).Amount
+  val = add(val, calculation.withCostType(CostType.TC_DCCEXPENSE).Amount)
+  val = add(val, calculation.withCostType(CostType.TC_UNSPECIFIED).Amount)
+
+  calculation.clear()
+  var agreementTotal = calculation.withClaim(claim).withRIAgreement(reinsuranceAgreement).Amount
+  var claimCostAmount = calculation.withCostType(CostType.TC_CLAIMCOST).Amount
+  var confirmVal = subtract(agreementTotal, claimCostAmount)
+  if (val == null and confirmVal != null and !confirmVal.Amount.IsZero) {
+    return confirmVal
+  } else if (val != null and confirmVal != null and val.Amount.compareTo(confirmVal) != 0) {
+    return confirmVal
+  }
+  return val
+}
+
+/**
+ * Expenses calculations are simply the payments for the exposures claim minus the claim cost.  However, to get the correct indication that there are or are not 
+ * applicable transactions, it makes sense to sum up the various expenses.  I wanted to be sure that we get the correct amount, so I've built a check against
+ * the simple calculation
+ */
+function getExpenses(calculation : FinancialsCalculator) : CurrencyAmount {
+  var val = calculation.withClaim(claim).withCostType(CostType.TC_AOEXPENSE).Amount
+  val = add(val, calculation.withCostType(CostType.TC_DCCEXPENSE).Amount)
+  val = add(val, calculation.withCostType(CostType.TC_UNSPECIFIED).Amount)
+
+  calculation.clear()
+  var total = calculation.withClaim(claim).withRIAgreementGroup(reinsuranceAgreement.RIAgreementGroup).Amount
+  var claimCostTotal = calculation.withCostType(CostType.TC_CLAIMCOST).Amount
+  var confirmVal = subtract(total, claimCostTotal)
+  if (val == null and confirmVal != null and !confirmVal.Amount.IsZero) {
+    return confirmVal
+  } else if (val != null and confirmVal != null and val.Amount.compareTo(confirmVal) != 0) {
+    return confirmVal
+  }
+  return val
+}
+
+function shouldShowAdjustments() : Boolean {
+  var recoverablesAdj = gw.api.financials.FinancialsCalculations.getRITotalRecoverablesAdjustments().withClaim(claim).withRIAgreement(reinsuranceAgreement).Amount
+  var cededResAdj = gw.api.financials.FinancialsCalculations.getRITotalCededReservesAdjustments().withClaim(claim).withRIAgreement(reinsuranceAgreement).Amount
+  return (recoverablesAdj != null and !recoverablesAdj.Amount.IsZero)
+         or
+         (cededResAdj != null and !cededResAdj.Amount.IsZero)
+}
+
+function getExposures() : Exposure[] {
+  return reinsuranceAgreement.RIAgreementGroup.Exposures;
+}
+function subtract(start : CurrencyAmount, amount : CurrencyAmount) : CurrencyAmount {
+  if (amount != null) {
+    return add(start, amount.negateStrict())
+  }
+  return start
+}
+
+function add(start : CurrencyAmount, amount : CurrencyAmount) : CurrencyAmount {
+  if (start == null) {
+    return amount
+  }
+  if (amount != null) {
+    return start.addStrict(amount)
+  }
+  return start
+}
+
+function deleteAgreementAndGroupIfLastAgreement() {
+  reinsuranceAgreement.delete()
+  claim.setReinsuranceNotificationIfGrossTotalIncurredOverThreshold()
+}
+
+function createNewAgreementGroup() {
+  claim.addToRIAgreementGroups( new RIAgreementGroup() )
+}
+
+static function removeOrVerifyNewAgreementGroups( agreement : RIAgreement ) {
+  for (group in claim.RIAgreementGroups) {
+    if (group.New and group != agreement.RIAgreementGroup) {
+      group.deleteIfNecessary()
+    } else if (group.New and group == agreement.RIAgreementGroup
+               and group.Exposures.length == 0) {
+      throw new gw.api.util.DisplayableException(
+        displaykey.Java.Financials.Exception.NoExposuresOnRIAgreementGroup( group.DisplayName ))
+    }
+  }
+}
+]]></Code>
+  </Page>
+</PCF>

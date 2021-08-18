@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <ListViewPanel
+    id="PolicyRefreshExistingPropertyRULV">
+    <Require
+      name="claim"
+      type="Claim"/>
+    <Require
+      name="policySummary"
+      type="PolicySummary"/>
+    <RowIterator
+      canPick="false"
+      checkBoxVisible="false"
+      editable="true"
+      elementName="riskUnitWrapper"
+      hasCheckBoxes="true"
+      value="gw.pcf.policyrefresh.PolicyRefreshRiskUnitWrapper.createWrapper(claim.Policy.RiskUnits.where(\ r -&gt; r typeis LocationBasedRU), policySummary)">
+      <Variable
+        initialValue="riskUnitWrapper.RiskUnit as LocationBasedRU"
+        name="propertyRU"
+        type="LocationBasedRU"/>
+      <ToolbarFlag
+        name="prop"/>
+      <Row>
+        <Cell
+          align="center"
+          id="Present"
+          label="displaykey.Web.PolicyRefresh.PresentOnNewPolicy"
+          value="riskUnitWrapper.MatchedString"
+          width="100"/>
+        <Cell
+          id="PropertyNumber"
+          label="displaykey.Web.Address.Default.Number"
+          sortOrder="1"
+          value="propertyRU.RUNumber"/>
+        <Cell
+          id="Location"
+          label="displaykey.Web.Address.Default.LocationNumber"
+          value="propertyRU.PolicyLocation.LocationNumber"/>
+        <Cell
+          id="BuildingNumber"
+          label="displaykey.Web.Address.Default.BuildingNumber"
+          value="propertyRU.Building.BuildingNumber"/>
+        <Cell
+          id="Description"
+          label="displaykey.Web.Address.Default.BuildingDescription"
+          value="propertyRU.Description"/>
+        <Cell
+          id="Address"
+          label="displaykey.Web.Address.Default.Address"
+          sortBy="propertyRU.Property.Address.AddressLine1,propertyRU.Property.Address.AddressLine2"
+          value="getDisplayAddress(propertyRU.Property.Address)"/>
+        <Cell
+          id="City"
+          label="displaykey.Web.Address.Default.City"
+          value="propertyRU.Property.Address.City"/>
+      </Row>
+    </RowIterator>
+    <Code><![CDATA[function getDisplayAddress(address : Address): String {
+  var formatter =  new gw.api.address.AddressFormatter() {
+      :AddressLine1 = address.addressLine1,
+      :AddressLine2 = address.addressLine2,
+      :AddressLine1Kanji = address.addressLine1Kanji,
+      :AddressLine2Kanji = address.addressLine2Kanji
+  }
+  return formatter.format(formatter, ", ")  
+}]]></Code>
+  </ListViewPanel>
+</PCF>

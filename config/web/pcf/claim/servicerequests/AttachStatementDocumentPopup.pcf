@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Popup
+    beforeCommit="createdStatement.attachDocument(documentCreationInfo)"
+    canEdit="true"
+    canVisit="true"
+    id="AttachStatementDocumentPopup"
+    startInEditMode="true"
+    title="displaykey.Web.ServiceRequest.Statement.AttachDocumentPopup.Title">
+    <LocationEntryPoint
+      signature="AttachStatementDocumentPopup(createdStatement: ServiceRequestStatement)"/>
+    <Variable
+      name="createdStatement"
+      type="ServiceRequestStatement"/>
+    <Variable
+      initialValue="initializeDocumentCreationInfo()"
+      name="documentCreationInfo"
+      type="gw.document.DocumentCreationInfo"/>
+    <ScreenRef
+      def="NewDocumentLinkedScreen(documentCreationInfo, createdStatement.ServiceRequest.Claim, true)"/>
+    <Code><![CDATA[function initializeDocumentCreationInfo(): gw.document.DocumentCreationInfo {
+  var info: gw.document.DocumentCreationInfo = gw.document.DocumentsUtil.createDocumentCreationInfo(createdStatement.ServiceRequest.Claim)
+  info.Document.setRelatedTo(createdStatement.ServiceRequest)
+  return info
+}]]></Code>
+  </Popup>
+</PCF>

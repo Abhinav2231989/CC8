@@ -1,0 +1,365 @@
+<?xml version="1.0"?>
+<wsdl:definitions targetNamespace="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/policylocation/PolicyLocationSearchAPI" name="PolicyLocationSearchAPI" xmlns="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/policylocation/PolicyLocationSearchAPI" xmlns:gwsoap="http://guidewire.com/ws/soapheaders" xmlns:gwwsdl="http://guidewire.com/pl/wsdl" xmlns:pogo="http://guidewire.com/pc/ws/gw/policylocation/PolicyLocationInfo" xmlns:pogo2="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ccentities/CCAddress" xmlns:pogo3="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ccentities/CCPolicyLocation" xmlns:pogo4="http://guidewire.com/pc/ws/gw/policylocation/MapEntry" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/policylocation/PolicyLocationSearchAPI" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://guidewire.com/ws/soapheaders" schemaLocation="soapheaders.xsd"/>
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/policylocation/MapEntry"/>
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ccentities/CCPolicyLocation"/>
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ccentities/CCAddress"/>
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/policylocation/PolicyLocationInfo"/>
+      <xs:element name="findPolicyLocationsWithinBoundingBox">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="effDate" type="xs:dateTime" gw:type="java.util.Date" minOccurs="0" xmlns:gw="http://guidewire.com/xsd"/>
+            <xs:element name="productCodes" minOccurs="0" gw:viewas="array" xmlns:gw="http://guidewire.com/xsd">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="Entry" type="xs:string" nillable="true"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="topLeftLat" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="topLeftLong" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="bottomRightLat" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="bottomRightLong" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="refCon" type="xs:string" minOccurs="0"/>
+            <xs:element name="start" type="xs:int"/>
+            <xs:element name="count" type="xs:int"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="findPolicyLocationsWithinBoundingBoxResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="return" minOccurs="0" gw:viewas="array" xmlns:gw="http://guidewire.com/xsd">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="Entry" nillable="true" type="pogo:PolicyLocationInfo"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="cancelFindPolicyLocations">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="refCon" type="xs:string" minOccurs="0"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="cancelFindPolicyLocationsResponse">
+        <xs:complexType/>
+      </xs:element>
+      <xs:element name="isFindPolicyLocationsCached">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="refCon" type="xs:string" minOccurs="0"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="isFindPolicyLocationsCachedResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="return" type="xs:boolean"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="findPolicyLocationByEffDateAndProductsWithinBoundingBox">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="effDate" type="xs:dateTime" gw:type="java.util.Date" minOccurs="0" xmlns:gw="http://guidewire.com/xsd"/>
+            <xs:element name="productCodes" minOccurs="0" gw:viewas="array" xmlns:gw="http://guidewire.com/xsd">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="Entry" type="xs:string" nillable="true"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="topLeftLat" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="topLeftLong" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="bottomRightLat" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="bottomRightLong" type="xs:decimal" minOccurs="0"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="findPolicyLocationByEffDateAndProductsWithinBoundingBoxResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="return" minOccurs="0" gw:viewas="array" xmlns:gw="http://guidewire.com/xsd">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="Entry" nillable="true" type="pogo:PolicyLocationInfo"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SOAPException">
+        <xs:complexType/>
+      </xs:element>
+      <xs:element name="RequiredFieldException">
+        <xs:complexType/>
+      </xs:element>
+      <xs:element name="BadIdentifierException">
+        <xs:complexType/>
+      </xs:element>
+    </xs:schema>
+    <xs:schema targetNamespace="http://guidewire.com/pc/ws/gw/policylocation/PolicyLocationInfo" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/policylocation/MapEntry"/>
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ccentities/CCPolicyLocation"/>
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ccentities/CCAddress"/>
+      <xs:complexType name="PolicyLocationInfo">
+        <xs:sequence>
+          <xs:element name="PNIAddressFields" minOccurs="0" type="pogo2:CCAddress"/>
+          <xs:element name="PNIEmail" type="xs:string" minOccurs="0"/>
+          <xs:element name="PNIName" type="xs:string" minOccurs="0"/>
+          <xs:element name="PNIPhoneNumber" type="xs:string" minOccurs="0"/>
+          <xs:element name="PolicyLocation" minOccurs="0" type="pogo3:CCPolicyLocation"/>
+          <xs:element name="PolicyLocationGeocodeStatus" type="xs:string" minOccurs="0"/>
+          <xs:element name="PolicyLocationLatitude" type="xs:decimal" minOccurs="0"/>
+          <xs:element name="PolicyLocationLongitude" type="xs:decimal" minOccurs="0"/>
+          <xs:element name="PolicyNumber" type="xs:string" minOccurs="0"/>
+          <xs:element name="ProductCode" type="xs:string" minOccurs="0"/>
+          <xs:element name="TotalInsuredValues" minOccurs="0" gw:viewas="array" xmlns:gw="http://guidewire.com/xsd">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="Entry" nillable="true" type="pogo4:MapEntry"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema targetNamespace="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ccentities/CCAddress" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/policylocation/MapEntry"/>
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ccentities/CCPolicyLocation"/>
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/policylocation/PolicyLocationInfo"/>
+      <xs:complexType name="CCAddress">
+        <xs:sequence>
+          <xs:element name="AddressBookUID" type="xs:string" minOccurs="0"/>
+          <xs:element name="AddressLine1" type="xs:string" minOccurs="0"/>
+          <xs:element name="AddressLine2" type="xs:string" minOccurs="0"/>
+          <xs:element name="AddressLine3" type="xs:string" minOccurs="0"/>
+          <xs:element name="AddressType" type="xs:string" minOccurs="0"/>
+          <xs:element name="City" type="xs:string" minOccurs="0"/>
+          <xs:element name="Country" type="xs:string" minOccurs="0"/>
+          <xs:element name="County" type="xs:string" minOccurs="0"/>
+          <xs:element name="Description" type="xs:string" minOccurs="0"/>
+          <xs:element name="HTMID" type="xs:decimal" minOccurs="0"/>
+          <xs:element name="PostalCode" type="xs:string" minOccurs="0"/>
+          <xs:element name="State" type="xs:string" minOccurs="0"/>
+          <xs:element name="ValidUntil" type="xs:dateTime" gw:type="java.util.Date" minOccurs="0" xmlns:gw="http://guidewire.com/xsd"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema targetNamespace="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ccentities/CCPolicyLocation" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/policylocation/MapEntry"/>
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ccentities/CCAddress"/>
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/policylocation/PolicyLocationInfo"/>
+      <xs:complexType name="CCPolicyLocation">
+        <xs:sequence>
+          <xs:element name="Address" minOccurs="0" type="pogo2:CCAddress"/>
+          <xs:element name="LocationNumber" type="xs:string" minOccurs="0"/>
+          <xs:element name="Notes" type="xs:string" minOccurs="0"/>
+          <xs:element name="PolicySystemID" type="xs:string" minOccurs="0"/>
+          <xs:element name="PrimaryLocation" type="xs:boolean"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema targetNamespace="http://guidewire.com/pc/ws/gw/policylocation/MapEntry" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ccentities/CCPolicyLocation"/>
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ccentities/CCAddress"/>
+      <xs:import namespace="http://guidewire.com/pc/ws/gw/policylocation/PolicyLocationInfo"/>
+      <xs:complexType name="MapEntry">
+        <xs:sequence>
+          <xs:element name="Name" type="xs:string" minOccurs="0"/>
+          <xs:element name="Value" type="xs:decimal" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:portType name="PolicyLocationSearchAPIPortType">
+    <wsdl:operation name="findPolicyLocationsWithinBoundingBox">
+      <wsdl:input name="findPolicyLocationsWithinBoundingBox" message="findPolicyLocationsWithinBoundingBox"/>
+      <wsdl:output name="findPolicyLocationsWithinBoundingBoxResponse" message="findPolicyLocationsWithinBoundingBoxResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="cancelFindPolicyLocations">
+      <wsdl:input name="cancelFindPolicyLocations" message="cancelFindPolicyLocations"/>
+      <wsdl:output name="cancelFindPolicyLocationsResponse" message="cancelFindPolicyLocationsResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="isFindPolicyLocationsCached">
+      <wsdl:input name="isFindPolicyLocationsCached" message="isFindPolicyLocationsCached"/>
+      <wsdl:output name="isFindPolicyLocationsCachedResponse" message="isFindPolicyLocationsCachedResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="findPolicyLocationByEffDateAndProductsWithinBoundingBox">
+      <wsdl:input name="findPolicyLocationByEffDateAndProductsWithinBoundingBox" message="findPolicyLocationByEffDateAndProductsWithinBoundingBox"/>
+      <wsdl:output name="findPolicyLocationByEffDateAndProductsWithinBoundingBoxResponse" message="findPolicyLocationByEffDateAndProductsWithinBoundingBoxResponse"/>
+      <wsdl:fault name="SOAPException" message="SOAPException"/>
+      <wsdl:fault name="RequiredFieldException" message="RequiredFieldException"/>
+      <wsdl:fault name="BadIdentifierException" message="BadIdentifierException"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PolicyLocationSearchAPISoap12Binding" type="PolicyLocationSearchAPIPortType">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="findPolicyLocationsWithinBoundingBox">
+      <soap12:operation style="document"/>
+      <wsdl:input name="findPolicyLocationsWithinBoundingBox">
+        <soap12:body use="literal"/>
+        <soap12:header message="gw-authentication" part="gw-authentication" use="literal"/>
+        <soap12:header message="gw-locale" part="gw-locale" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findPolicyLocationsWithinBoundingBoxResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelFindPolicyLocations">
+      <soap12:operation style="document"/>
+      <wsdl:input name="cancelFindPolicyLocations">
+        <soap12:body use="literal"/>
+        <soap12:header message="gw-authentication" part="gw-authentication" use="literal"/>
+        <soap12:header message="gw-locale" part="gw-locale" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="cancelFindPolicyLocationsResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="isFindPolicyLocationsCached">
+      <soap12:operation style="document"/>
+      <wsdl:input name="isFindPolicyLocationsCached">
+        <soap12:body use="literal"/>
+        <soap12:header message="gw-authentication" part="gw-authentication" use="literal"/>
+        <soap12:header message="gw-locale" part="gw-locale" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="isFindPolicyLocationsCachedResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findPolicyLocationByEffDateAndProductsWithinBoundingBox">
+      <soap12:operation style="document"/>
+      <wsdl:input name="findPolicyLocationByEffDateAndProductsWithinBoundingBox">
+        <soap12:body use="literal"/>
+        <soap12:header message="gw-authentication" part="gw-authentication" use="literal"/>
+        <soap12:header message="gw-locale" part="gw-locale" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findPolicyLocationByEffDateAndProductsWithinBoundingBoxResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SOAPException">
+        <soap12:fault name="SOAPException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="RequiredFieldException">
+        <soap12:fault name="RequiredFieldException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="BadIdentifierException">
+        <soap12:fault name="BadIdentifierException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PolicyLocationSearchAPISoap11Binding" type="PolicyLocationSearchAPIPortType">
+    <soap11:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="findPolicyLocationsWithinBoundingBox">
+      <soap11:operation style="document"/>
+      <wsdl:input name="findPolicyLocationsWithinBoundingBox">
+        <soap11:body use="literal"/>
+        <soap11:header message="gw-authentication" part="gw-authentication" use="literal"/>
+        <soap11:header message="gw-locale" part="gw-locale" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findPolicyLocationsWithinBoundingBoxResponse">
+        <soap11:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cancelFindPolicyLocations">
+      <soap11:operation style="document"/>
+      <wsdl:input name="cancelFindPolicyLocations">
+        <soap11:body use="literal"/>
+        <soap11:header message="gw-authentication" part="gw-authentication" use="literal"/>
+        <soap11:header message="gw-locale" part="gw-locale" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="cancelFindPolicyLocationsResponse">
+        <soap11:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="isFindPolicyLocationsCached">
+      <soap11:operation style="document"/>
+      <wsdl:input name="isFindPolicyLocationsCached">
+        <soap11:body use="literal"/>
+        <soap11:header message="gw-authentication" part="gw-authentication" use="literal"/>
+        <soap11:header message="gw-locale" part="gw-locale" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="isFindPolicyLocationsCachedResponse">
+        <soap11:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="findPolicyLocationByEffDateAndProductsWithinBoundingBox">
+      <soap11:operation style="document"/>
+      <wsdl:input name="findPolicyLocationByEffDateAndProductsWithinBoundingBox">
+        <soap11:body use="literal"/>
+        <soap11:header message="gw-authentication" part="gw-authentication" use="literal"/>
+        <soap11:header message="gw-locale" part="gw-locale" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findPolicyLocationByEffDateAndProductsWithinBoundingBoxResponse">
+        <soap11:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SOAPException">
+        <soap11:fault name="SOAPException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="RequiredFieldException">
+        <soap11:fault name="RequiredFieldException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="BadIdentifierException">
+        <soap11:fault name="BadIdentifierException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PolicyLocationSearchAPI">
+    <wsdl:port name="PolicyLocationSearchAPISoap12Port" binding="PolicyLocationSearchAPISoap12Binding">
+      <soap12:address location="http://localhost:8180/pc/ws/gw/webservice/pc/pc700/policylocation/PolicyLocationSearchAPI"/>
+      <gwwsdl:address location="${pc}/ws/gw/webservice/pc/pc700/policylocation/PolicyLocationSearchAPI"/>
+    </wsdl:port>
+    <wsdl:port name="PolicyLocationSearchAPISoap11Port" binding="PolicyLocationSearchAPISoap11Binding">
+      <soap11:address location="http://localhost:8180/pc/ws/gw/webservice/pc/pc700/policylocation/PolicyLocationSearchAPI/soap11"/>
+      <gwwsdl:address location="${pc}/ws/gw/webservice/pc/pc700/policylocation/PolicyLocationSearchAPI/soap11"/>
+    </wsdl:port>
+  </wsdl:service>
+  <wsdl:message name="findPolicyLocationsWithinBoundingBox">
+    <wsdl:part name="parameters" element="findPolicyLocationsWithinBoundingBox"/>
+  </wsdl:message>
+  <wsdl:message name="findPolicyLocationsWithinBoundingBoxResponse">
+    <wsdl:part name="parameters" element="findPolicyLocationsWithinBoundingBoxResponse"/>
+  </wsdl:message>
+  <wsdl:message name="cancelFindPolicyLocations">
+    <wsdl:part name="parameters" element="cancelFindPolicyLocations"/>
+  </wsdl:message>
+  <wsdl:message name="cancelFindPolicyLocationsResponse">
+    <wsdl:part name="parameters" element="cancelFindPolicyLocationsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="isFindPolicyLocationsCached">
+    <wsdl:part name="parameters" element="isFindPolicyLocationsCached"/>
+  </wsdl:message>
+  <wsdl:message name="isFindPolicyLocationsCachedResponse">
+    <wsdl:part name="parameters" element="isFindPolicyLocationsCachedResponse"/>
+  </wsdl:message>
+  <wsdl:message name="findPolicyLocationByEffDateAndProductsWithinBoundingBox">
+    <wsdl:part name="parameters" element="findPolicyLocationByEffDateAndProductsWithinBoundingBox"/>
+  </wsdl:message>
+  <wsdl:message name="findPolicyLocationByEffDateAndProductsWithinBoundingBoxResponse">
+    <wsdl:part name="parameters" element="findPolicyLocationByEffDateAndProductsWithinBoundingBoxResponse"/>
+  </wsdl:message>
+  <wsdl:message name="SOAPException">
+    <wsdl:part name="SOAPException" element="SOAPException"/>
+  </wsdl:message>
+  <wsdl:message name="RequiredFieldException">
+    <wsdl:part name="RequiredFieldException" element="RequiredFieldException"/>
+  </wsdl:message>
+  <wsdl:message name="BadIdentifierException">
+    <wsdl:part name="BadIdentifierException" element="BadIdentifierException"/>
+  </wsdl:message>
+  <wsdl:message name="gw-authentication">
+    <wsdl:part name="gw-authentication" element="gwsoap:authentication"/>
+  </wsdl:message>
+  <wsdl:message name="gw-locale">
+    <wsdl:part name="gw-locale" element="gwsoap:locale"/>
+  </wsdl:message>
+</wsdl:definitions>

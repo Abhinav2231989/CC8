@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <!-- This file automatically generated from nvv_activity.xml -->
+  <InputSet
+    id="ActivityDetailsInputSet">
+    <Require
+      name="Activity"
+      type="Activity"/>
+    <Label
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.Activity.Details"/>
+    <Input
+      editable="true"
+      id="Activity_Subject"
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.Activity.Subject"
+      required="true"
+      value="Activity.Subject"/>
+    <TextAreaInput
+      editable="true"
+      id="Activity_Description"
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.Activity.Description"
+      numCols="40"
+      numRows="3"
+      value="Activity.Description"/>
+    <RangeInput
+      editable="true"
+      id="RelatedTo"
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.RelatedTo"
+      numCols="20"
+      optionLabel="VALUE typeis Claim ? displaykey.Java.NoteView.EntireClaim : VALUE.DisplayName"
+      required="true"
+      sortValueRange="false"
+      value="Activity.RelatedTo"
+      valueRange="Activity.Claim.RelatedToCandidates"
+      visible="not (Activity.RelatedTo typeis ServiceRequest)">
+      <PostOnChange/>
+    </RangeInput>
+    <Input
+      action="ClaimServiceRequests.goInMain(Activity.Claim, Activity.ServiceRequest)"
+      id="RelatedToLink"
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.RelatedTo"
+      value="(Activity.RelatedTo as ServiceRequest).ShortDisplayName"
+      visible="Activity.RelatedTo typeis ServiceRequest"/>
+    <DateInput
+      dateFormat="short"
+      editable="true"
+      id="Activity_DueDate"
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.Activity.DueDate"
+      required="Activity.Importance != &quot;notOnCalendar&quot;"
+      value="Activity.TargetDate"
+      visible="Activity.ActivityClass != &quot;event&quot;"/>
+    <DateInput
+      dateFormat="short"
+      editable="true"
+      id="Activity_StartDate"
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.Activity.StartDate"
+      required="Activity.Importance != &quot;notOnCalendar&quot;"
+      timeFormat="short"
+      value="Activity.TargetDate"
+      visible="Activity.ActivityClass == &quot;event&quot;"/>
+    <DateInput
+      dateFormat="short"
+      editable="true"
+      id="Activity_EndDate"
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.Activity.EndDate"
+      timeFormat="short"
+      value="Activity.EndDate"
+      visible="Activity.ActivityClass == &quot;event&quot;"/>
+    <DateInput
+      dateFormat="short"
+      editable="true"
+      id="Activity_EscalationDate"
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.Activity.EscalationDate"
+      value="Activity.EscalationDate"/>
+    <TypeKeyInput
+      editable="true"
+      id="Activity_Priority"
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.Priority"
+      required="true"
+      value="Activity.Priority"/>
+    <TypeKeyInput
+      editable="true"
+      id="Activity_Importance"
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.Activity.Importance"
+      required="true"
+      value="Activity.Importance"/>
+    <BooleanRadioInput
+      editable="Activity.canMakeMandatory()"
+      id="Activity_Mandatory"
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.Activity.Mandatory"
+      required="true"
+      value="Activity.Mandatory"/>
+    <TypeKeyInput
+      id="Activity_Status"
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.Activity.Status"
+      value="Activity.Status"/>
+    <BooleanRadioInput
+      editable="true"
+      id="ExternallyOwned"
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.ExternallyOwned"
+      required="true"
+      value="Activity.ExternallyOwned"/>
+    <ClaimContactInput
+      claim="Activity.Claim"
+      editable="true"
+      id="ExternalOwner"
+      label="displaykey.NVV.Activity.SubView.ActivityDetails.ExternalOwner"
+      value="Activity.ExternalOwner"
+      valueRange="Activity.Claim.RelatedContacts"/>
+  </InputSet>
+</PCF>

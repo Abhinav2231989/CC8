@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <Page
+    canEdit="perm.Claim.edit(Claim)and perm.System.editsubrodetails"
+    canVisit="perm.Claim.view(Claim) and perm.System.viewsubrodetails"
+    id="SubrogationGeneral"
+    title="displaykey.Web.Claim.Subro"
+    validationParameter="Claim">
+    <LocationEntryPoint
+      signature="SubrogationGeneral(Claim : Claim)"/>
+    <Variable
+      name="Claim"
+      type="Claim"/>
+    <Screen
+      id="ClaimSubroSummaryScreen">
+      <Toolbar>
+        <EditButtons/>
+      </Toolbar>
+      <PanelRef
+        def="SubrogationMainDV(Claim)"/>
+    </Screen>
+  </Page>
+</PCF>

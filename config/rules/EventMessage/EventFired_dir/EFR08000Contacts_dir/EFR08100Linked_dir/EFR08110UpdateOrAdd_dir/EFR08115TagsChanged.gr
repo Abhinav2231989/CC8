@@ -1,0 +1,43 @@
+package rules.EventMessage.EventFired_dir.EFR08000Contacts_dir.EFR08100Linked_dir.EFR08110UpdateOrAdd_dir
+uses gw.api.contact.ContactSystemUtil
+
+@gw.rules.RuleDisabled
+@gw.rules.RuleName("EFR08115 - Tags Changed")
+internal class EFR08115TagsChanged {
+  static function doCondition(messageContext : entity.MessageContext) : boolean {
+    
+/*start00rule*/
+return (messageContext.Root as Contact).isArrayElementAddedOrRemoved("Tags") 
+or
+(messageContext.Root as Contact).isArrayElementChanged("Tags")
+/*end00rule*/
+
+  }
+
+  static function doAction(messageContext : entity.MessageContext, actions : gw.rules.Action) {
+
+/*start00rule*/
+/**
+ * This rule is deprecated in ClaimCenter 8.0. Only valid
+ * for use with the IAddressBookAdapter/ABContactPlugin from
+ * ClaimCenter 7.0.
+ */
+uses gw.api.addressbook.ContactTagUpdateBatchUtil
+
+var contact = messageContext.Root as Contact
+var linkStatus = ContactSystemUtil.INSTANCE.generateLinkStatus(contact)
+
+if(!linkStatus.Broken) {
+  // create serialized update batch for contact tag updating
+  var updateBatch = ContactTagUpdateBatchUtil.buildUpdateBatchForContact(contact)
+
+  if(updateBatch != null) {
+    var xml = ContactTagUpdateBatchUtil.serializeUpdateBatch(updateBatch)
+    messageContext.createMessage(xml)
+  }
+}
+
+/*end00rule*/
+
+  }
+}

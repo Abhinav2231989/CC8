@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<internalExtension xmlns="http://guidewire.com/datamodel" entityName="MessageHistory">
+  <description>
+A completed message     
+    </description>
+  <foreignkey columnName="ClaimID" desc="Associated claim, if applicable.  If null, then the associated object is a cross-claim object." fkentity="Claim" name="Claim" nullok="true"/>
+  <column columnName="ContactID" desc="Associated contact, if applicable." name="Contact" type="softentityreference" nullok="true"/>
+  <dbcheckbuilder className="com.guidewire.pl.system.messaging.dbchecks.MessageHistoryDBCheckBuilder"/>
+</internalExtension>

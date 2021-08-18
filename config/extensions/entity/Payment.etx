@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<extension xmlns="http://guidewire.com/datamodel" entityName="Payment">
+<!-- The deductible handling feature in CC 6.0 does not use the deductiblesubtracted, originalamount,
+      deductibleamount, or netamount fields.  If the data in these columns are to be retained, please
+      uncomment this section.
+  <column name="DeductibleSubtracted" type="bit" nullok="true" desc="Has the deductible been paid?" />
+  <column name="OriginalAmount" type="money" desc="Original payment amount." />
+  <column name="DeductibleAmount" type="money" desc="Amount subtracted for deductible." />
+  <column name="NetAmount" type="money" desc="Net Amount to Pay." />
+-->
+</extension>

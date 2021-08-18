@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Page
+    canVisit="perm.System.custsvctierview"
+    id="CustomerServiceTierAdmin"
+    title="displaykey.Web.Admin.CustomerServiceTier.CustomerServiceTiers">
+    <Variable
+      initialValue="getCustomerServiceTiers()"
+      name="customerServiceTiers"
+      recalculateOnRefresh="true"/>
+    <Screen
+      id="CustomerServiceTierScreen">
+      <PanelRef
+        def="CustomerServiceTiersLV(customerServiceTiers)">
+        <Toolbar
+          id="CustomerServiceTierToolbar">
+        <ToolbarButton
+          available="CustomerServiceTier.getTypeKeys(false).Count > customerServiceTiers.length"
+          action="NewCustomerServiceTier.go()"
+          id="AddServiceTierButton"
+          iterator="CustomerServiceTiersLV.CustomerServiceTiersLV"
+          label="displaykey.Web.Admin.CustomerServiceTier.Toolbar.Add"
+          shortcut="A"
+          showConfirmMessage="false"
+          tooltip="displaykey.Web.Admin.CustomerServiceTier.Toolbar.Add.Tooltip"
+          visible="perm.System.custsvctiermng"/>
+        <CheckedValuesToolbarButton
+          allCheckedRowsAction="admin.AdminUtil.deleteCustomerServiceTiers(CheckedValues)"
+          confirmMessage="displaykey.Web.Admin.CustomerServiceTier.Toolbar.DeleteConfirm"
+          id="DeleteServiceTierButton"
+          iterator="CustomerServiceTiersLV.CustomerServiceTiersLV"
+          label="displaykey.Web.Admin.CustomerServiceTier.Toolbar.Remove"
+          tooltip="displaykey.Web.Admin.CustomerServiceTier.Toolbar.Remove.Tooltip"
+          visible="perm.System.custsvctiermng"/>
+        </Toolbar>
+        </PanelRef>
+    </Screen>
+    <Code><![CDATA[
+      function getCustomerServiceTiers() : CustomerServiceTierSpecialHandling[] {
+        return gw.api.database.Query.make(CustomerServiceTierSpecialHandling).select().toTypedArray()
+      }]]></Code>
+    </Page>
+</PCF>

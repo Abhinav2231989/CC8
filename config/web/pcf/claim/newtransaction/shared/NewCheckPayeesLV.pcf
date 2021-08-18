@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <!-- This file automatically generated from lv_financials.xml -->
+  <ListViewPanel
+    id="NewCheckPayeesLV">
+    <ExposeIterator
+      flags="NonPrimaryCheck"
+      valueType="entity.Check"
+      widget="NewCheckPayeesLV"/>
+    <Require
+      name="CheckGroup"
+      type="CheckGroup"/>
+    <Require
+      name="Wizard"
+      type="financials.CheckWizardInfo"/>
+    <RowIterator
+      checkBoxVisible="not Wizard.Check.LinkedToServiceRequests"
+      editable="false"
+      elementName="Check"
+      pageSize="6"
+      toCreateAndAdd="Wizard.addAdditionalPayee(CheckGroup)"
+      toRemove="Wizard.deleteCheck(Check)"
+      value="CheckGroup != null ? CheckGroup.DisplayableChecks : new Check[]{Wizard.Check}">
+      <ToolbarFlag
+        condition="!Check.Primary"
+        name="NonPrimaryCheck"/>
+      <Row>
+        <Cell
+          icon="&quot;new.png&quot;"
+          iconLabel="displaykey.LV.Financials.Check.Primary.Tip"
+          id="Check_Primary"
+          label="displaykey.LV.Financials.Check.Primary"
+          tooltip="displaykey.LV.Financials.Check.Primary.Tip"
+          value="Check.Primary"/>
+        <Cell
+          id="Check_PayTo"
+          label="displaykey.LV.Financials.NewCheckPayees.Check.PayTo"
+          sortOrder="1"
+          value="Check.PayTo"/>
+        <TypeKeyCell
+          id="Check_DeductionType"
+          label="displaykey.LV.Financials.NewCheckPayees.Check.DeductionType"
+          value="Check.DeductionType"
+          visible="not Wizard.Check.LinkedToServiceRequests"/>
+        <TypeKeyCell
+          id="Check_DeliverMethod"
+          label="displaykey.LV.Financials.NewCheckPayees.Check.DeliverMethod"
+          value="Check.DeliveryMethod"/>
+        <Cell
+          helpText="displaykey.LV.Financials.Check.Portion.Tip"
+          id="Check_Portion"
+          label="displaykey.LV.Financials.NewCheckPayees.Check.Portion"
+          value="Check.Portion.DisplayName"
+          visible="not Wizard.Check.LinkedToServiceRequests"/>
+      </Row>
+    </RowIterator>
+  </ListViewPanel>
+</PCF>

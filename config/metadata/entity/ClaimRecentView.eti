@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<viewEntity xmlns="http://guidewire.com/datamodel" desc="View entity for efficiently displaying Claims in the Recently Viewed Claims tab." entity="ClaimRecentView" exportable="false" final="false" subpackage="claim" primaryEntity="Claim">
+  <viewEntityLink name="Claim" path="ID"/>
+</viewEntity>

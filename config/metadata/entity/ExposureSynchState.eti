@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><entity xmlns="http://guidewire.com/datamodel" desc="Represents the current state of synchronization between an Exposure and a MessageSink." entity="ExposureSynchState" loadable="false" platform="false"  subpackage="messaging" table="exposuresynchst" type="versionable">
+  <implementsEntity name="Extractable"/>
+  <fulldescription>&lt;p&gt;
+Represents the synchronization state of an &lt;code&gt;Exposure&lt;/code&gt; with respect to a particular
+&lt;code&gt;MessageSink&lt;/code&gt;. As part of the work of integrating your Guidewire application with other external and/or legacy
+systems, &lt;code&gt;MessageSink&lt;/code&gt; entities will be set up to receive messages and update those systems to reflect the
+new state of the &lt;code&gt;Exposure&lt;/code&gt; in the system.&lt;/p&gt;&lt;p&gt;
+Due to the asynchronous nature of messaging, those messages may not be transmitted immeditately, so the &lt;code&gt;ExposureSynchState&lt;/code&gt;
+entity exists to track whether the external system represented by a particular &lt;code&gt;MessageSink&lt;/code&gt; can be considered to
+be up-to-date with the system changes.&lt;/p&gt;
+&lt;p&gt;See {@link com.guidewire.pl.system.typelist.tl.SynchState} for the available synchronization states.&lt;/p&gt;
+@see Exposure#getExposureSynchStates
+      
+    </fulldescription>
+  <foreignkey columnName="ExposureID" desc="The Exposure to which the synchronization state applies." exportable="false" fkentity="Exposure" name="Exposure" nullok="false"/>
+  <column desc="Identifies the message sink to which the synchronization state applies." name="MessageSink" nullok="false" type="integer"/>
+  <typekey desc="The synchronization state of the given Exposure with respect to the given message sink." name="SynchState" nullok="true" typelist="SynchState"/>
+  <index desc="Enforce uniqueness, only one entry per message sink per exposure" name="exposuresynchstu1" unique="true">
+    <indexcol keyposition="1" name="ExposureID"/>
+    <indexcol keyposition="2" name="MessageSink"/>
+  </index>
+</entity>

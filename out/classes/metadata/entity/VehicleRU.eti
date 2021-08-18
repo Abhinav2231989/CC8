@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><subtype xmlns="http://guidewire.com/datamodel" desc="RiskUnit containing a vehicle." entity="VehicleRU" subpackage="policy" supertype="RiskUnit">
+  <foreignkey columnName="VehicleID"  desc="Related vehicle." fkentity="Vehicle" name="Vehicle" nullok="true" owner="true" triggersValidation="true"/>
+  <foreignkey columnName="VehicleLocationID" desc="The PolicyLocation associted with this Vehicle Risk Unit, if any." fkentity="PolicyLocation" name="VehicleLocation" nullok="true" owner="true"/>
+  <index desc="Enforce uniqueness, a particular vehicle can only appear once on a policy" name="policyvehicleu1" unique="true">
+    <indexcol keyposition="1" name="PolicyID"/>
+    <indexcol keyposition="2" name="VehicleID"/>
+  </index>
+  <index desc="Enforce uniqueness, ensuring that no vehicle is shared between policies" name="policyvehicle1" unique="true">
+    <indexcol keyposition="1" name="VehicleID"/>
+  </index>
+</subtype>

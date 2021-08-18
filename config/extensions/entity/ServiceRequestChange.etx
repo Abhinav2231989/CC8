@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<extension xmlns="http://guidewire.com/datamodel" entityName="ServiceRequestChange">
+
+  <!-- A potentially-changing ServiceRequest property has two corresponding columns here.
+       The "_Chg" column indicates whether the property is changing. If the property is changing, the "New_"
+       column contains the new value, which may be null. If it is not changing, then the "New_" column always
+       contains null. The values of these columns are set automatically when the ServiceRequestChange is
+       created by ServiceRequest.recordChange.
+       To record changes to other ServiceRequest properties here in ServiceRequestChange, add corresponding "New_" and "_Chg"
+       properties based on the name and type of the ServiceRequest property. -->
+
+  <column name="ExpectedServiceCompletionDate_Chg" columnName="expservicecompletiondate_chg" desc="True if ExpectedServiceCompletionDate is changing." nullok="false" type="bit" default="false"/>
+  <column name="New_ExpectedServiceCompletionDate" columnName="new_expservicecompletiondate" desc="The new value of ServiceRequest.ExpectedServiceCompletionDate, or null if ExpectedServiceCompletionDate did not change." type="datetime" nullok="true"/>
+  <column name="ExpectedQuoteCompletionDate_Chg" columnName="expquotecompletiondate_chg" desc="True if ExpectedQuoteCompletionDate is changing." nullok="false" type="bit" default="false"/>
+  <column name="New_ExpectedQuoteCompletionDate" columnName="new_expquotecompletiondate" desc="The new value of ServiceRequest.ExpectedQuoteCompletionDate, or null if ExpectedQuoteCompletionDate did not change." type="datetime" nullok="true"/>
+
+</extension>

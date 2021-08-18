@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!-- TAccountOwnerDelegate - Used by ReserveLine and RICoding. -->
+<delegate xmlns="http://guidewire.com/datamodel"
+          subpackage="financials.taccount"
+          name="TAccountOwnerDelegate"
+          requires="com.guidewire.cc.domain.financials.taccount.TAccountOwnerDelegateAdapter"/>

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <ListViewPanel
+    editable="CurrentLocation.InEditMode"
+    id="InstructionServicesLV"
+    mode="default">
+    <Require
+      name="serviceRequest"
+      type="ServiceRequest"/>
+    <ExposeIterator
+      name="InstructionServicesLV"
+      valueType="entity.ServiceRequestInstructionService"
+      widget="InstructionServicesIterator"/>
+    <Require
+      name="isEditable"
+      type="boolean"/>
+    <RowIterator
+      canPick="false"
+      checkBoxVisible="isEditable"
+      editable="false"
+      elementName="instructionService"
+      hasCheckBoxes="true"
+      id="InstructionServicesIterator"
+      toRemove="serviceRequest.Instruction.removeFromServices(instructionService)"
+      value="serviceRequest.Instruction.OrderedServices">
+      <Row>
+        <Cell
+          id="InstructionServiceType0"
+          label="displaykey.Web.ServiceRequest.ServiceToPerform.Category"
+          required="true"
+          sortBy="instructionService.getEditHelper(0).Value.Name"
+          value="instructionService.getEditHelper(0).Value"
+          width="120"/>
+        <Cell
+          id="InstructionServiceType1"
+          label="displaykey.Web.ServiceRequest.ServiceToPerform.SubCategory"
+          sortBy="instructionService.getEditHelper(1).Value.Name"
+          value="instructionService.getEditHelper(1).Value"/>
+        <Cell
+          id="InstructionServiceType2"
+          label="displaykey.Web.ServiceRequest.ServiceToPerform.ServiceType"
+          sortBy="instructionService.getEditHelper(2).Value.Name"
+          value="instructionService.getEditHelper(2).Value"/>
+      </Row>
+    </RowIterator>
+    <Code><![CDATA[function addInstructionService(instructionService : entity.ServiceRequestInstructionService) {
+  serviceRequest.Instruction.addToServices(instructionService)
+  var valueRange = instructionService.getEditHelper(0).ValueRange
+  if (valueRange.Count == 1) {
+    instructionService.getEditHelper(0).Value = valueRange.single()
+  }
+}]]></Code>
+  </ListViewPanel>
+</PCF>

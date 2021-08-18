@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<entity
+  xmlns="http://guidewire.com/datamodel"
+  desc="Preserves a coverage specification for which at least one transaction exists on the archived claim"
+  entity="CoverageLineMatchDataInfo"
+  loadable="false"
+  subpackage="claim.archiving"
+  table="coveragelinematchdatainfo"
+  type="editable">
+  <typekey
+    desc="Coverage type."
+    name="CoverageType"
+    nullok="false"
+    typelist="CoverageType"/>
+  <typekey
+    desc="The CoverageSubtype; This is drawn from the CoverageSubtype typelist."
+    name="LOBCoverageSubtype"
+    nullok="true"
+    typelist="CoverageSubtype"/>
+  <typekey
+    desc="The subclass type of the Coverage, e.g., PolicyCoverage, VehicleCoverage, or PropertyCoverage. This is unrelated to the CoverageSubtype typelist.  Also known as CoverageIntSubtype"
+    name="CoverageIntSubtype"
+    nullok="true"
+    typelist="Coverage"/>
+  <column name="RUPolicySystemId" type="policysystemid" nullok="true"
+     desc="Identifier for the covered risk unit in an external policy system.  Only applies to those CoverageLines which point to a VehicleCoverage, or PropertyCoverage, or any coverage which extends from RUCoverage and therefore has a RiskUnit with (possibly) a policySystemID."/>
+  <column
+    desc="Number of the risk unit for the coverage on the policy."
+    name="RiskUnitNumber"
+    nullok="true"
+    type="integer"/>
+  <foreignkey
+    columnName="ClaimInfoID"
+    desc="The archived claim"
+    fkentity="ClaimInfo"
+    name="ClaimInfo"
+    nullok="false"/>
+</entity>

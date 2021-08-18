@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><entity xmlns="http://guidewire.com/datamodel" desc="Subrogation information related to a claim" entity="SubrogationSummary" exportable="true" platform="false" subpackage="claim" table="subrogationsummary" type="retireable">
+  <implementsEntity name="Extractable"/>
+  <foreignkey columnName="ClaimID" desc="Related Claim" fkentity="Claim" name="Claim" nullok="false"/>
+  <column default="false" desc="To indicate Subro for a claim as owned by an external owner" name="ExtOwned" nullok="true" type="bit"/>
+  <column default="false" desc="Escalate toSubro" name="EscalateSubro" nullok="true" type="bit"/>
+  <column desc="Date when when referral made to Subrogation" name="SubroReferralDate" nullok="true" type="datetime"/>
+  <column desc="A Comment from the referer to the referee" name="SubroReferralComment" nullok="true" type="shorttext"/>
+  <column desc="Date when Subro is complete" name="SubroCloseDate" nullok="true" type="datetime"/>
+  <column desc="Comment upon close of Subrogation opportunity" name="SubroCloseComment" nullok="true" type="shorttext"/>
+  <typekey desc="SubroClosedOutcome" name="SubroClosedOutcome" nullok="true" typelist="SubroClosedOutcome"/>
+  <array arrayentity="StatuteLimitationsLine" desc="A list of applicable Statute of Limitations for this claim." name="StatuteLine" triggersValidation="true"/>
+  <array arrayentity="SubroAdverseParty" desc="A list of applicable Adverse Parties related to for this claim." name="SubroAdverseParties" triggersValidation="true"/>
+  <column default="false" desc="Whether to automatically calculate OS Recovery Reserves" name="CalculateOSRecReserve" nullok="true" type="bit"/>
+</entity>

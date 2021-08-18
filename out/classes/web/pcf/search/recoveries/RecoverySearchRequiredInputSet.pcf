@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <!-- This file automatically generated from nvv_financials.xml -->
+  <InputSet
+    id="RecoverySearchRequiredInputSet">
+    <Require
+      name="RecoverySearchCriteria"
+      type="RecoverySearchCriteria"/>
+    <Label
+      label="displaykey.NVV.Search.RequiredParameters"/>
+    <Input
+      editable="true"
+      id="ClaimNumber"
+      label="displaykey.JSP.RecoverySearch.Recoveries.ClaimNumber"
+      required="false"
+      value="RecoverySearchCriteria.claimNumber"/>
+    <UserInput
+      editable="true"
+      id="CreatedBy"
+      label="displaykey.JSP.RecoverySearch.Recoveries.CreatedBy"
+      required="false"
+      value="RecoverySearchCriteria.createdByUser"/>
+    <InputSetRef
+      def="GlobalPersonNameInputSet(new gw.api.name.SearchNameOwner(RecoverySearchCriteria.NameCriteria) { :NameLabelType = gw.api.name.SearchNameOwner.PAYER } )"
+      mode="gw.api.name.NameLocaleSettings.PCFMode"/>
+    <InputSetRef
+      def="GlobalContactNameInputSet(new gw.api.name.SearchNameOwner(RecoverySearchCriteria.NameCriteria) { :NameLabelType = gw.api.name.SearchNameOwner.PAYER } )"
+      mode="gw.api.name.NameLocaleSettings.PCFMode"/>
+    <Input
+      editable="true"
+      id="TaxID"
+      label="displaykey.JSP.RecoverySearch.Recoveries.TaxID"
+      required="false"
+      value="RecoverySearchCriteria.NameCriteria.taxId"/>
+  </InputSet>
+</PCF>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<subtype xmlns="http://guidewire.com/datamodel" desc="A Reinsurance (RI) transaction which reflects an amount of Reserves attributable to an RIAgreement." entity="RICededReserve" final="true" subpackage="financials.ri" supertype="RITransaction">
+  <fulldescription>
+    A subtype of &lt;code&gt;RITransaction&lt;/code&gt; that indicates an Amount of Reserves attributable to a particular RIAgreement.
+    In other words, we have created Reserves, and if we pay out all that money, the reinsurer behind the RIAgreement will be obligated to
+    reimburse us for this amount according to the RI treaty. It is a heads up about potential reinsurer liability.
+    Like both types of RITransactions, RICededReserves behave similar to Reserve transactions as entities: they are immutable,
+    and so multiple positive or negative transactions are created to adjust the total on a particular RICoding.
+    To get the Total Ceded Reserves and other RI financials calculations,
+    use the &lt;code&gt;FinancialsCalculationUtil&lt;/code&gt; class.
+  </fulldescription>
+</subtype>

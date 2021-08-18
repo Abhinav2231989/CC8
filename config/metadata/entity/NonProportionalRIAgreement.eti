@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<subtype xmlns="http://guidewire.com/datamodel" desc="Non-proportional reinsurance agreement." entity="NonProportionalRIAgreement"
+        abstract="true" subpackage="reinsurance" supertype="RIAgreement">
+</subtype>

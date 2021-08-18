@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<entity xmlns="http://guidewire.com/datamodel" desc="Associates a Service Request Statement to a Document Link." entity="ServiceRequestStatementDocumentLink" exportable="true" subpackage="vendormanagement" platform="false" table="servicereqstatementdoclink" loadable="false" type="joinarray" extendable="false">
+  <implementsEntity name="Extractable"/>
+  <foreignkey columnName="ServiceRequestDocumentLinkID" desc="Service Request Document Link the statement is linked to." fkentity="ServiceRequestDocumentLink" name="ServiceRequestDocumentLink" nullok="false" />
+  <foreignkey columnName="ServiceRequestStatementID" desc="The associated statement for the document link." name="ServiceRequestStatement" fkentity="ServiceRequestStatement"  nullok="false"/>
+  <index desc="Ensure uniqueness for ServiceRequestDocumentLink and ServiceRequestStatement" name="doclinkqteu1" unique="true">
+    <indexcol keyposition="1" name="ServiceRequestDocumentLinkID"/>
+    <indexcol keyposition="2" name="ServiceRequestStatementID"/>
+  </index>
+  <dbcheckbuilder className="com.guidewire.cc.domain.vendormanagement.dbchecks.ServiceRequestStatementDocumentLinkDBCheckBuilder"/>
+</entity>

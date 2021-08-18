@@ -1,0 +1,260 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <CardViewPanel
+    id="ClaimSnapshotDwellingIncidentCV"
+    mode="800">
+    <Require
+      name="claim"
+      type="Claim"/>
+    <Require
+      name="incidentParam"
+      type="Object"/>
+    <Require
+      name="snapshot"
+      type="Object"/>
+    <Variable
+      initialValue="incidentParam as snapshot.v800.DwellingIncident"
+      name="incident"
+      type="snapshot.v800.DwellingIncident"/>
+    <Card
+      id="Dwelling_DetailsCard"
+      title="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.Details">
+      <PanelRow>
+        <PanelColumn>
+          <PanelRef>
+            <TitleBar
+              title="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.Damage"/>
+            <DetailViewPanel
+              id="DamageDV">
+              <InputColumn>
+                <Input
+                  id="PropertyDescription"
+                  label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.PropertyDescription"
+                  value="incident.PropertyDesc"/>
+                <TextAreaInput
+                  id="Description"
+                  label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.DamageDescription"
+                  numCols="30"
+                  numRows="3"
+                  required="true"
+                  value="incident.Description"/>
+                <Input
+                  id="LossEstimate"
+                  label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.LossEstimate"
+                  value="incident.LossEstimate"/>
+                <InputDivider/>
+                <InputSet>
+                  <Label
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.DamageInfoA"/>
+                  <Input
+                    id="DamageTypesLabel"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.DamageTypes"
+                    value="null"/>
+                  <InputIterator
+                    elementName="damage"
+                    id="DamageTypesIterator"
+                    value="gw.api.claim.HomeownersHelper.getDamages(claim).where( \ d -&gt; snapshot[d.ClaimProperty.Name] != null)">
+                    <CheckBoxInput
+                      id="Damage"
+                      value="damage.Present"
+                      valueLabel="damage.Name"
+                      visible="damage.Present"/>
+                  </InputIterator>
+                  <ListViewInput
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.RoomsDamaged">
+                    <Toolbar/>
+                    <ListViewPanel>
+                      <RowIterator
+                        editable="true"
+                        elementName="roomDamage"
+                        value="incident.DwellingRoomDamages">
+                        <Row>
+                          <Cell
+                            enableSort="false"
+                            id="NumberOfRooms"
+                            label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.NumberOfRooms"
+                            numCols="2"
+                            value="roomDamage.NumberOfRooms"
+                            wrapLabel="true"/>
+                          <Cell
+                            id="RoomType"
+                            label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.Type"
+                            sortOrder="1"
+                            value="roomDamage.RoomType"/>
+                        </Row>
+                      </RowIterator>
+                    </ListViewPanel>
+                  </ListViewInput>
+                  <Input
+                    id="MaterialsDamaged"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.MaterialsDamaged"
+                    value="incident.MaterialsDamaged"/>
+                  <Input
+                    id="DamagedAreaSize"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.DamagedAreaSize"
+                    value="incident.DamagedAreaSize"/>
+                </InputSet>
+                <InputDivider/>
+                <Label
+                  label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.Repairs"/>
+                <Input
+                  id="EstimatedReceived"
+                  label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.EstimateReceived"
+                  value="incident.EstimatesReceived"/>
+                <Input
+                  id="EstimateCost"
+                  label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.EstimateCost"
+                  value="incident.EstRepairCost"
+                  visible="incident.EstimatesReceived.Code == &quot;yes&quot;"/>
+                <Input
+                  id="EstimateTime"
+                  label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.EstimateTime"
+                  value="incident.EstRepairTime"
+                  visible="incident.EstimatesReceived.Code == &quot;yes&quot;"/>
+                <Input
+                  id="AlreadyRepaired"
+                  label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.AlreadyRepaired"
+                  value="incident.AlreadyRepaired"/>
+                <InputDivider/>
+              </InputColumn>
+            </DetailViewPanel>
+          </PanelRef>
+        </PanelColumn>
+        <PanelColumn>
+          <PanelRef>
+            <TitleBar
+              title="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.PropertyInfo"/>
+            <DetailViewPanel>
+              <InputColumn>
+                <Input
+                  id="Address"
+                  label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.Address"
+                  value="incident.Claim.LossLocation.DisplayName"/>
+                <InputDivider/>
+                <InputSet>
+                  <Label
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.BuildingDetail"/>
+                  <Input
+                    id="DwellingAttribute_ClassType"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.ClassType"
+                    value="incident.ClassType"/>
+                  <TextInput
+                    id="DwellingAttribute_NumStories"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.NumStories"
+                    numCols="3"
+                    value="incident.NumStories"/>
+                  <Input
+                    id="DwellingAttribute_RoofMaterial"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.RoofMaterial"
+                    value="incident.RoofMaterial"/>
+                  <Input
+                    id="DwellingAttribute_ExtWallMat"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.ExtWallMat"
+                    value="incident.ExtWallMat"/>
+                  <DateInput
+                    dateFormat="short"
+                    id="YearBuilt"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.YearBuilt"
+                    value="incident.YearBuilt"/>
+                  <TextInput
+                    id="PropertySize"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.PropertySize"
+                    numCols="3"
+                    value="incident.PropertySize"/>
+                  <InputDivider/>
+                  <Label
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.OccupancyDetail"/>
+                  <Input
+                    id="OccupancyType"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.OccupancyType"
+                    value="incident.OccupancyType"/>
+                  <Input
+                    id="DwellingAttribute_LossArea"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.LossArea"
+                    value="incident.LossArea"/>
+                  <Input
+                    id="DwellingAttribute_NumberOfPeopleOnPolicy"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.NumberOfPeopleOnPolicy"
+                    value="incident.NumberOfPeopleOnPolicy"/>
+                  <Input
+                    id="DwellingAttribute_YearsInHome"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.YearsInHome"
+                    value="incident.YearsInHome"/>
+                  <InputSet
+                    visible="incident.Claim.LossCause.Code == &quot;fire&quot;">
+                    <InputDivider/>
+                    <Label
+                      label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.FireProtectionDetails"/>
+                    <Input
+                      id="DwellingAttribute_SprinklerType"
+                      label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.SprinklerType"
+                      value="incident.SprinklerType"/>
+                    <TextInput
+                      id="DwellingAttribute_NumSprinkler"
+                      label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.NumSprinkler"
+                      numCols="3"
+                      value="incident.NumSprinkler"/>
+                    <TextInput
+                      id="DwellingAttribute_NumSprinkOper"
+                      label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.NumSprinkOper"
+                      numCols="3"
+                      value="incident.NumSprinkOper"/>
+                    <Input
+                      id="DwellingAttribute_SprinkRetServ"
+                      label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.SprinkRetServ"
+                      value="incident.SprinkRetServ"/>
+                  </InputSet>
+                  <InputDivider/>
+                  <Input
+                    id="LossLocation_Mold"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.Mold"
+                    value="incident.MoldInvolved"/>
+                  <Input
+                    id="LossLocation_Hazard"
+                    label="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.Hazard"
+                    value="incident.HazardInvolved"/>
+                </InputSet>
+                <InputDivider/>
+              </InputColumn>
+            </DetailViewPanel>
+          </PanelRef>
+          <PanelRef
+            def="ClaimSnapshotIncidentRelatedExposuresPanelSet(claim, snapshot)"
+            mode="800"/>
+        </PanelColumn>
+      </PanelRow>
+    </Card>
+    <Card
+      id="Dwelling_AssessmentCard"
+      title="displaykey.Web.ClaimSnapshot.ClaimSnapshotDwellingIncident.Assessment">
+      <PanelRef
+        def="ClaimSnapshotIncidentAssessDV(claim, incident, snapshot)"
+        mode="800"/>
+    </Card>
+    <Code><![CDATA[function approvedTotal(itemLine : snapshot.v800.AssessmentItem[]) : gw.api.financials.CurrencyAmount {
+  var TotalOfApproved: gw.api.financials.CurrencyAmount = gw.api.util.CCCurrencyUtil.getStrict(java.math.BigDecimal.ZERO, claim.Currency)
+  for (aline in itemLine) {
+    if (aline.Action == "approve") {
+      if (aline.EstimateAmount != null) {
+        TotalOfApproved = TotalOfApproved + (aline.EstimateAmount as gw.api.financials.CurrencyAmount)
+      }
+    }
+  }
+  return TotalOfApproved;
+}
+
+function reviewTotal(itemLine : snapshot.v800.AssessmentItem[]) : gw.api.financials.CurrencyAmount {
+  var TotalOfInReview: gw.api.financials.CurrencyAmount = gw.api.util.CCCurrencyUtil.getStrict(java.math.BigDecimal.ZERO, claim.Currency)
+  for (aline in itemLine) {
+    if (aline.Action == "Review" or aline.Action == null) {
+      if (aline.EstimateAmount != null) {
+        TotalOfInReview = TotalOfInReview + (aline.EstimateAmount as gw.api.financials.CurrencyAmount)
+      }
+    }
+  }
+  return TotalOfInReview;
+}]]></Code>
+  </CardViewPanel>
+</PCF>

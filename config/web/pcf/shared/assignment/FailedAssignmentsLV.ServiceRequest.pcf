@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="pcf.xsd">
+  <ListViewPanel
+    id="FailedAssignmentsLV"
+    mode="ServiceRequest">
+    <Require
+      name="AssignmentPopup"
+      type="assignment.AssignmentPopup"/>
+    <RowIterator
+      editable="true"
+      elementName="ServiceRequest"
+      type="ServiceRequest"
+      value="AssignmentPopup.getFailedAssignables()">
+      <Row>
+        <Cell
+          icon="serviceRequest.Kind.Icon"
+          iconLabel="serviceRequest.Kind.Label"
+          id="Kind"
+          label="displaykey.LV.Claim.ServiceRequest.Kind"
+          showHeaderIcon="false"
+          value="true"/>
+        <Cell
+          id="ServiceRequestNumber"
+          label="displaykey.LV.Claim.ServiceRequest.ServiceRequestNumber"
+          sortOrder="3"
+          value="serviceRequest.ServiceRequestNumber"/>
+        <Cell
+          id="ServiceRequestReferenceNumber"
+          label="displaykey.LV.Claim.ServiceRequest.ServiceRequestReferenceNumber"
+          value="serviceRequest.ServiceRequestReferenceNumber"/>
+        <Cell
+          id="Services"
+          label="displaykey.LV.Claim.ServiceRequest.Services"
+          value="serviceRequest.ServicesString"/>
+        <Cell
+          action="ClaimContactDetailPopup.push(serviceRequest.Specialist, serviceRequest.Claim)"
+          actionAvailable="serviceRequest.Specialist != null"
+          id="Specialist"
+          label="displaykey.LV.Claim.ServiceRequest.Specialist"
+          sortOrder="2"
+          value="serviceRequest.SpecialistName"/>
+        <DateCell
+          id="ExpectedCompletionDate"
+          label="displaykey.LV.Claim.ServiceRequest.Target"
+          value="serviceRequest.nextExpectedCompletionDate()"/>
+        <Cell
+          formatType="currency"
+          id="QuoteAmount"
+          label="displaykey.LV.Claim.ServiceRequest.QuoteAmount"
+          value="serviceRequest?.LatestQuote.Amount"/>
+      </Row>
+    </RowIterator>
+  </ListViewPanel>
+</PCF>

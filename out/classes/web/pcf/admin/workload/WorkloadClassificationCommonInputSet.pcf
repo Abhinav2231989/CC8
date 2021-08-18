@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <InputSet
+    id="WorkloadClassificationCommonInputSet">
+    <Require
+      name="assignmentClassification"
+      type="WorkloadClassification"/>
+    <Label
+      label="displaykey.Web.Admin.Workload.WorkloadClassification.AllCriteriaLabel"/>
+    <InputSet
+      hideIfEditable="true">
+      <Input
+        id="AllClaimLossType"
+        label="displaykey.Web.Admin.Workload.WorkloadClassification.ClaimLossType"
+        value="assignmentClassification.ClaimLossType "/>
+      <Input
+        id="AllClaimLOBCode"
+        label="displaykey.Web.Admin.Workload.WorkloadClassification.ClaimLOB"
+        value="assignmentClassification.ClaimLOBCode != null ? assignmentClassification.ClaimLOBCode : displaykey.Web.Admin.Workload.WorkloadClassification.ClaimLOB.AllLinesOfBusiness"/>
+      <Input
+        id="AllClaimPolicyType"
+        label="displaykey.Web.Admin.Workload.WorkloadClassification.ClaimPolicyType"
+        value="assignmentClassification.ClaimPolicyType != null ? assignmentClassification.ClaimPolicyType : displaykey.Web.Admin.Workload.WorkloadClassification.ClaimPolicyType.AllPolicyTypes"/>
+    </InputSet>
+    <InputSet
+      hideIfReadOnly="true"
+      id="AssignmentClassificationInputSet">
+      <Input
+        confirmMessage="displaykey.Web.Admin.Workload.WorkloadClassification.ClaimLossTypeChangeWarning"
+        editable="true"
+        id="ClaimLossType"
+        label="displaykey.Web.Admin.Workload.WorkloadClassification.ClaimLossType"
+        required="true"
+        showConfirmMessage="gw.api.assignment.workload.util.WorkloadClassificationUIHelper.isLossTypeWarningApplicable(assignmentClassification)"
+        value="assignmentClassification.ClaimLossType">
+        <PostOnChange
+          onChange="gw.api.assignment.workload.util.WorkloadClassificationUIHelper.validateAndUpdateWorkloadClassification(assignmentClassification)"
+          target="AssignmentClassificationInputSet"/>
+      </Input>
+      <RangeInput
+        available="assignmentClassification.ClaimLossType != null"
+        confirmMessage="displaykey.Web.Admin.Workload.WorkloadClassification.ClaimLOBChangeWarning"
+        editable="true"
+        id="ClaimLOBCode"
+        label="displaykey.Web.Admin.Workload.WorkloadClassification.ClaimLOB"
+        noneSelectedLabel="displaykey.Web.Admin.Workload.WorkloadClassification.ClaimLOB.AllLinesOfBusiness"
+        showConfirmMessage="gw.api.assignment.workload.util.WorkloadClassificationUIHelper.isLOBWarningApplicable(assignmentClassification)"
+        value="assignmentClassification.ClaimLOBCode"
+        valueRange="getValidLOBRange(assignmentClassification.ClaimLossType)">
+        <PostOnChange
+          onChange="gw.api.assignment.workload.util.WorkloadClassificationUIHelper.validateAndUpdateWorkloadClassification(assignmentClassification)"
+          target="AssignmentClassificationInputSet"/>
+      </RangeInput>
+      <RangeInput
+        available="assignmentClassification.ClaimLOBCode != null"
+        confirmMessage="displaykey.Web.Admin.Workload.WorkloadClassification.ClaimPolicyTypeChangeWarning"
+        editable="true"
+        id="ClaimPolicyType"
+        label="displaykey.Web.Admin.Workload.WorkloadClassification.ClaimPolicyType"
+        noneSelectedLabel="displaykey.Web.Admin.Workload.WorkloadClassification.ClaimPolicyType.AllPolicyTypes"
+        showConfirmMessage="gw.api.assignment.workload.util.WorkloadClassificationUIHelper.isPolicyTypeWarningApplicable(assignmentClassification)"
+        value="assignmentClassification.ClaimPolicyType"
+        valueRange="getValidPolicyTypeRange(assignmentClassification.ClaimLOBCode)">
+        <PostOnChange
+          onChange="gw.api.assignment.workload.util.WorkloadClassificationUIHelper.validateAndUpdateWorkloadClassification(assignmentClassification)"
+          target="AssignmentClassificationInputSet"/>
+      </RangeInput>
+    </InputSet>
+    <Code><![CDATA[function getValidLOBRange(lossType : LossType) : List<LOBCode> {
+  var codes = LOBCode.getTypeKeys(false)
+  if (lossType != null) {
+    codes = codes.where(\ lobCode ->lobCode.hasCategory(lossType))
+  }
+  return codes
+}
+
+function getValidPolicyTypeRange(lobCode : LOBCode) : List<PolicyType> {
+  var allPolicyTypes = PolicyType.getTypeKeys(false)
+  if (lobCode != null) {
+    return allPolicyTypes.where(\ policyType ->policyType.hasCategory(lobCode))
+  }
+  return java.util.Collections.emptyList()
+}]]></Code>
+  </InputSet>
+</PCF>

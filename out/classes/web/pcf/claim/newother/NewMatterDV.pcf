@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <!-- The next name value view controls the matter screens -->
+  <DetailViewPanel
+    id="NewMatterDV">
+    <Require
+      name="Matter"
+      type="Matter"/>
+    <Require
+      name="AssigneeHolder"
+      type="assignment.Assignee[]"/>
+    <InputColumn>
+      <Label
+        label="displaykey.NVV.Matter.SubView.NewMatterGeneral"/>
+      <TypeKeyInput
+        editable="true"
+        id="MatterType"
+        label="displaykey.MatterGeneral.Matter.Type"
+        required="true"
+        value="Matter.MatterType">
+        <PostOnChange/>
+      </TypeKeyInput>
+      <Input
+        editable="true"
+        id="Matter_Name"
+        label="displaykey.NVV.Matter.SubView.NewMatterGeneral.Matter.Name"
+        required="true"
+        value="Matter.Name"/>
+      <Input
+        editable="true"
+        id="Matter_CaseNumber"
+        label="displaykey.NVV.Matter.SubView.NewMatterGeneral.Matter.CaseNumber"
+        required="false"
+        value="Matter.CaseNumber"
+        visible="Matter.MatterType == &quot;Lawsuit&quot; || Matter.MatterType == &quot;Arbitration&quot; || Matter.MatterType == &quot;Hearing&quot; || Matter.MatterType == &quot;General&quot;"/>
+      <ClaimContactInput
+        claim="Matter.Claim"
+        editable="true"
+        id="Plaintiff"
+        label="displaykey.MatterGeneral.Matter.Plaintiff"
+        required="false"
+        value="Matter.Plaintiff"
+        valueRange="Matter.Claim.getRelatedContacts()"/>
+      <ClaimContactInput
+        claim="Matter.Claim"
+        editable="true"
+        id="Defendant"
+        label="displaykey.MatterGeneral.Matter.Defendant"
+        required="false"
+        value="Matter.Defendant"
+        valueRange="Matter.Claim.getRelatedContacts()"/>
+      <BooleanRadioInput
+        editable="true"
+        id="TrialDetails_SubroRelated"
+        label="displaykey.NVV.Matter.SubView.NewMatterGeneral.TrialDetails.SubroRelated"
+        required="false"
+        value="Matter.SubroRelated"/>
+      <InputDivider/>
+      <Label
+        label="displaykey.MatterGeneral.Matter.Litigation"
+        visible="Matter.MatterType == &quot;Lawsuit&quot; || Matter.MatterType == &quot;General&quot;"/>
+      <TypeKeyInput
+        editable="true"
+        id="CourtType"
+        label="displaykey.MatterGeneral.Matter.CourtType"
+        required="false"
+        value="Matter.CourtType"
+        visible="Matter.MatterType == &quot;Lawsuit&quot; || Matter.MatterType == &quot;General&quot;">
+        <PostOnChange/>
+      </TypeKeyInput>
+      <TypeKeyInput
+        editable="true"
+        id="CourtDistrict"
+        label="displaykey.MatterGeneral.Matter.CourtDistrict"
+        required="false"
+        value="Matter.CourtDistrict"
+        visible="Matter.MatterType == &quot;Lawsuit&quot; || Matter.MatterType == &quot;General&quot;"/>
+      <TypeKeyInput
+        editable="true"
+        id="LegalSpecialty"
+        label="displaykey.MatterGeneral.Matter.LegalSpecialty"
+        required="false"
+        value="Matter.LegalSpecialty"
+        visible="Matter.MatterType == &quot;Lawsuit&quot; || Matter.MatterType == &quot;General&quot;"/>
+      <TypeKeyInput
+        editable="true"
+        id="TrialDetails_PrimaryCause"
+        label="displaykey.NVV.Matter.SubView.NewMatterGeneral.TrialDetails.PrimaryCause"
+        required="false"
+        value="Matter.PrimaryCause"
+        visible="Matter.MatterType == &quot;Lawsuit&quot; || Matter.MatterType == &quot;General&quot;"/>
+      <InputDivider
+        visible="Matter.MatterType == &quot;Lawsuit&quot; || Matter.MatterType == &quot;General&quot;"/>
+      <Label
+        label="displaykey.NVV.Matter.SubView.NewMatterGeneral.Counsel"
+        visible="Matter.MatterType == &quot;Lawsuit&quot; || Matter.MatterType == &quot;Arbitration&quot; || Matter.MatterType == &quot;Hearing&quot; || Matter.MatterType == &quot;General&quot;"/>
+      <ClaimContactInput
+        claim="Matter.Claim"
+        editable="true"
+        id="Counsel_PlaintiffAttorney"
+        label="displaykey.NVV.Matter.SubView.NewMatterGeneral.Counsel.PlaintiffAttorney"
+        required="false"
+        value="Matter.PlaintiffAtt"
+        valueRange="Matter.Claim.RelatedAttorneyArray"
+        visible="Matter.MatterType == &quot;Lawsuit&quot; || Matter.MatterType == &quot;Arbitration&quot; || Matter.MatterType == &quot;Hearing&quot; || Matter.MatterType == &quot;General&quot;"/>
+      <ClaimContactInput
+        claim="Matter.Claim"
+        editable="true"
+        id="Counsel_PlaintiffLawFirm"
+        label="displaykey.NVV.Matter.SubView.NewMatterGeneral.Counsel.PlaintiffLawFirm"
+        required="false"
+        value="Matter.PlaintiffFirm"
+        valueRange="Matter.Claim.RelatedLawFirmArray"
+        visible="Matter.MatterType == &quot;Lawsuit&quot; || Matter.MatterType == &quot;Arbitration&quot; || Matter.MatterType == &quot;Hearing&quot; || Matter.MatterType == &quot;General&quot;"/>
+      <ClaimContactInput
+        claim="Matter.Claim"
+        editable="true"
+        id="Counsel_DefenseAttorney"
+        label="displaykey.NVV.Matter.SubView.NewMatterGeneral.Counsel.DefenseAttorney"
+        required="false"
+        value="Matter.DefenseAttorney"
+        valueRange="Matter.Claim.RelatedAttorneyArray"
+        visible="Matter.MatterType == &quot;Lawsuit&quot; || Matter.MatterType == &quot;Arbitration&quot; || Matter.MatterType == &quot;Hearing&quot; || Matter.MatterType == &quot;General&quot;"/>
+      <ClaimContactInput
+        claim="Matter.Claim"
+        editable="true"
+        id="Counsel_DefenseLawFirm"
+        label="displaykey.NVV.Matter.SubView.NewMatterGeneral.Counsel.DefenseLawFirm"
+        required="false"
+        value="Matter.DefenseFirm"
+        valueRange="Matter.Claim.RelatedLawFirmArray"
+        visible="Matter.MatterType == &quot;Lawsuit&quot; || Matter.MatterType == &quot;Arbitration&quot; || Matter.MatterType == &quot;Hearing&quot; || Matter.MatterType == &quot;General&quot;"/>
+      <InputDivider
+        visible="Matter.MatterType == &quot;Lawsuit&quot; || Matter.MatterType == &quot;Arbitration&quot; || Matter.MatterType == &quot;Hearing&quot; || Matter.MatterType == &quot;General&quot;"/>
+      <CCAssigneeInput
+        assignable="Matter"
+        claim="Matter != null ? Matter.Claim : null"
+        editable="true"
+        id="Matter_AssignActivity"
+        label="displaykey.NVV.Matter.SubView.NewMatterGeneral.Matter.AssignActivity"
+        required="true"
+        sortValueRange="false"
+        value="AssigneeHolder[0]"
+        valueRange="Matter.SuggestedAssignees"/>
+      <InputDivider/>
+    </InputColumn>
+  </DetailViewPanel>
+</PCF>

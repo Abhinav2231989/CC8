@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<Entity
+  name="ClaimIndicatorTrigger">
+  <Columns>
+    <Column
+      beanPath="ClaimIndicatorTrigger.claimIndicator"
+      name="Indicator"
+      sortOrder="1"/>
+    <Column
+      beanPath="ClaimIndicatorTrigger.triggeringValue"
+      name="TriggeringValue"
+      sortOrder="2"/>
+  </Columns>
+  <DisplayName><![CDATA[return "ClaimIndicatorTrigger that fires when the " + Indicator + " Indicator " + (TriggeringValue ? "Turns On" : "Turns Off")]]></DisplayName>
+</Entity>

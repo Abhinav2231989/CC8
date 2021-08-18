@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="pcf.xsd">
+  <InputSet
+    id="FreeTextClaimSearchFilterInputSet">
+    <Require
+      name="ClaimSearchCriteria"
+      type="ClaimSearchCriteria"/>
+    <Label
+      label="displaykey.NVV.Search.FreeTextSearchFilters"/>
+    <InputDivider/>
+    <Input
+      editable="true"
+      id="State"
+      label="displaykey.JSP.ClaimSearch.Claims.PlainState"
+      required="false"
+      value="ClaimSearchCriteria.AddressCriteria.State"/>
+    <Input
+      editable="true"
+      id="PostalCode"
+      label="displaykey.JSP.ClaimSearch.Claims.PostalCode"
+      required="false"
+      value="ClaimSearchCriteria.AddressCriteria.PostalCode"/>
+    <InputDivider/>
+    <DateCriterionChoiceInput
+      chosenOptionVisible="true"
+      editable="true"
+      id="DateSearch"
+      label="displaykey.JSP.ClaimSearch.Claims.Date"
+      required="false"
+      value="ClaimSearchCriteria.DateCriterionChoice"/>
+  </InputSet>
+</PCF>

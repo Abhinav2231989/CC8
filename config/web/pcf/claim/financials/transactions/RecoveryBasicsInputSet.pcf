@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <InputSet
+    id="RecoveryBasicsInputSet">
+    <Require
+      name="Transaction"
+      type="Transaction"/>
+    <Label
+      label="displaykey.NVV.Financials.TransactionRecovery.Transaction.Details"/>
+    <Input
+      id="NVV_Financials_TransactionRecovery_Recovery_Payer"
+      label="displaykey.NVV.Financials.TransactionRecovery.Recovery.Payer"
+      value="(Transaction as Recovery).Payer"/>
+    <Input
+      id="NVV_Financials_TransactionRecovery_Recovery_OnBehalfOf"
+      label="displaykey.NVV.Financials.TransactionRecovery.Recovery.OnBehalfOf"
+      value="(Transaction as Recovery).OnBehalfOf"
+      visible="(Transaction as Recovery).RecoveryCategory == RecoveryCategory.TC_SUBRO"/>
+    <Input
+      id="Exposure"
+      label="displaykey.NVV.Financials.SubView.RecoveryBasics.Transaction.Exposure"
+      value="Transaction.Exposure.DisplayName == null ? displaykey.Web.Financials.Exposure.ClaimLevel : Transaction.Exposure.DisplayName"/>
+    <TypeKeyInput
+      id="Coverage"
+      label="displaykey.NVV.Financials.SubView.RecoveryBasics.Transaction.Coverage"
+      value="Transaction.Exposure.PrimaryCoverage"/>
+    <TypeKeyInput
+      id="CostType"
+      label="displaykey.NVV.Financials.SubView.RecoveryBasics.Transaction.CostType"
+      value="Transaction.CostType"/>
+    <TypeKeyInput
+      id="CostCategory"
+      label="displaykey.NVV.Financials.SubView.RecoveryBasics.Transaction.CostCategory"
+      value="Transaction.CostCategory"/>
+    <TypeKeyInput
+      id="ReservingCurrency"
+      label="displaykey.NVV.Financials.SubView.RecoveryBasics.Transaction.ReservingCurrency"
+      value="Transaction.ReservingCurrency"
+      visible="gw.util.CCConfigUtil.AllowExplicitReservingCurrency"/>
+    <TypeKeyInput
+      id="RecoveryCategory"
+      label="displaykey.NVV.Financials.SubView.RecoveryBasics.Transaction.RecoveryCategory"
+      value="Transaction.RecoveryCategory"/>
+    <Input
+      editable="true"
+      id="Comments"
+      label="displaykey.NVV.Financials.SubView.RecoveryBasics.Transaction.Comments"
+      value="Transaction.Comments"/>
+    <Input
+      formatType="currency"
+      id="Amount"
+      label="displaykey.NVV.Financials.SubView.RecoveryBasics.Transaction.Amount"
+      value="Transaction.TransactionAmountReservingAmountPair"/>
+    <InputSetRef
+      def="TransactionExchangeRateInputSet(Transaction)"
+      editable="false"/>
+    <ListViewInput
+      def="TransactionLineItemsLV(Transaction)"
+      label="displaykey.NVV.Financials.SubView.RecoveryBasics.Transaction.LineItems">
+      <Toolbar/>
+    </ListViewInput>
+  </InputSet>
+</PCF>

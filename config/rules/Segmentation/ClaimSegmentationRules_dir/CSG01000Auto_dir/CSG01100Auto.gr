@@ -1,0 +1,47 @@
+package rules.Segmentation.ClaimSegmentationRules_dir.CSG01000Auto_dir
+
+@gw.rules.RuleName("CSG01100 - Auto")
+internal class CSG01100Auto {
+  static function doCondition(claim : entity.Claim) : boolean {
+    
+/*start00rule*/
+return true
+
+/* This example claim segmentation rule is not as efficient as the one found in CSG02100 - Property,
+   but it is more easily understood. If efficiency of claim segmentation is of primary concern, you
+   should consider using the model from that other rule instead.
+*/
+/*end00rule*/
+
+  }
+
+  static function doAction(claim : entity.Claim, actions : gw.rules.Action) {
+
+/*start00rule*/
+uses gw.api.util.Logger
+
+/* Find an exposure with the most important segmentation. If not found, repeat for
+   the rest of the segmentations in reverse order of importance. As soon as an
+   exposure is found in any of these searches, segment the claim in the manner of
+   the exposure and then leave the claim segmentation rules. If no exposure is found,
+   leave this rule and drop into the default rule.
+*/
+var highestExposure = claim.Exposures.firstWhere(\ e -> e.Segment == "auto_high")
+
+if (highestExposure == null) {
+    highestExposure = claim.Exposures.firstWhere(\ e -> e.Segment == "auto_mid")
+}
+if (highestExposure == null) {
+    highestExposure = claim.Exposures.firstWhere(\ e -> e.Segment == "auto_low")
+}
+if (highestExposure != null) {
+  claim.Segment = highestExposure.Segment
+  Logger.logDebug(displaykey.Rules.Segmentation.Claim(actions.ShortRuleName))
+  Logger.logDebug(displaykey.Rules.Segmentation.Claim.SegmentedTo(claim.Segment))
+  actions.exit()
+}
+
+/*end00rule*/
+
+  }
+}

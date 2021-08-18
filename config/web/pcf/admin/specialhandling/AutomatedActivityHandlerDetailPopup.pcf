@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Popup
+    alwaysInEditMode="false"
+    beforeCommit="verifyNotADuplicate()"
+    canEdit="canEdit"
+    canVisit="true"
+    id="AutomatedActivityHandlerDetailPopup"
+    startInEditMode="startInEditMode"
+    title="displaykey.Web.Admin.AutomatedActivityHandlerDetailPopup.Title">
+    <LocationEntryPoint
+      signature="AutomatedActivityHandlerDetailPopup(automatedHandler : AutomatedActivityHandler, startInEditMode : boolean, canEdit : boolean)"/>
+    <Variable
+      name="automatedHandler"
+      type="AutomatedActivityHandler"/>
+    <Variable
+      name="startInEditMode"
+      type="boolean"/>
+    <Variable
+      initialValue="false"
+      name="canEdit"
+      type="boolean"/>
+    <Screen>
+      <Toolbar>
+        <EditButtons
+          showUpdateConfirmMessage="false"/>
+      </Toolbar>
+      <DetailViewPanel>
+        <InputColumn>
+          <Label
+            label="displaykey.Web.Admin.AutomatedHandlerBase.HeaderCondition"/>
+          <InputSetRef
+            def="AutomatedHandlerBaseInputSet(automatedHandler)"/>
+          <InputSetRef
+            def="AutomatedHandlerTriggerInputSet(automatedHandler)"
+            mode="(typeof automatedHandler.Trigger).DisplayName"/>
+          <Label
+            label="displaykey.Web.Admin.AutomatedHandlerBase.HeaderAction"/>
+          <InputSetRef
+            def="AutomatedHandlerActionInputSet(automatedHandler)"
+            mode="&quot;activity&quot;"/>
+        </InputColumn>
+      </DetailViewPanel>
+    </Screen>
+    <Code><![CDATA[function verifyNotADuplicate() {
+  if (automatedHandler.isDuplicateOfExistingHandler()) {
+    throw new gw.api.util.DisplayableException(displaykey.Web.Admin.NewAutomatedActivityHandlerPopup.DuplicateAutomatedActivity)
+  }
+}]]></Code>
+  </Popup>
+</PCF>

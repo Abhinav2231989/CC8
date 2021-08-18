@@ -1,0 +1,215 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../pcf.xsd">
+  <DetailViewPanel
+    id="AddressBookSearchDV">
+    <Require
+      name="searchCriteria"
+      type="ContactSearchCriteria"/>
+    <Require
+      name="proximitySearchPageHelper"
+      type="contact.CCProximitySearchPageHelper"/>
+    <Require
+      name="requiredContactType"
+      type="Type"/>
+    <Require
+      name="externalSearchEnabled"
+      type="boolean"/>
+    <Require
+      name="claim"
+      type="Claim"/>
+    <Require
+      name="performVendorSearch"
+      type="boolean"/>
+    <InputColumn>
+      <TypeKeyInput
+        editable="true"
+        id="SearchType"
+        label="displaykey.Web.AddressBook.Search.SearchType"
+        required="true"
+        value="searchCriteria.SearchType"
+        visible="externalSearchEnabled and ContactSearchType.getTypeKeys(false).Count &gt; 1">
+        <PostOnChange/>
+      </TypeKeyInput>
+      <RangeInput
+        editable="true"
+        filter="not(VALUE == &quot;UserContact&quot;)"
+        id="ContactSubtype"
+        label="displaykey.Web.AddressBook.Search.Type"
+        required="true"
+        value="searchCriteria.ContactSubtype"
+        valueRange="searchCriteria.getAvailableSubtypes(requiredContactType)">
+        <PostOnChange
+          onChange="postOnChangeAction()"/>
+      </RangeInput>
+      <InputSetRef
+        def="NameInputSet(searchCriteria)"
+        mode="searchCriteria.isSearchFor(entity.Person) ? &quot;Person&quot; : &quot;Contact&quot;"/>
+      <InputSet
+        visible="searchCriteria.isSearchFor(entity.Company) or (searchCriteria.isSearchFor(entity.Person) and !searchCriteria.isSearchFor(entity.UserContact) and !searchCriteria.isSearchFor(entity.Adjudicator))">
+        <Input
+          editable="true"
+          id="TaxID"
+          label="displaykey.Web.AddressBook.Search.TaxID"
+          value="searchCriteria.TaxID"/>
+      </InputSet>
+      <InputSet
+        visible="searchCriteria.isSearchFor(entity.Attorney)">
+        <TypeKeyInput
+          editable="true"
+          id="AttorneySpecialty"
+          label="displaykey.Web.AddressBook.Search.AttorneySpecialty"
+          value="searchCriteria.AttorneySpecialty"/>
+      </InputSet>
+      <InputSet
+        visible="searchCriteria.isSearchFor(entity.Doctor)">
+        <TypeKeyInput
+          editable="true"
+          id="DoctorSpecialty"
+          label="displaykey.Web.AddressBook.Search.DoctorSpecialty"
+          value="searchCriteria.DoctorSpecialty"/>
+      </InputSet>
+      <InputSet
+        visible="searchCriteria.isSearchFor(entity.Adjudicator)">
+        <TypeKeyInput
+          editable="true"
+          id="AdjudicativeDomain"
+          label="displaykey.Web.AddressBook.Search.AdjudicativeDomain"
+          value="searchCriteria.AdjudicativeDomain"/>
+      </InputSet>
+      <InputSet
+        visible="searchCriteria.isSearchFor(entity.MedicalCareOrg)">
+        <TypeKeyInput
+          editable="true"
+          id="MedicalSpecialty"
+          label="displaykey.Web.AddressBook.Search.MedicalSpecialty"
+          value="searchCriteria.MedicalOrgSpecialty"/>
+      </InputSet>
+      <InputSet
+        visible="searchCriteria.isSearchFor(entity.LawFirm)">
+        <TypeKeyInput
+          editable="true"
+          id="LawFirmSpecialty"
+          label="displaykey.Web.AddressBook.Search.LawFirmSpecialty"
+          value="searchCriteria.LawFirmSpecialty"/>
+      </InputSet>
+      <InputSet
+        visible="searchCriteria.isSearchFor(entity.PersonVendor) or searchCriteria.isSearchFor(entity.CompanyVendor)">
+        <BooleanRadioInput
+          editable="true"
+          id="PreferredVendors"
+          label="displaykey.Web.AddressBook.Search.PreferredVendors"
+          value="searchCriteria.PreferredVendors"/>
+        <RangeInput
+          editable="true"
+          id="MinimumScore"
+          label="displaykey.Web.Reviews.MinimumScore"
+          value="searchCriteria.Score"
+          valueRange="scoreRange()"
+          visible="gw.api.contact.ReviewUtil.haveReviewTypeForContactSubtype( searchCriteria.ContactSubtype ) "/>
+      </InputSet>
+      <CheckBoxInput
+        editable="true"
+        id="IncludePendingContacts"
+        labelAbove="true"
+        value="searchCriteria.IncludePendingContacts"
+        valueLabel="displaykey.Web.AddressBook.Search.IncludePendingCreates"/>
+      <CheckBoxInput
+        available="not performVendorSearch"
+        editable="true"
+        id="IncludeSpecialistService"
+        labelAbove="true"
+        value="searchCriteria.VendorContactTag"
+        valueLabel="displaykey.Web.AddressBook.Search.VendorServicesCheckbox">
+        <PostOnChange
+          target="SpecialistServicesInputSet"/>
+      </CheckBoxInput>
+      <InputSet
+        id="SpecialistServicesInputSet">
+        <ListViewInput
+          boldLabel="true"
+          label="displaykey.Web.AddressBook.Search.ServicesLVLabel"
+          labelAbove="true"
+          visible="searchCriteria.VendorContactTag">
+          <Toolbar>
+            <AddButton
+              conversionExpression="PickedValue.each( \ elt -&gt; { searchCriteria.addToSpecialistServiceCodes(new SpecialistServiceSearchCriteria() { : SpecialistServiceCode = elt.Code }) }); return PickedValue"
+              id="AddSpecialistService"
+              iterator="SpecialistServicesLV"
+              label="displaykey.Button.Add"
+              pickLocation="SelectServicesPopup.push(SpecialistServices)"/>
+            <CheckedValuesToolbarButton
+              checkedRowAction="searchCriteria.removeFromSpecialistServiceCodes(searchCriteria.SpecialistServiceCodes.firstWhere( \ elt -&gt; elt.SpecialistServiceCode == CheckedValue.Code )); gw.api.web.PebblesUtil.invalidateIterators(CurrentLocation, SpecialistService)"
+              id="RemoveSpecialService"
+              iterator="InstructionServicesIterator"
+              label="displaykey.Button.Remove"/>
+          </Toolbar>
+          <ListViewPanel
+            id="SpecialistServicesLV">
+            <RowIterator
+              canPick="false"
+              checkBoxVisible="true"
+              editable="false"
+              elementName="service"
+              hasCheckBoxes="true"
+              id="InstructionServicesIterator"
+              value="SpecialistServices">
+              <Row>
+                <Cell
+                  id="ServiceType0"
+                  label="displaykey.Web.ServiceRequest.ServiceToPerform.Category"
+                  required="true"
+                  sortBy="service.getEditHelper(0).Value.Name"
+                  value="service.getEditHelper(0).Value"/>
+                <Cell
+                  id="ServiceType1"
+                  label="displaykey.Web.ServiceRequest.ServiceToPerform.SubCategory"
+                  sortBy="service.getEditHelper(1).Value.Name"
+                  value="service.getEditHelper(1).Value"/>
+                <Cell
+                  id="ServiceType2"
+                  label="displaykey.Web.ServiceRequest.ServiceToPerform.ServiceType"
+                  sortBy="service.getEditHelper(2).Value.Name"
+                  value="service.getEditHelper(2).Value"/>
+              </Row>
+            </RowIterator>
+          </ListViewPanel>
+        </ListViewInput>
+      </InputSet>
+    </InputColumn>
+    <InputColumn>
+      <InputSetRef
+        def="CCAddressBookSearchLocationInputSet(searchCriteria)"/>
+    </InputColumn>
+    <InputColumn>
+      <InputSetRef
+        def="CCAddressBookSearchProximityAddressInputSet(searchCriteria, proximitySearchPageHelper, claim)"
+        visible="proximitySearchPageHelper.useGeocodeUIinAddressBook()"/>
+    </InputColumn>
+    <InputFooterSection>
+      <InputSetRef
+        def="SearchAndResetInputSet()"/>
+    </InputFooterSection>
+    <Code><![CDATA[function scoreRange() : String[] {
+        return new String[]{ "0", "10", "20", "30", "40", "50", "60", "70", "80", "90" };
+      }
+
+property get SpecialistServices() : List<SpecialistService> {
+  return searchCriteria.SpecialistServiceCodes.map( \ scw -> SpecialistService.getForCode(scw.SpecialistServiceCode) ).toList()
+}
+
+        function postOnChangeAction() {
+          if (not performVendorSearch) {
+            if ((searchCriteria.isSearchFor(PersonVendor) or searchCriteria.isSearchFor(CompanyVendor))) {
+              searchCriteria.VendorContactTag = true
+            } else {
+              if (not searchCriteria.ContactIntrinsicType.isAssignableFrom(PersonVendor) and not searchCriteria.ContactIntrinsicType.isAssignableFrom(CompanyVendor)) {
+                searchCriteria.VendorContactTag = false
+              }
+            }
+          }
+        }
+  ]]></Code>
+  </DetailViewPanel>
+</PCF>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <ListViewPanel
+    id="AccountsLV">
+    <ExposeIterator
+      valueType="entity.Account"
+      widget="AccountsLV"/>
+    <Require
+      name="Accounts"
+      type="Account[]"/>
+    <RowIterator
+      checkBoxVisible="perm.System.accountmng"
+      editable="false"
+      elementName="Account"
+      hasCheckBoxes="true"
+      value="Accounts">
+      <Row>
+        <Cell
+          action="AccountDetail.drilldown(Account)"
+          id="AccountNumber"
+          label="displaykey.Web.Admin.Account.Number"
+          sortOrder="1"
+          value="Account.AccountNumber"/>
+        <Cell
+          id="AccountHolder"
+          label="displaykey.Web.Admin.Account.Holder"
+          sortBy="Account.AccountHolder.DisplayName"
+          sortOrder="2"
+          value="Account.AccountHolder"
+          width="500"/>
+      </Row>
+    </RowIterator>
+  </ListViewPanel>
+</PCF>

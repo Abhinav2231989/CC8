@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <InputSet
+    id="AutomatedHandlerTriggerInputSet"
+    mode="financialthresholdtrigger">
+    <Require
+      name="automatedHandler"
+      type="AutomatedHandler"/>
+    <Variable
+      initialValue="automatedHandler.Trigger as FinancialThresholdTrigger"
+      name="trigger"
+      type="FinancialThresholdTrigger"/>
+    <RangeInput
+      editable="true"
+      id="AutomatedHandlerFinancialThreshold"
+      label="displaykey.Web.Admin.AutomatedHandlerTrigger.FinancialThreshold.Threshold"
+      required="true"
+      sortValueRange="false"
+      value="trigger.FinancialThreshold"
+      valueRange="FinancialThreshold.getTypeKeys(false)"/>
+    <TextInput
+      id="Cause"
+      label="displaykey.Web.Admin.AutomatedHandlerTrigger.FinancialThreshold.ThresholdCriteria"
+      required="true"
+      value="trigger.TriggeringCause"/>
+    <TypeKeyInput
+      editable="true"
+      id="Currency"
+      label="displaykey.Web.Admin.AutomatedHandlerTrigger.FinancialThreshold.ThresholdCurrency"
+      required="true"
+      value="trigger.Currency"
+      visible="util.CurrencyUtil.isMultiCurrencyMode()">
+      <PostOnChange/>
+    </TypeKeyInput>
+    <Input
+      editable="true"
+      id="Amount"
+      label="displaykey.Web.Admin.AutomatedHandlerTrigger.FinancialThreshold.ThresholdAmount"
+      required="true"
+      validationExpression="trigger.ThresholdAmount.Amount &gt;= 0 ? null : displaykey.Web.Admin.AutomatedHandlerTrigger.FinancialThreshold.ThresholdAmount.ValidationError.NotPositive"
+      value="trigger.ThresholdAmount"/>
+  </InputSet>
+</PCF>

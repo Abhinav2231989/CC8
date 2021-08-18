@@ -1,0 +1,278 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <PanelSet
+    id="FNOLWizardFindPolicyPanelSet"
+    mode="Search">
+    <Require
+      name="Claim"
+      type="Claim"/>
+    <Require
+      name="Wizard"
+      type="claim.NewClaimWizardInfo"/>
+    <Variable
+      initialValue="{ Wizard.FindPolicyUtils = new gw.pcf.FNOLFindPolicyUtils(Wizard, Claim); return Wizard.FindPolicyUtils }"
+      name="FindPolicyUtils"
+      type="gw.pcf.FNOLFindPolicyUtils"/>
+    <Variable
+      initialValue="new gw.api.claim.ClaimLossDateProxy(Claim)"
+      name="claimLossDate"
+      type="gw.api.claim.ClaimLossDateProxy"/>
+    <SearchPanel
+      cachingEnabled="false"
+      criteriaName="policySearchCriteria"
+      resultsName="PolicySummaryList"
+      search="FindPolicyUtils.performSearch()"
+      searchCriteria="FindPolicyUtils.PolicySearchCriteria"
+      searchOnEnter="Claim.LossType != null"
+      searchOnRefresh="false"
+      searchResultsType="PolicySummaryQuery">
+      <DetailViewPanel>
+        <InputColumn>
+          <TextInput
+            editable="true"
+            focusOnStartEditing="true"
+            id="policyNumber"
+            label="displaykey.Web.SearchFindPolicyPanelSet.SearchPanel.PolicyNumber.Label"
+            maxChars="20"
+            value="policySearchCriteria.PolicyNumber"/>
+          <InputSetRef
+            def="GlobalPersonNameInputSet(new gw.api.name.SearchNameOwner(policySearchCriteria))"
+            mode="gw.api.name.NameLocaleSettings.PCFMode"/>
+          <InputSetRef
+            def="GlobalContactNameInputSet(new gw.api.name.SearchNameOwner(policySearchCriteria))"
+            mode="gw.api.name.NameLocaleSettings.PCFMode"/>
+          <TypeKeyInput
+            editable="true"
+            id="PolicyType"
+            label="displaykey.NVV.Policy.PolicySearch.Policy.PolicyType"
+            value="policySearchCriteria.PolicyType"/>
+          <DateInput
+            editable="true"
+            id="date"
+            label="displaykey.NVV.Policy.PolicySearch.Policy.LossDate"
+            validationExpression=""
+            value="policySearchCriteria.LossDate"/>
+          <CheckBoxInput
+            editable="true"
+            id="IncludeArchivedPolicies"
+            label="displaykey.NVV.Policy.PolicySearch.Policy.IncludeArchivedPolicies"
+            value="policySearchCriteria.IncludeArchived"
+            visible="gw.api.system.CCConfigParameters.PolicySystemArchivingEnabled.Value"/>
+        </InputColumn>
+        <InputColumn>
+          <InputSetRef
+            def="FNOLWizard_PolicySearchInputSet(Claim, FindPolicyUtils.PolicySearchCriteria)"
+            mode="FindPolicyUtils.PolicySearchCriteria.InsuredAddress.Country != null ? FindPolicyUtils.PolicySearchCriteria.InsuredAddress.Country : gw.api.admin.BaseAdminUtil.getDefaultCountry()"/>
+        </InputColumn>
+        <InputFooterSection>
+          <InputSet>
+            <ContentInput
+              id="searchBtns"
+              labelAbove="true">
+              <Link
+                action="FindPolicyUtils.resetVariables(); util.SearchUtil.search(); if (PolicySummaryList.getCount() == 1) {FindPolicyUtils.selectPolicyRow(PolicySummaryList.getFirstResult(), CurrentLocation as pcf.api.Wizard);}"
+                available="FindPolicyUtils.SelectedPolicySummary == null"
+                default="true"
+                id="Search"
+                label="displaykey.Button.Search"
+                shortcut="S"
+                styleClass="bigButton"
+                visible="true"/>
+              <Link
+                action="util.SearchUtil.reset(); FindPolicyUtils.resetVariables(); FindPolicyUtils.PolicySearchCriteria.resetPolicySearchCriteria(); "
+                available="FindPolicyUtils.SelectedPolicySummary == null"
+                id="Reset"
+                label="displaykey.Button.Reset"
+                shortcut="R"
+                styleClass="bigButton"
+                visible="true"/>
+            </ContentInput>
+          </InputSet>
+        </InputFooterSection>
+      </DetailViewPanel>
+      <PanelRef>
+        <Toolbar/>
+        <ListViewPanel
+          id="PolicyResultLV">
+          <RowIterator
+            editable="false"
+            elementName="PolicySummary"
+            pickValue=""
+            value="{FindPolicyUtils.saveSearch(policySearchCriteria, PolicySummaryList); return Wizard.getPolicySummariesOrSelected(PolicySummaryList, FindPolicyUtils.SelectedPolicySummary)}">
+            <Row
+              highlighted="PolicySummary.isSamePolicySummary( FindPolicyUtils.SelectedPolicySummary)">
+              <LinkCell
+                id="Select"
+                visible="true">
+                <Link
+                  action="FindPolicyUtils.selectPolicyRow(PolicySummary, CurrentLocation as pcf.api.Wizard)"
+                  confirmMessage="displaykey.Java.Validation.FindPolicyPanelSet.Unselect"
+                  id="selectButton"
+                  label="displaykey.Web.SearchFindPolicyPanelSet.PolicyResultLV.Select.Label"
+                  shortcut="e"
+                  showConfirmMessage="Claim.Policy != null and Claim.Policy.PolicyType != PolicySummary.PolicyType"
+                  styleClass="miniButton"
+                  visible="FindPolicyUtils.SelectedPolicySummary == null"/>
+                <Link
+                  action="FindPolicyUtils.resetVariables(); Wizard.resetSteps(); util.SearchUtil.search();"
+                  confirmMessage="displaykey.Java.Validation.FindPolicyPanelSet.Unselect"
+                  id="unselectButton"
+                  label="displaykey.Web.SearchFindPolicyPanelSet.PolicyResultLV.Unselect.Label"
+                  shortcut="U"
+                  showConfirmMessage="Claim.Policy != null"
+                  styleClass="miniButton"
+                  visible="FindPolicyUtils.SelectedPolicySummary != null"/>
+              </LinkCell>
+              <Cell
+                action="PolicySummaryInfoPopup.push(FindPolicyUtils.SelectedPolicySummary == null ? PolicySummary : FindPolicyUtils.SelectedPolicySummary)"
+                id="PolicyNumber"
+                label="displaykey.LV.Policy.PolicySearchResult.PolicySearch.PolicyNumber"
+                value="PolicySummary.PolicyNumber"/>
+              <Cell
+                id="Insured"
+                label="displaykey.LV.Policy.PolicySearchResult.PolicySearch.Insured"
+                value="PolicySummary.InsuredName"/>
+              <Cell
+                id="Address"
+                label="displaykey.Web.Address.Default.Address"
+                sortBy="PolicySummary.AddressLine1"
+                value="PolicySummary.DisplayAddress"/>
+              <Cell
+                id="City"
+                label="displaykey.Web.Address.Default.City"
+                sortBy="PolicySummary.City"
+                value="PolicySummary.DisplayCity"/>
+              <TypeKeyCell
+                id="State"
+                label="displaykey.Web.Address.Default.State"
+                value="PolicySummary.State"/>
+              <Cell
+                id="Zip"
+                label="displaykey.Web.Address.Default.ZIP"
+                value="PolicySummary.PostalCode"/>
+              <DateCell
+                id="Effective"
+                label="displaykey.LV.Policy.PolicySearchResult.PolicySearch.Effective"
+                value="PolicySummary.EffectiveDate"/>
+              <DateCell
+                id="Expiration"
+                label="displaykey.LV.Policy.PolicySearchResult.PolicySearch.Expiration"
+                value="PolicySummary.ExpirationDate"/>
+              <TypeKeyCell
+                id="Type"
+                label="displaykey.LV.Policy.PolicySearchResult.PolicySearch.Type"
+                value="PolicySummary.PolicyType"/>
+              <TypeKeyCell
+                id="Status"
+                label="displaykey.LV.Policy.PolicySearchResult.PolicySearch.Status"
+                value="PolicySummary.Status"
+                visible="policySearchCriteria.IncludeArchived == true"/>
+            </Row>
+          </RowIterator>
+        </ListViewPanel>
+      </PanelRef>
+    </SearchPanel>
+    <DetailViewPanel
+      visible="FindPolicyUtils.SelectedPolicySummary != null">
+      <InputColumn>
+        <Label
+          label="displaykey.Web.SearchFindPolicyPanelSet.NewClaimLabel"/>
+        <Input
+          editable="true"
+          id="ClaimNumber2"
+          label="displaykey.NVV.Claim.SubView.NewClaimGeneral.Claim.ClaimNumber"
+          required="true"
+          validationExpression="!Claim.DuplicateClaimNumber ? null : displaykey.Java.NewClaimWizard.Error.ClaimNumberNotUnique(Claim.ClaimNumber)"
+          value="Claim.ClaimNumber"
+          visible="!Claim.ClaimNumberGenerationEnabled"/>
+        <DateInput
+          confirmMessage="displaykey.Wizard.NewClaimWizard.LossDateChangeWarning"
+          dateFormat="short"
+          editable="true"
+          id="Claim_LossDate"
+          label="displaykey.NVV.Claim.SubView.NewClaimLossDetailsAuto.Claim.LossDate"
+          required="true"
+          showConfirmMessage="not Wizard.AtHighWaterMark"
+          validationExpression="Claim.validateLossDate()"
+          value="claimLossDate.LossDate"/>
+        <DateInput
+          editable="true"
+          id="Claim_lossTime"
+          label="displaykey.Web.SearchFindPolicyPanelSet.Time.Label"
+          timeFormat="short"
+          value="claimLossDate.LossTime"/>
+        <RangeRadioInput
+          confirmMessage="displaykey.Java.Validation.SelectPolicy.Warnings.ChangingClaimType"
+          editable="true"
+          id="ClaimMode"
+          label="displaykey.NVV.Claim.NewClaimSelectType.Claim.LossType"
+          required="true"
+          showConfirmMessage="!Wizard.AtHighWaterMark"
+          sortValueRange="false"
+          stacked="true"
+          value="Wizard.ClaimMode"
+          valueRange="FindPolicyUtils.ClaimModeArray">
+          <PostOnChange
+            onChange="FindPolicyUtils.onClaimModeSelectionMade()"/>
+        </RangeRadioInput>
+      </InputColumn>
+      <InputColumn>
+        <Label
+          label="displaykey.Web.SearchFindPolicyPanelSet.ClaimHistory.Label"
+          visible="FindPolicyUtils.isClaimHistoryVisible()"/>
+        <ListViewInput
+          labelAbove="true"
+          visible="FindPolicyUtils.isClaimHistoryVisible()">
+          <Toolbar/>
+          <ListViewPanel
+            id="otherClaimLV">
+            <RowIterator
+              editable="false"
+              elementName="otherClaim"
+              value="Claim.findPriorClaimsByPolicyNumber(FindPolicyUtils.SelectedPolicySummary.PolicyNumber, {}) as PriorClaimViewQuery">
+              <IteratorSort
+                sortBy="otherClaim.LossDate"
+                sortDirection="descending"
+                sortOrder="1"/>
+              <Row
+                highlighted="otherClaim.State != &quot;closed&quot;">
+                <TypeKeyCell
+                  id="otherStatus"
+                  label="displaykey.LV.Claim.DuplicateClaimSearchResults.Claims.Status"
+                  value="otherClaim.State"/>
+                <Cell
+                  action="FindPolicyUtils.gotoClaimFile(CurrentLocation as pcf.api.Wizard, otherClaim.Claim)"
+                  id="otherID"
+                  label="displaykey.LV.Claim.DuplicateClaimSearchResults.Claims.ID"
+                  value="otherClaim.ClaimNumber"/>
+                <DateCell
+                  id="otherLossDate"
+                  label="displaykey.LV.Claim.DuplicateClaimSearchResults.Claims.LossDate"
+                  sortDirection="descending"
+                  value="otherClaim.LossDate"/>
+                <Cell
+                  id="otherInsured"
+                  label="displaykey.Web.SearchFindPolicyPanelSet.otherClaimLV.Description.Label"
+                  value="otherClaim.Description"
+                  width="200"/>
+                <DateCell
+                  enableSort="false"
+                  id="otherPolicyID"
+                  label="displaykey.Web.SearchFindPolicyPanelSet.otherClaimLV.Reported.Label"
+                  value="otherClaim.ReportedDate"/>
+                <Cell
+                  action="UserContactDetailPopup.push(otherClaim.claim.AssignedUser)"
+                  enableSort="false"
+                  id="otherClaimant"
+                  label="displaykey.Web.SearchFindPolicyPanelSet.otherClaimLV.AssignTo.Label"
+                  value="otherClaim.AssignedUserDisplayName"/>
+              </Row>
+            </RowIterator>
+          </ListViewPanel>
+        </ListViewInput>
+      </InputColumn>
+    </DetailViewPanel>
+  </PanelSet>
+</PCF>

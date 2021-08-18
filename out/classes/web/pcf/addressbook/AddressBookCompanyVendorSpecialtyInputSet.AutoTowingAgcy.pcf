@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../pcf.xsd">
+  <InputSet
+    id="AddressBookCompanyVendorSpecialtyInputSet"
+    mode="AutoTowingAgcy">
+    <Require
+      name="CompanyVendor"
+      type="CompanyVendor"/>
+    <Input
+      editable="true"
+      id="BusinessLicense"
+      label="displaykey.Web.ContactDetail.AutoTowingAgcy.BusinessLicense"
+      value="(CompanyVendor as AutoTowingAgcy).AutoTowingLicense"/>
+  </InputSet>
+</PCF>

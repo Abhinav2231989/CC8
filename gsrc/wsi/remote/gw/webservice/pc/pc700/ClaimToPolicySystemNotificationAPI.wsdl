@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<wsdl:definitions targetNamespace="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ClaimToPolicySystemNotificationAPI" name="ClaimToPolicySystemNotificationAPI" xmlns="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ClaimToPolicySystemNotificationAPI" xmlns:gwsoap="http://guidewire.com/ws/soapheaders" xmlns:gwwsdl="http://guidewire.com/pl/wsdl" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://guidewire.com/pc/ws/gw/webservice/pc/pc700/ccintegration/ClaimToPolicySystemNotificationAPI" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://guidewire.com/ws/soapheaders" schemaLocation="soapheaders.xsd"/>
+      <xs:element name="claimExceedsThreshold">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="lossDate" type="xs:dateTime" gw:type="java.util.Date" minOccurs="0" xmlns:gw="http://guidewire.com/xsd"/>
+            <xs:element name="policyNumber" type="xs:string" minOccurs="0"/>
+            <xs:element name="grossTotalIncurred" type="xs:string" minOccurs="0"/>
+            <xs:element name="transactionId" type="xs:string" minOccurs="0"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="claimExceedsThresholdResponse">
+        <xs:complexType/>
+      </xs:element>
+      <xs:element name="BadIdentifierException">
+        <xs:complexType/>
+      </xs:element>
+      <xs:element name="AlreadyExecutedException">
+        <xs:complexType/>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:portType name="ClaimToPolicySystemNotificationAPIPortType">
+    <wsdl:operation name="claimExceedsThreshold">
+      <wsdl:input name="claimExceedsThreshold" message="claimExceedsThreshold"/>
+      <wsdl:output name="claimExceedsThresholdResponse" message="claimExceedsThresholdResponse"/>
+      <wsdl:fault name="BadIdentifierException" message="BadIdentifierException"/>
+      <wsdl:fault name="AlreadyExecutedException" message="AlreadyExecutedException"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ClaimToPolicySystemNotificationAPISoap12Binding" type="ClaimToPolicySystemNotificationAPIPortType">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="claimExceedsThreshold">
+      <soap12:operation style="document"/>
+      <wsdl:input name="claimExceedsThreshold">
+        <soap12:body use="literal"/>
+        <soap12:header message="gw-authentication" part="gw-authentication" use="literal"/>
+        <soap12:header message="gw-locale" part="gw-locale" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="claimExceedsThresholdResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="BadIdentifierException">
+        <soap12:fault name="BadIdentifierException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AlreadyExecutedException">
+        <soap12:fault name="AlreadyExecutedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ClaimToPolicySystemNotificationAPISoap11Binding" type="ClaimToPolicySystemNotificationAPIPortType">
+    <soap11:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="claimExceedsThreshold">
+      <soap11:operation style="document"/>
+      <wsdl:input name="claimExceedsThreshold">
+        <soap11:body use="literal"/>
+        <soap11:header message="gw-authentication" part="gw-authentication" use="literal"/>
+        <soap11:header message="gw-locale" part="gw-locale" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="claimExceedsThresholdResponse">
+        <soap11:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="BadIdentifierException">
+        <soap11:fault name="BadIdentifierException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="AlreadyExecutedException">
+        <soap11:fault name="AlreadyExecutedException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ClaimToPolicySystemNotificationAPI">
+    <wsdl:port name="ClaimToPolicySystemNotificationAPISoap12Port" binding="ClaimToPolicySystemNotificationAPISoap12Binding">
+      <soap12:address location="http://localhost:8180/pc/ws/gw/webservice/pc/pc700/ccintegration/ClaimToPolicySystemNotificationAPI"/>
+      <gwwsdl:address location="${pc}/ws/gw/webservice/pc/pc700/ccintegration/ClaimToPolicySystemNotificationAPI"/>
+    </wsdl:port>
+    <wsdl:port name="ClaimToPolicySystemNotificationAPISoap11Port" binding="ClaimToPolicySystemNotificationAPISoap11Binding">
+      <soap11:address location="http://localhost:8180/pc/ws/gw/webservice/pc/pc700/ccintegration/ClaimToPolicySystemNotificationAPI/soap11"/>
+      <gwwsdl:address location="${pc}/ws/gw/webservice/pc/pc700/ccintegration/ClaimToPolicySystemNotificationAPI/soap11"/>
+    </wsdl:port>
+  </wsdl:service>
+  <wsdl:message name="claimExceedsThreshold">
+    <wsdl:part name="parameters" element="claimExceedsThreshold"/>
+  </wsdl:message>
+  <wsdl:message name="claimExceedsThresholdResponse">
+    <wsdl:part name="parameters" element="claimExceedsThresholdResponse"/>
+  </wsdl:message>
+  <wsdl:message name="BadIdentifierException">
+    <wsdl:part name="BadIdentifierException" element="BadIdentifierException"/>
+  </wsdl:message>
+  <wsdl:message name="AlreadyExecutedException">
+    <wsdl:part name="AlreadyExecutedException" element="AlreadyExecutedException"/>
+  </wsdl:message>
+  <wsdl:message name="gw-authentication">
+    <wsdl:part name="gw-authentication" element="gwsoap:authentication"/>
+  </wsdl:message>
+  <wsdl:message name="gw-locale">
+    <wsdl:part name="gw-locale" element="gwsoap:locale"/>
+  </wsdl:message>
+</wsdl:definitions>

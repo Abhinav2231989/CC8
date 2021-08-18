@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Popup
+    afterEnter="onEnterPopup()"
+    canEdit="false"
+    id="ClaimContactTransferRolesPopup"
+    title="displaykey.Web.ClaimContactTransferRolesPopup.Title(targetContact.Contact)">
+    <LocationEntryPoint
+      signature="ClaimContactTransferRolesPopup(claim : Claim, targetContact : ClaimContact)"/>
+    <Variable
+      name="targetContact"
+      type="ClaimContact"/>
+    <Variable
+      name="claim"
+      type="Claim"/>
+    <Variable
+      initialValue="new java.util.ArrayList&lt;ClaimContact&gt;()"
+      name="contactsToTransfer"/>
+    <Variable
+      initialValue="new java.util.ArrayList&lt;ClaimContact&gt;()"
+      name="availableClaimContacts"/>
+    <Screen>
+      <Toolbar>
+        <ToolbarButton
+          action="performTransfer(); CurrentLocation.cancel()"
+          available="not contactsToTransfer.Empty"
+          confirmMessage="displaykey.Web.ClaimContactTransferRolesPopup.ConfirmDialog.Message(targetContact.Contact, targetContact.createCombinedRolesString(contactsToTransfer), contactsToTransfer.join(&quot;, &quot;))"
+          default="true"
+          id="PerformContactRoleTransferButton"
+          label="displaykey.Web.ClaimContactTransferRolesPopup.Button.TransferContactRoles"
+          shortcut="M"/>
+        <ToolbarButton
+          action="CurrentLocation.cancel()"
+          id="CancelTransferRolesButton"
+          label="displaykey.Button.Cancel"
+          shortcut="C"/>
+      </Toolbar>
+      <Verbatim
+        label="displaykey.Web.ClaimContactTransferRolesPopup.CurrentRoles(targetContact.Contact, targetContact.RolesString)"/>
+      <DetailViewPanel>
+        <InputColumn>
+          <ListViewInput
+            boldLabel="true"
+            id="AvailableClaimContacts"
+            label="displaykey.Web.ClaimContactTransferRolesPopup.AvailableContactListView.Title(targetContact.Contact)"
+            labelAbove="true">
+            <Toolbar>
+              <CheckedValuesToolbarButton
+                allCheckedRowsAction="addToSourceContacts(CheckedValues.toList())"
+                flags="any ChooseClaimContact"
+                id="AddToSourceContacts"
+                iterator="AvailableClaimContactsLV"
+                label="displaykey.Web.ClaimContactTransferRolesPopup.Button.AddContactsToTransfer"
+                shortcut="A"/>
+            </Toolbar>
+            <ListViewPanel
+              id="AvailableClaimContactsLV">
+              <RowIterator
+                editable="false"
+                elementName="ChooseClaimContact"
+                hasCheckBoxes="true"
+                pageSize="10"
+                value="availableClaimContacts">
+                <ToolbarFlag
+                  name="ChooseClaimContact"/>
+                <Row>
+                  <Cell
+                    id="Name"
+                    label="displaykey.LV.Claim.PeopleInvolvedDetailed.PeopleInvolved.Name"
+                    sortBy="ChooseClaimContact.Contact.PrimarySortValue,ChooseClaimContact.Contact.SecondarySortValue,ChooseClaimContact.Contact.TertiarySortValue,ChooseClaimContact.Contact.QuaternarySortValue"
+                    sortOrder="1"
+                    value="ChooseClaimContact.Contact"/>
+                  <Cell
+                    id="Roles"
+                    label="displaykey.LV.Claim.PeopleInvolvedDetailed.PeopleInvolved.Roles"
+                    value="ChooseClaimContact.RolesString"/>
+                  <Cell
+                    id="ContactProhibited"
+                    label="displaykey.LV.Claim.PeopleInvolvedDetailed.PeopleInvolved.ContactProhibited"
+                    numCols="2"
+                    value="ChooseClaimContact.ContactProhibited"
+                    wrapLabel="true"/>
+                  <Cell
+                    id="Phone_Work"
+                    label="displaykey.LV.Claim.PeopleInvolvedDetailed.PeopleInvolved.Phone.Work"
+                    value="ChooseClaimContact.Contact.PrimaryPhoneValue"/>
+                  <Cell
+                    id="Address"
+                    label="displaykey.Web.Address.Default.Address"
+                    sortBy="ChooseClaimContact.Contact.PrimaryAddress.AddressLine1"
+                    value="ChooseClaimContact.Contact.PrimaryAddress.DisplayAddressLine1"/>
+                  <Cell
+                    id="City"
+                    label="displaykey.Web.Address.Default.City"
+                    sortBy="ChooseClaimContact.Contact.PrimaryAddress.City"
+                    value="ChooseClaimContact.Contact.PrimaryAddress.DisplayCity"/>
+                  <TypeKeyCell
+                    id="State"
+                    label="displaykey.Web.Address.Default.State"
+                    value="ChooseClaimContact.Contact.PrimaryAddress.State"/>
+                  <Cell
+                    id="PostalCode"
+                    label="displaykey.Web.Address.Default.ZIP"
+                    numCols="15"
+                    value="ChooseClaimContact.Contact.PrimaryAddress.PostalCode"/>
+                </Row>
+              </RowIterator>
+            </ListViewPanel>
+          </ListViewInput>
+          <Input
+            id="Blank"
+            value="&quot;&quot;"/>
+          <ListViewInput
+            boldLabel="true"
+            id="SourceContact"
+            label="displaykey.Web.ClaimContactTransferRolesPopup.SelectedContactListView.Title(targetContact.Contact)"
+            labelAbove="true">
+            <Toolbar>
+              <CheckedValuesToolbarButton
+                allCheckedRowsAction="removeFromSourceContacts(CheckedValues.toList())"
+                flags="any SourceClaimContact"
+                id="RemoveFromSourceContacts"
+                iterator="SourceClaimContactsLV"
+                label="displaykey.Web.ClaimContactTransferRolesPopup.Button.Remove"
+                shortcut="R"/>
+            </Toolbar>
+            <ListViewPanel
+              id="SourceClaimContactsLV">
+              <RowIterator
+                editable="false"
+                elementName="SourceClaimContact"
+                hasCheckBoxes="true"
+                pageSize="10"
+                value="contactsToTransfer">
+                <ToolbarFlag
+                  name="SourceClaimContact"/>
+                <Row>
+                  <Cell
+                    id="Name"
+                    label="displaykey.LV.Claim.PeopleInvolvedDetailed.PeopleInvolved.Name"
+                    sortBy="SourceClaimContact.Contact.PrimarySortValue,SourceClaimContact.Contact.SecondarySortValue,SourceClaimContact.Contact.TertiarySortValue,SourceClaimContact.Contact.QuaternarySortValue"
+                    sortOrder="1"
+                    value="SourceClaimContact.Contact"/>
+                  <Cell
+                    id="Roles"
+                    label="displaykey.LV.Claim.PeopleInvolvedDetailed.PeopleInvolved.Roles"
+                    value="SourceClaimContact.RolesString"/>
+                  <Cell
+                    id="ContactProhibited"
+                    label="displaykey.LV.Claim.PeopleInvolvedDetailed.PeopleInvolved.ContactProhibited"
+                    numCols="2"
+                    value="SourceClaimContact.ContactProhibited"
+                    wrapLabel="true"/>
+                  <Cell
+                    id="Phone_Work"
+                    label="displaykey.LV.Claim.PeopleInvolvedDetailed.PeopleInvolved.Phone.Work"
+                    value="SourceClaimContact.Contact.PrimaryPhoneValue"/>
+                  <Cell
+                    id="Address"
+                    label="displaykey.Web.Address.Default.Address"
+                    sortBy="SourceClaimContact.Contact.PrimaryAddress.AddressLine1"
+                    value="SourceClaimContact.Contact.PrimaryAddress.DisplayAddressLine1"/>
+                  <Cell
+                    id="City"
+                    label="displaykey.Web.Address.Default.City"
+                    sortBy="SourceClaimContact.Contact.PrimaryAddress.City"
+                    value="SourceClaimContact.Contact.PrimaryAddress.DisplayCity"/>
+                  <TypeKeyCell
+                    id="State"
+                    label="displaykey.Web.Address.Default.State"
+                    value="SourceClaimContact.Contact.PrimaryAddress.State"/>
+                  <Cell
+                    id="PostalCode"
+                    label="displaykey.Web.Address.Default.ZIP"
+                    numCols="15"
+                    value="SourceClaimContact.Contact.PrimaryAddress.PostalCode"/>
+                </Row>
+              </RowIterator>
+            </ListViewPanel>
+          </ListViewInput>
+        </InputColumn>
+      </DetailViewPanel>
+      <PanelSet>
+        <Verbatim
+          label="displaykey.Web.ClaimContactTransferRolesPopup.NewRoles(targetContact.Contact, targetContact.createCombinedRolesString(contactsToTransfer))"/>
+      </PanelSet>
+    </Screen>
+    <Code><![CDATA[function performTransfer() {
+  var checkedErrors = new java.util.TreeMap()
+  claimparties.ClaimContactUtil.transferClaimContacts(CurrentLocation, contactsToTransfer.toTypedArray(), targetContact, checkedErrors)
+  // There might be several errors but we will just show one at a time.
+  if (!checkedErrors.Empty) {
+    throw checkedErrors.values().first() as com.guidewire.pl.web.controller.UserDisplayableException
+  }
+}
+
+function onEnterPopup() {
+  for (cc in claim.getContactsWithPreload()) {
+    if (cc != targetContact) {
+      availableClaimContacts.add(cc)
+    }
+  }
+}
+
+function addToSourceContacts(chosenContacts : List<ClaimContact>) {
+  contactsToTransfer.addAll(chosenContacts) 
+  availableClaimContacts.removeAll(chosenContacts)
+}
+
+function removeFromSourceContacts(chosenContacts : List<ClaimContact>) {
+  availableClaimContacts.addAll(chosenContacts)  
+  contactsToTransfer.removeAll(chosenContacts) 
+}
+]]></Code>
+  </Popup>
+</PCF>

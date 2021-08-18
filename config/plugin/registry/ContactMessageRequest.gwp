@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<plugin name="ContactMessageRequest" interface="MessageRequest">
+    <plugin-gosu disabled="false" gosuclass="gw.plugin.messaging.ab800.ContactMessageRequest"/>
+</plugin>

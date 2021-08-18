@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<delegate xmlns="http://guidewire.com/datamodel" extendable="true" subpackage="contact" name="EFTDataDelegate">
+  <fulldescription>Delegate used by Contact and Check to store Electronic funds transfer data
+    </fulldescription>
+</delegate>

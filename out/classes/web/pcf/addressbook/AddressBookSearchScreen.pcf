@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../pcf.xsd">
+  <Screen
+    id="AddressBookSearchScreen">
+    <Require
+      name="externalSearchEnabled"
+      type="boolean"/>
+    <Require
+      name="requiredContactType"
+      type="Type"/>
+    <Require
+      name="claim"
+      type="Claim"/>
+    <Require
+      name="showCancel"
+      type="boolean"/>
+    <Require
+      name="initialSpecialistServices"
+      type="java.util.List&lt;SpecialistService&gt;"/>
+    <Require
+      name="performVendorSearch"
+      type="boolean"/>
+    <Variable
+      initialValue="new contact.CCProximitySearchPageHelper()"
+      name="PageHelper"/>
+    <Variable
+      initialValue="&quot;AddressBookSearchLV&quot;"
+      name="PrintTargetLV"/>
+    <Variable
+      initialValue="new gw.api.addressbook.ContactManager()"
+      name="RemoteSystem"
+      type="gw.api.addressbook.ABSystem"/>
+    <Toolbar>
+      <ToolbarButton
+        action="CurrentLocation.cancel()"
+        id="cancel"
+        label="displaykey.Button.Cancel"
+        visible="showCancel"/>
+      <ToolbarButton
+        action="launchContactManager()"
+        id="LaunchAB"
+        label="displaykey.Web.AddressBook.Button.LaunchContactManager"
+        tooltip="displaykey.Web.AddressBook.Button.LaunchContactManager.Tooltip"
+        visible="RemoteSystem.Enabled"/>
+    </Toolbar>
+    <SearchPanel
+      cachingEnabled="false"
+      clearInvisibleInputs="true"
+      criteriaName="searchCriteria"
+      maxSearchResults="gw.api.search.MaxSearchResults.forContacts()"
+      resultsName="searchResults"
+      search="new gw.api.name.UserSearchNameOwner(searchCriteria).clearNonvisibleFields(); return PageHelper.performProximitySearch(CurrentLocation,searchCriteria)"
+      searchCriteria="newSearchCriteria()"
+      searchResultsType="ContactQuery">
+      <PanelRef
+        def="AddressBookSearchDV(searchCriteria, PageHelper, requiredContactType, externalSearchEnabled, claim, performVendorSearch)"/>
+      <PanelDivider/>
+      <PanelRef
+        def="AddressBookSearchLV(null, PageHelper, searchCriteria.ExternalContactSource, searchResults, searchCriteria)">
+        <TitleBar
+          appendListViewPaging="true"
+          title="displaykey.Web.Search.Results"/>
+        <Toolbar>
+          <CheckedValuesToolbarButton
+            allCheckedRowsAction="PageHelper.getDrivingDirectionsCache().getSelectedDirections(CheckedValues, searchCriteria);"
+            flags="any ExternalContact"
+            id="RetrieveRequested"
+            iterator="AddressBookSearchLV.AddressBookSearchLV"
+            label="displaykey.Web.AddressBook.Search.Result.GetRequested"
+            visible="searchCriteria.isProximitySearch()"/>
+          <ToolbarButton
+            action="print.ListViewPrintOptionPopupAction.printListViewOnlyWithOptions(PrintTargetLV, displaykey.Web.Search.Results, null)"
+            available="perm.User.printlistviews"
+            id="ClaimSearchScreen_PrintButton"
+            label="displaykey.Java.ListView.Print"
+            shortcut="N"/>
+        </Toolbar>
+      </PanelRef>
+    </SearchPanel>
+    <Code><![CDATA[function newSearchCriteria() : ContactSearchCriteria {
+  var aCriteria = new ContactSearchCriteria();
+  aCriteria.ContactSubtype = requiredContactType.RelativeName as typekey.Contact;
+  aCriteria.SearchType = "internal";
+  if (claim != null) {
+    aCriteria.initializeProximitySearch(claim.Addresses as java.util.List<entity.Address>, claim.LossLocation);
+  }
+
+  aCriteria.initializeSpecialistServices(initialSpecialistServices)
+  gw.api.web.PebblesUtil.invalidateIterators(CurrentLocation, SpecialistService)
+
+  if (performVendorSearch) {
+    // AllTagsRequired doesn't have any effect when there is only one tag, but setting it here for completeness
+    aCriteria.AllTagsRequired = true
+    aCriteria.setTagTypes({ContactTagType.TC_VENDOR})
+    if (claim.LossLocation != null) {
+      aCriteria.Address.setState(claim.LossLocation.State)
+      aCriteria.Address.setCountry(claim.LossLocation.Country)
+    }
+  }
+  return aCriteria
+}
+
+function launchContactManager() {
+  if(not RemoteSystem.Enabled) {
+    gw.api.util.LocationUtil.addRequestScopedErrorMessage(displaykey.Web.AddressBook.RemoteSystemNotEnabled)
+  }
+  GoToAB.push(RemoteSystem.EntryPointURL)
+}]]></Code>
+  </Screen>
+</PCF>

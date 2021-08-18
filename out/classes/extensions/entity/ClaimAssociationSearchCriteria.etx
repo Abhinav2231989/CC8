@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<extension xmlns="http://guidewire.com/datamodel" entityName="ClaimAssociationSearchCriteria">
+    <column desc="This contact's name in kanji.  Used only for Japanese names and will be null otherwise." name="NameKanji" type="companyname" nullok="true"/>
+    <column desc="First name in kanji.  Used only for Japanese names and will be null otherwise." name="FirstNameKanji" type="firstname" nullok="true"/>
+    <column desc="Last name in kanji.  Used only for Japanese names and will be null otherwise." name="LastNameKanji" type="lastname" nullok="true"/>
+</extension>

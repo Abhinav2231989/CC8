@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<endpoint
+  name="pcintegrationPC702"
+  wsdl-location="http://localhost:8180/pc/soap/CCPolicySearchIntegration?wsdl">
+  <settings
+    authentication-type="Http"
+    call-timeout="0">
+    <http-authentication
+      password="tj"
+      username="su"/>
+  </settings>
+</endpoint>

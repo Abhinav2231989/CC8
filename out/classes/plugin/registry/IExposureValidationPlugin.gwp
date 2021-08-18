@@ -1,0 +1,3 @@
+<plugin name="IExposureValidationPlugin">
+  <plugin-java javaclass="com.guidewire.cc.system.validation.RulesBasedExposureValidationPlugin"/>
+</plugin>

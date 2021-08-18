@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<typelist xmlns="http://guidewire.com/typelists" desc="Permissions to restrict access to claims" final="false" subpackage="claim" name="ClaimSecurityType">
+  <typecode code="unsecuredclaim" desc="Permission to view claims with no additional security specified" name="UnsecuredClaim"/>
+</typelist>

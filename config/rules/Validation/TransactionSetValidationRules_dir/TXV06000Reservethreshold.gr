@@ -1,0 +1,27 @@
+package rules.Validation.TransactionSetValidationRules_dir
+
+@gw.rules.RuleName("TXV06000 - Reserve threshold")
+internal class TXV06000Reservethreshold {
+  static function doCondition(transactionSet : entity.TransactionSet) : boolean {
+    
+/*start00rule*/
+return transactionSet.Subtype == "ReserveSet"  
+and transactionSet.ClaimAmount.Amount > 1000000
+/*end00rule*/
+
+  }
+
+  static function doAction(transactionSet : entity.TransactionSet, actions : gw.rules.Action) {
+
+/*start00rule*/
+uses gw.api.util.CurrencyUtil
+uses gw.api.financials.CurrencyAmount
+
+transactionSet.reject("newloss", 
+  displaykey.Rules.Validation.Transaction.ReserveTotalNotGreaterThanOneMillion(
+      CurrencyUtil.renderAsCurrency(new CurrencyAmount(1000000, transactionSet.Claim.Currency))),
+  null, null)
+/*end00rule*/
+
+  }
+}

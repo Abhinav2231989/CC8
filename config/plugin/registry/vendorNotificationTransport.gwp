@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<plugin name="vendorNotificationTransport" interface="MessageTransport">
+    <plugin-gosu disabled="false" gosuclass="gw.plugin.vendormanagement.impl.VendorNotificationTransport">
+        <param name="contactDestId" value="99"/>
+    </plugin-gosu>
+</plugin>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<subtype xmlns="http://guidewire.com/datamodel"
+         entity="AutomatedNotificationHandler"
+         subpackage="specialhandling"
+         supertype="AutomatedHandler"
+         abstract="true"
+         final="false"
+         desc="A subtype of AutomatedHandler that generates an email when a trigger is executed.">
+    <fulldescription>
+        A subtype of AutomatedHandler that causes emails to be generated when the associated trigger is executed by changes to a Claim.
+    </fulldescription>
+    <implementsInterface iface="gw.api.specialhandling.AutomatedHandlerMethods"
+                         impl="gw.specialhandling.AutomatedNotificationHandlerMethodsImpl"/>
+    <column name="EmailTemplate"
+            desc="The ID of the email template to use when generating the email after the associated trigger fires.  The id gets passed to IEmailTemplateSource to retrieve the EmailTemplateDescriptor."
+            nullok="false"
+            type="shorttext"/>
+    <column name="EmailAddress"
+            type="varchar"
+            nullok="true"
+            desc="Email address to which the generated email should be sent">
+        <columnParam name="size" value="60"/>
+        <columnParam name="validator" value="Email"/>
+    </column>
+    <typekey
+      desc="This is set when email address should be determined dynamically based on the contact assigned to this role."
+      name="EmailRole"
+      nullok="true"
+      typefilter="specialhandling"
+      typelist="ContactRole">
+    </typekey>
+    <typekey
+      desc="Notification type for either notification to a fixed email address or a specific contact on a claim"
+      default="email"
+      name="NotificationType"
+      nullok="false"
+      typelist="NotificationType">
+    </typekey>
+    <array
+      arrayentity="SpecialHandlingEmailAddress"
+      desc="Email addresses for multi-recipient lists."
+      name="EmailAddresses"
+      owner="true"
+      triggersValidation="true"/>
+</subtype>
+
+

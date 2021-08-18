@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <DetailViewPanel
+    id="RoleDetailDV">
+    <Require
+      name="role"
+      type="Role"/>
+    <Variable
+      initialValue="getAvailablePermissions()"
+      name="availablePermissions"
+      recalculateOnRefresh="true"/>
+    <InputColumn>
+      <Label
+        label="displaykey.Web.Admin.RoleDetailDV.Role"/>
+      <Input
+        editable="true"
+        id="Name"
+        label="displaykey.Web.Admin.RoleDetailDV.Name"
+        required="true"
+        value="role.Name"/>
+      <TextAreaInput
+        editable="true"
+        id="Description"
+        label="displaykey.Web.Admin.RoleDetailDV.Description"
+        numRows="3"
+        value="role.Description"/>
+      <ListViewInput>
+        <Toolbar>
+          <IteratorButtons
+            addVisible="perm.RolePrivilege.create"
+            iterator="RolePrivilegesLV"
+            removeShortcut="E"
+            removeVisible="perm.RolePrivilege.delete"/>
+        </Toolbar>
+        <ListViewPanel
+          id="RolePrivilegesLV"
+          validationExpression="gw.api.admin.AdminUtil.checkForDuplicateRolePrivileges(role)">
+          <RowIterator
+            editable="true"
+            elementName="rolePrivilege"
+            hasCheckBoxes="true"
+            hideCheckBoxesIfReadOnly="true"
+            toAdd="role.addToPrivileges(rolePrivilege)"
+            toRemove="role.removeFromPrivileges(rolePrivilege)"
+            value="role.Privileges">
+            <Row>
+              <RangeCell
+                editable="perm.RolePrivilege.edit"
+                id="Permission"
+                label="displaykey.Web.Admin.RolePrivileges.Permission"
+                required="true"
+                sortBy="rolePrivilege.Permission"
+                sortOrder="1"
+                unique="true"
+                value="rolePrivilege.Permission"
+                valueRange="getValueRange(rolePrivilege.Permission)">
+                <PostOnChange
+                  target="DATA_ONLY"/>
+              </RangeCell>
+              <Cell
+                id="Code"
+                label="displaykey.Web.Admin.RolePrivileges.Code"
+                value="rolePrivilege.Permission.Code"/>
+              <Cell
+                id="Description"
+                label="displaykey.Web.Admin.RolePrivileges.Description"
+                value="rolePrivilege.Permission.Description"/>
+            </Row>
+          </RowIterator>
+        </ListViewPanel>
+      </ListViewInput>
+    </InputColumn>
+    <Code><![CDATA[function getAvailablePermissions() : SystemPermissionType[] {
+          // Returns all permissions that are not already associated with "Role"
+          var allPermissions = typekey.SystemPermissionType.getTypeKeys( false )
+          var permissionsInUse = role.Privileges*.Permission
+          return allPermissions.subtract(permissionsInUse.toSet()).toTypedArray()
+      }
+
+     function getValueRange(permission : SystemPermissionType) : SystemPermissionType[] {
+         // Returns the available permissions with "permission" added if it's non-null. This is needed so
+         // the range cell can display the currently set permission, which is no longer available.
+         return (permission == null) ? availablePermissions : availablePermissions.union({permission}).toTypedArray()
+     }]]></Code>
+  </DetailViewPanel>
+</PCF>

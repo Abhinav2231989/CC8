@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<entity xmlns="http://guidewire.com/datamodel" desc="Other instructions for account special handling" entity="OtherInstruction" table="otherinstruction" exportable="true" extendable="true" subpackage="specialhandling" final="false" platform="false" type="retireable">
+  <foreignkey columnName="SpecialHandlingID" desc="The special handling object this other instruction relates to." fkentity="SpecialHandling" name="SpecialHandling" nullok="false"/>
+  <typekey desc="The policy type this instruction relates to. If no policy type is specified, it will relate to all types." name="PolicyType" nullok="true" typelist="PolicyType"/>
+  <typekey desc="The instruction category this instruction relates to." name="InstructionCategory" nullok="true" typelist="InstructionCategory"/>
+  <typekey desc="The specific instruction type this instruction relates to." name="InstructionType" nullok="true" typelist="InstructionType">
+      <keyfilters>
+            <keyfilter name="InstructionCategory"/>
+      </keyfilters>
+  </typekey>
+  <column name="Comments" type="mediumtext" desc="Special handling other instruction comment" nullok="true">
+      <localization nullok="true" tableName="inst_comm_l10n"/>
+  </column>
+</entity>

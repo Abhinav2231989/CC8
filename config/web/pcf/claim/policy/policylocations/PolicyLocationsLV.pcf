@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <ListViewPanel
+    editable="false"
+    id="PolicyLocationsLV">
+    <Require
+      name="PolicyLocations"
+      type="PolicyLocation[]"/>
+    <Require
+      name="Claim"
+      type="Claim"/>
+    <ExposeIterator
+      flags="hasRU,checked"
+      valueType="PolicyLocation"
+      widget="PolicyLocationIterator"/>
+    <RowIterator
+      checkBoxVisible="CurrentLocation.InEditMode"
+      editable="false"
+      elementName="PolicyLocation"
+      hasCheckBoxes="true"
+      id="PolicyLocationIterator"
+      pickLocation="PolicyLocationPopup.push(null, Claim, true)"
+      toRemove="Claim.Policy.removeFromPolicyLocations(PolicyLocation)"
+      value="PolicyLocations">
+      <ToolbarFlag
+        condition="PolicyLocation.LocationBasedRisks.Count &gt; 0"
+        name="hasRU"/>
+      <ToolbarFlag
+        name="checked"/>
+      <Row>
+        <Cell
+          action="PolicyLocationPopup.push(PolicyLocation, Claim, CurrentLocation.InEditMode)"
+          id="LocationNumber"
+          label="displaykey.LV.Policy.Locations.Number"
+          value="PolicyLocation.LocationNumber"/>
+        <Cell
+          id="Description"
+          label="displaykey.LV.Policy.Locations.Description"
+          value="PolicyLocation.Address.Description"/>
+        <Cell
+          action="PolicyLocationPopup.push(PolicyLocation, Claim, CurrentLocation.InEditMode)"
+          id="Address"
+          label="displaykey.LV.Policy.Locations.Address"
+          value="PolicyLocation.Address"/>
+        <Cell
+          id="Lienholders"
+          label="displaykey.LV.Policy.Locations.Lienholders"
+          value="PolicyLocation.policyLocationLienHoldersOnly.join(&quot;, &quot;)"
+          visible="Claim.Policy.PolicyType != PolicyType.TC_WORKERSCOMP"/>
+        <TypeKeyCell
+          id="HighValueItems"
+          label="displaykey.LV.Policy.Locations.HasListedItems"
+          value="PolicyLocation.HighValueItems.Count &gt; 0 ? YesNo.TC_YES : YesNo.TC_NO"/>
+      </Row>
+    </RowIterator>
+  </ListViewPanel>
+</PCF>

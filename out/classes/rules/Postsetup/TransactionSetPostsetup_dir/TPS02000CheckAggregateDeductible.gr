@@ -1,0 +1,39 @@
+package rules.Postsetup.TransactionSetPostsetup_dir
+
+@gw.rules.RuleName("TPS02000 - Check Aggregate Deductible")
+internal class TPS02000CheckAggregateDeductible {
+  static function doCondition(transactionSet : entity.TransactionSet) : boolean {
+    
+/*start00rule*/
+return transactionSet.isWithinPercentOfLimit(20, "deductible")
+/*end00rule*/
+
+  }
+
+  static function doAction(transactionSet : entity.TransactionSet, actions : gw.rules.Action) {
+
+/*start00rule*/
+var activities = transactionSet.Claim.Activities
+var warningExists = false
+
+/* See if activity already exists */
+for (activity in activities) {
+  if (activity.ActivityPattern.Code == "general_reminder"
+      and activity.Subject == displaykey.Rules.PostSetup.Transaction.ApproachingAggregateDeductibles
+      and activity.Status == "open") {
+    warningExists = true
+    break
+  }
+}
+/* If activity does not exist, create it with overrides for subject and description */ 
+if (!warningExists) {
+  transactionSet.Claim.createActivity(
+     null, ActivityPattern.finder.getActivityPatternByCode("general_reminder"),
+     displaykey.Rules.PostSetup.Transaction.ApproachingAggregateDeductibles,
+     displaykey.Rules.PostSetup.Transaction.PolicyWithinAggregateDeductibles,
+     null, null, gw.api.util.DateUtil.addDays(gw.api.util.DateUtil.currentDate(), 5), null)
+}
+/*end00rule*/
+
+  }
+}

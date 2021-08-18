@@ -1,0 +1,3 @@
+<plugin name="ITransactionSetApprovalPlugin">
+  <plugin-java javaclass="com.guidewire.cc.plugin.approval.internal.RulesBasedTransactionSetApprovalPlugin"/>
+</plugin>

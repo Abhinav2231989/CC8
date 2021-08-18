@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <DetailViewPanel
+    id="FixedPropertyIncidentDV">
+    <Require
+      name="FixedPropertyIncident"
+      type="FixedPropertyIncident"/>
+    <Require
+      name="singletonNewFixedProperty"
+      type="PolicyLocation"/>
+    <Require
+      name="unusedServiceRequests"
+      type="java.util.Set&lt;ServiceRequest&gt;"/>
+    <Variable
+      initialValue="FixedPropertyIncident.Claim"
+      name="Claim"
+      type="Claim"/>
+    <Variable
+      initialValue="new gw.api.address.FixedPropertyAddressOwner(FixedPropertyIncident, singletonNewFixedProperty)"
+      name="addressOwner"
+      recalculateOnRefresh="true"
+      type="gw.api.address.CCAddressOwner"/>
+    <Variable
+      initialValue="gw.vendormanagement.SpecialistServiceCodeConstants.PROPINSPECTAPPRAISAL"
+      name="appraisalIncidentCode"
+      type="String"/>
+    <Variable
+      initialValue="createOtherServiceRequests()"
+      name="otherServiceRequests"
+      type="java.util.Set&lt;ServiceRequest&gt;"/>
+    <InputColumn>
+      <Label
+        label="displaykey.Web.FixedPropertyIncident.Damage"/>
+      <Input
+        editable="true"
+        id="PropertyDescription"
+        label="displaykey.Web.FixedPropertyIncident.PropertyDescription"
+        value="FixedPropertyIncident.PropertyDesc"/>
+      <TextAreaInput
+        editable="true"
+        id="Description"
+        label="displaykey.Web.FixedPropertyIncident.Description"
+        numCols="30"
+        numRows="3"
+        value="FixedPropertyIncident.Description"/>
+      <Input
+        editable="true"
+        id="LossEstimate"
+        label="displaykey.Web.FixedPropertyIncident.LossEstimate"
+        value="FixedPropertyIncident.LossEstimate"/>
+      <TypeKeyInput
+        editable="true"
+        id="EstDamageAmt"
+        label="displaykey.NVV.Claim.SubView.LossDetailsProperty.Claim.EstDamageAmt"
+        value="FixedPropertyIncident.EstDamageType"/>
+      <TextAreaInput
+        editable="true"
+        id="ExtDamagetxt"
+        label="displaykey.NVV.Claim.SubView.LossDetailsProperty.Claim.ExtDamagetxt"
+        numCols="40"
+        numRows="2"
+        value="FixedPropertyIncident.ExtDamagetxt"/>
+      <InputDivider
+        visible="FixedPropertyIncident.Claim.Policy.PolicyType == &quot;homeowners&quot;"/>
+      <Label
+        label="displaykey.Web.FixedPropertyIncident.Property"/>
+      <InputSetRef
+        def="CCAddressInputSet(addressOwner)"/>
+      <ListViewInput
+        boldLabel="true"
+        def="AllPolicyLocationLienHoldersLV(FixedPropertyIncident.Property)"
+        editable="false"
+        label="displaykey.Web.FixedPropertyIncident.Property.Lienholders"
+        labelAbove="true"
+        visible="FixedPropertyIncident.Claim.Policy.PolicyType != &quot;homeowners&quot;">
+        <Toolbar/>
+      </ListViewInput>
+      <InputDivider/>
+      <Label
+        label="displaykey.Web.ServicesScreen.ServiceRequest.ServiceToPerform"/>
+      <Input
+        id="ServiceRequestSubmitMessageFNOL"
+        labelAbove="true"
+        value="displaykey.Web.ServiceRequest.FNOL.SubmitMessage"
+        visible="Claim.DraftClaim"/>
+      <Input
+        id="ServiceRequestSubmitMessage"
+        labelAbove="true"
+        value="displaykey.Web.ServiceRequest.SubmitMessage"
+        visible="not Claim.DraftClaim and CurrentLocation.InEditMode"/>
+      <InputSetRef
+        def="AppraisalServiceInputSet(PropertyAppraisalServiceRequest, FixedPropertyIncident, unusedServiceRequests, appraisalIncidentCode)"
+        id="AppraisalServiceInputSet"/>
+      <InputSetRef
+        def="OtherServicesLVInputGroupInputSet(Claim, FixedPropertyIncident, otherServiceRequests, otherServiceRequests, unusedServiceRequests, {})"/>
+      <InputDivider/>
+      <Label
+        label="displaykey.Web.FixedPropertyIncident.Repairs"/>
+      <TypeKeyInput
+        editable="true"
+        id="EstimatedReceived"
+        label="displaykey.Web.FixedPropertyIncident.EstimatedReceived"
+        value="FixedPropertyIncident.EstimatesReceived">
+        <PostOnChange/>
+      </TypeKeyInput>
+      <Input
+        editable="true"
+        id="EstimateCost"
+        label="displaykey.Web.FixedPropertyIncident.EstimateCost"
+        value="FixedPropertyIncident.EstRepairCost"
+        visible="FixedPropertyIncident.EstimatesReceived == &quot;yes&quot;"/>
+      <Input
+        editable="true"
+        id="EstimateTime"
+        label="displaykey.Web.FixedPropertyIncident.EstimateTime"
+        value="FixedPropertyIncident.EstRepairTime"
+        visible="FixedPropertyIncident.EstimatesReceived == &quot;yes&quot;"/>
+      <BooleanRadioInput
+        editable="true"
+        id="AlreadyRepaired"
+        label="displaykey.Web.FixedPropertyIncident.AlreadyRepaired"
+        value="FixedPropertyIncident.AlreadyRepaired">
+        <PostOnChange/>
+      </BooleanRadioInput>
+      <InputDivider/>
+    </InputColumn>
+    <InputColumn>
+      <InputSetRef
+        def="PropertyAttributeInputSet(FixedPropertyIncident)"/>
+      <InputDivider/>
+    </InputColumn>
+    <Code><![CDATA[uses java.util.Set
+
+property get PropertyAppraisalServiceRequest() : ServiceRequest {
+  return FixedPropertyIncident.ServiceRequests.firstWhere(\ sr ->
+         sr.Instruction.Services.Count == 1
+         and sr.Instruction.Services.single().Service.Code == appraisalIncidentCode
+         and (otherServiceRequests == null or not otherServiceRequests.contains(sr)))
+}
+
+function createOtherServiceRequests() :  Set<ServiceRequest> {
+  return FixedPropertyIncident.ServiceRequests.where(\sr -> sr != PropertyAppraisalServiceRequest).toSet()
+}]]></Code>
+  </DetailViewPanel>
+</PCF>

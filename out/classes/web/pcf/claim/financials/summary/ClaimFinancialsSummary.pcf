@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <Page
+    canEdit="false"
+    canVisit="perm.Claim.view(Claim) and perm.System.viewfinsum and perm.Claim.viewtransactiondetails(Claim)"
+    id="ClaimFinancialsSummary"
+    title="perm.Claim.viewnettotalincurred(Claim) ? displaykey.JSP.ClaimFinancials.Financials.Incurred(util.CurrencyUtil.renderAsCurrency(util.Math.Nz(financials.FinancialsCalculations.getTotalIncurredNet().withClaim(Claim).Amount.Amount), Claim.Currency), displaykey.JSP.ClaimFinancials.Financials.Summary) : displaykey.JSP.ClaimFinancials.Financials.NoIncurred(displaykey.JSP.ClaimFinancials.Financials.Summary)">
+    <LocationEntryPoint
+      signature="ClaimFinancialsSummary(Claim : Claim)"/>
+    <LocationEntryPoint
+      signature="ClaimFinancialsSummary(Claim : Claim, filterOption : String)"/>
+    <Variable
+      name="Claim"
+      type="Claim"/>
+    <Variable
+      initialValue="financials.FinancialsUtil.getFinancialsSummaryOption(Claim)"
+      name="savedOption"/>
+    <Variable
+      initialValue="&quot;Exposure&quot;"
+      name="defaultOption"/>
+    <Variable
+      initialValue="savedOption != null ? savedOption : defaultOption "
+      name="filterOption"/>
+    <Variable
+      initialValue="false"
+      name="useFloatingFinancials"
+      type="boolean"/>
+    <Screen
+      id="ClaimFinancialsSummaryScreen">
+      <Toolbar>
+        <ToolbarRangeInput
+          id="FinancialsSummaryRangeInput"
+          label="displaykey.Web.Financials.Summary.View"
+          optionLabel="getFilterOptionLabel(VALUE)"
+          required="true"
+          value="filterOption"
+          valueRange="AvailableFilterOptions">
+          <PostOnChange
+            onChange="financials.FinancialsUtil.setFinancialsSummaryOption(Claim, filterOption)"/>
+        </ToolbarRangeInput>
+        <ToolbarDivider/>
+        <ToolbarRangeInput
+          editable="true"
+          id="floatingFinancialsInputWidget"
+          label="displaykey.Web.Financials.Summary.ExchangeRate"
+          optionLabel="getViewAmountsOptionLabel(VALUE)"
+          required="true"
+          value="useFloatingFinancials"
+          valueRange="{false, true}"
+          visible="gw.util.CCConfigUtil.EnableMulticurrencyReserving and filterOption != &quot;ReservingCurrency&quot;">
+          <PostOnChange
+            target="DATA_ONLY"/>
+        </ToolbarRangeInput>
+      </Toolbar>
+      <PanelRef
+        def="FinancialsSummaryPanelSet(Claim, useFloatingFinancials)"
+        mode="filterOption"/>
+    </Screen>
+    <Code><![CDATA[uses gw.util.CCConfigUtil
+
+property get AvailableFilterOptions() : List<String> {
+  var options = {"Exposure", "Claimant", "Coverage", "ClaimCostOnly", "ExposureOnly"}
+  
+  if(CCConfigUtil.AllowExplicitReservingCurrency) {
+    options.add("ReservingCurrency")
+  }
+  
+  return options
+}
+
+function getFilterOptionLabel(option : String) : String {
+  switch (option) {
+    case "ClaimCostOnly": return displaykey.Web.Financials.Summary.ClaimCostOnly
+    case "Claimant": return displaykey.Web.Financials.Summary.Claimant
+    case "Coverage": return displaykey.Web.Financials.Summary.Coverage
+    case "Exposure": return displaykey.Web.Financials.Summary.Exposure
+    case "ExposureOnly": return displaykey.Web.Financials.Summary.ExposureOnly
+    case "ReservingCurrency": return displaykey.Web.Financials.Summary.ReservingCurrency
+    default: return null
+  }
+}
+
+function getViewAmountsOptionLabel(option : boolean) : String {
+  return option ? 
+      displaykey.Web.Financials.Summary.ExchangeRate.Market : 
+      displaykey.Web.Financials.Summary.ExchangeRate.Fixed
+}]]></Code>
+  </Page>
+</PCF>

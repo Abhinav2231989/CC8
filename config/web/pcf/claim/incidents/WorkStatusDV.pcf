@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <DetailViewPanel
+    id="WorkStatusDV">
+    <Require
+      name="aWorkStatus"
+      type="WorkStatus"/>
+    <InputColumn>
+      <TypeKeyInput
+        editable="true"
+        id="Status"
+        label="displaykey.DV.Incident.WorkStatus.Status"
+        required="true"
+        value="aWorkStatus.Status">
+        <PostOnChange
+          target="Status_InputSet"/>
+      </TypeKeyInput>
+      <DateInput
+        editable="true"
+        id="StatusDate"
+        label="displaykey.DV.Incident.WorkStatus.Start"
+        required="true"
+        validationExpression="(aWorkStatus.StatusDate &gt; aWorkStatus.StatusEndDate  ? displaykey.Rules.Validation.Claim.WorkStatus.StatusDateGTStatusEndDate : null)"
+        value="aWorkStatus.StatusDate"/>
+      <DateInput
+        editable="true"
+        id="StatusEndDate"
+        label="displaykey.DV.Incident.WorkStatus.End"
+        validationExpression="(aWorkStatus.StatusDate &gt; aWorkStatus.StatusEndDate  ? displaykey.Rules.Validation.Claim.WorkStatus.StatusDateGTStatusEndDate : null)"
+        value="aWorkStatus.StatusEndDate"/>
+      <TextAreaInput
+        editable="true"
+        id="StatusComments"
+        label="displaykey.DV.Incident.WorkStatus.Comments"
+        numCols="35"
+        numRows="3"
+        value="aWorkStatus.Comments"/>
+      <InputSet
+        id="Status_InputSet"
+        visible="aWorkStatus.Status == &quot;stopped_work&quot; or aWorkStatus.Status == &quot;restricted_work&quot;">
+        <InputSet
+          visible="aWorkStatus.Status == &quot;stopped_work&quot;">
+          <InputDivider/>
+          <DateInput
+            editable="true"
+            id="LastWorkedDate"
+            label="displaykey.DV.Incident.WorkStatus.LastDayWorked"
+            validationExpression="(  aWorkStatus.LastWorkedDate &gt; aWorkStatus.StatusDate  ? displaykey.Rules.Validation.WorkStatus.LastWorkedDate: null)"
+            value="aWorkStatus.LastWorkedDate"/>
+          <BooleanRadioInput
+            editable="true"
+            id="PaidFullForLastWorked"
+            label="displaykey.DV.Incident.WorkStatus.PaidForLastDay"
+            value="aWorkStatus.PaidFullForLastWorked"/>
+        </InputSet>
+        <InputSet
+          visible="aWorkStatus.Status == &quot;restricted_work&quot;">
+          <InputDivider/>
+          <Input
+            editable="true"
+            id="DaysWorked"
+            label="displaykey.DV.Incident.WorkStatus.DaysWorked"
+            value="aWorkStatus.NumDaysWorked"/>
+          <Input
+            editable="true"
+            id="HoursWorked"
+            label="displaykey.DV.Incident.WorkStatus.HoursWorked"
+            value="aWorkStatus.NumHoursWorked"/>
+          <Input
+            editable="true"
+            id="WeeklyWage"
+            label="displaykey.DV.Incident.WorkStatus.WeeklyWage"
+            value="aWorkStatus.WageAmountPostInjury"/>
+        </InputSet>
+      </InputSet>
+    </InputColumn>
+  </DetailViewPanel>
+</PCF>

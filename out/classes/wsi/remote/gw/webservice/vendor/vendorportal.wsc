@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<webservice-collection xmlns="http://guidewire.com/config/webservicecollection">
+  <resources>
+    <resource>
+      <url>http://localhost:8090/vendor/services/ServiceRequestNotificationAPI?wsdl</url>
+    </resource>
+  </resources>
+  <settings>
+    <configuration-provider>
+      <service>
+        <serviceName xmlns:ns0="http://ws.vendor.portal.edge/">ns0:ServiceRequestNotificationAPIService</serviceName>
+        <portName xmlns:ns0="http://ws.vendor.portal.edge/">ns0:ServiceRequestNotificationAPIPort</portName>
+      </service>
+      <type-name>wsi.remote.gw.webservice.vendor.VendorPortalConfigurationProvider</type-name>
+    </configuration-provider>
+  </settings>
+</webservice-collection>

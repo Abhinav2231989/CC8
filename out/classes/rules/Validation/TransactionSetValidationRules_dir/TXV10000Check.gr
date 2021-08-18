@@ -1,0 +1,35 @@
+package rules.Validation.TransactionSetValidationRules_dir
+
+@gw.rules.RuleDisabled
+@gw.rules.RuleName("TXV10000 - Check")
+internal class TXV10000Check {
+  static function doCondition(transactionSet : entity.TransactionSet) : boolean {
+    
+/*start00rule*/
+return transactionSet.Subtype == "CheckSet"
+/* Use this rule to restrict user from writing a check for Workers' 
+ * Comp Exposures that have no appropriate coverage in the policy.
+ */
+/*end00rule*/
+
+  }
+
+  static function doAction(transactionSet : entity.TransactionSet, actions : gw.rules.Action) {
+
+/*start00rule*/
+for (check in transactionSet.AllTransactions) {
+  if (transactionSet.Claim.Policy.PolicyType == "WorkersComp" and
+      check.Exposure.Coverage == null) {
+       transactionSet.rejectSubField(check.Exposure, "Coverage", "payment", 
+               displaykey.Rules.Validation.Transaction.CoverageInPolicy, null, null)
+  }
+  if (check.Exposure.ValidationLevel != "payment") {
+         transactionSet.rejectSubField(check, "Exposure", "payment", 
+               displaykey.Rules.Validation.Transaction.PaymentLevel, null, null)
+  }
+}
+
+/*end00rule*/
+
+  }
+}

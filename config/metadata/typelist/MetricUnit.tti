@@ -1,0 +1,2 @@
+<?xml version="1.0"?>
+<typelist xmlns="http://guidewire.com/typelists" desc="Units for claim metrics, such as days, currency, percent etc." final="false" subpackage="metric" name="MetricUnit"/>

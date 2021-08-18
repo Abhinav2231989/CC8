@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <InputSet
+    id="AutomatedHandlerActionInputSet"
+    mode="notification">
+    <Require
+      name="automatedHandler"
+      type="AutomatedHandler"/>
+    <Variable
+      initialValue="automatedHandler as AutomatedNotificationHandler"
+      name="automatedNotificationHandler"
+      type="AutomatedNotificationHandler"/>
+    <PickerInput
+      conversionExpression="PickedValue.getFilename()"
+      editable="true"
+      freeInputEnabled="false"
+      id="AutomatedHandlerEmailTemplate"
+      label="displaykey.Web.Admin.AutomatedHandlerAction.Notification.EmailTemplate"
+      outputConversion="gw.pcf.specialhandling.EmailTemplateUtil.getEmailTemplateDisplayName(VALUE)"
+      pickLocation="PickEmailTemplatePopup.push(getEmailTemplateSearchCriteria())"
+      required="true"
+      value="automatedNotificationHandler.EmailTemplate"/>
+    <RangeInput
+      editable="true"
+      id="NotificationType"
+      label="displaykey.Web.Admin.AutomatedHandlerAction.Notification.NotificationType"
+      value="automatedNotificationHandler.NotificationType"
+      valueRange="NotificationType.getTypeKeys(false)">
+      <PostOnChange
+        onChange="gw.api.specialhandling.SpecialHandlingHelper.refreshEmailAddressField(automatedNotificationHandler)"/>
+    </RangeInput>
+    <TypeKeyInput
+      editable="true"
+      id="ContactRole"
+      label="displaykey.Web.Admin.AutomatedHandlerAction.Notification.ContactRole"
+      required="automatedNotificationHandler.NotificationType == NotificationType.TC_CONTACTROLE"
+      value="automatedNotificationHandler.EmailRole"
+      visible="automatedNotificationHandler.NotificationType == NotificationType.TC_CONTACTROLE"/>
+    <Input
+      editable="true"
+      id="AutomatedHandlerEmailAddress"
+      label="displaykey.Web.Admin.AutomatedHandlerAction.Notification.EmailAddress"
+      required="automatedNotificationHandler.NotificationType == NotificationType.TC_EMAIL"
+      value="automatedNotificationHandler.EmailAddress"
+      visible="automatedNotificationHandler.NotificationType == NotificationType.TC_EMAIL"/>
+    <ListViewInput
+      id="EmailAddressesLV"
+      label="displaykey.Web.Admin.AutomatedHandlerAction.Notification.EmailAddresses"
+      visible="automatedNotificationHandler.NotificationType == NotificationType.TC_MULTI_EMAIL">
+      <Toolbar>
+        <IteratorButtons
+          iterator="EmailIterator"/>
+      </Toolbar>
+      <ListViewPanel>
+        <RowIterator
+          editable="true"
+          elementName="anEmailAddress"
+          id="EmailIterator"
+          toAdd="automatedNotificationHandler.addToEmailAddresses(anEmailAddress)"
+          toRemove="automatedNotificationHandler.removeFromEmailAddresses(anEmailAddress)"
+          value="automatedNotificationHandler.EmailAddresses">
+          <Row>
+            <Cell
+              editable="true"
+              id="EmailAddress"
+              label="displaykey.Web.Admin.AutomatedHandlerAction.Notification.EmailAddress"
+              value="anEmailAddress.EmailAddress"/>
+          </Row>
+        </RowIterator>
+      </ListViewPanel>
+    </ListViewInput>
+    <Code><![CDATA[function getEmailTemplateSearchCriteria() : gw.api.email.EmailTemplateSearchCriteria {
+  var criteria = new gw.api.email.EmailTemplateSearchCriteria()
+  criteria.Keywords = "automatednotificationhandler, " + (typeof automatedHandler.Trigger).DisplayName
+  return criteria
+}]]></Code>
+  </InputSet>
+</PCF>

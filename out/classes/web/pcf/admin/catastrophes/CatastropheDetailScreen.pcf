@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Screen
+    id="CatastropheDetailScreen">
+    <Require
+      name="catastrophe"
+      type="Catastrophe"/>
+    <Require
+      name="showRelatedClaimsFinder"
+      type="boolean"/>
+    <Toolbar
+      visible="perm.Catastrophe.edit">
+      <EditButtons
+        editVisible="perm.Catastrophe.edit"/>
+    </Toolbar>
+    <CardViewPanel>
+      <Card
+        id="Details"
+        title="displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.Details">
+        <PanelRef
+          def="AdminCatastropheDV(catastrophe)">
+          <Toolbar
+            visible="perm.Catastrophe.edit">
+            <ToolbarButton
+              action="findRelatedClaims()"
+              available="catastrophe.Active"
+              id="FindUnmatchedClaimsButton"
+              label="displaykey.Web.Admin.AdminCatastrophe.FindUnmatchedClaims"
+              visible="(showRelatedClaimsFinder and !CurrentLocation.InEditMode)"/>
+            <ToolbarDivider/>
+            <ToolbarButton
+              action="CatastropheSearch.go(catastrophe)"
+              available="catastrophe.hasAssociatedClaims()"
+              id="ShowCatMapButton"
+              label="displaykey.Web.Admin.AdminCatastrophe.ShowCatMap"
+              visible="gw.api.heatmap.HeatMapGenerator.isHeatMapConfigured()"/>
+          </Toolbar>
+        </PanelRef>
+      </Card>
+      <Card
+        id="Policy"
+        title="displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.PolicyLocationsLV"
+        visible="gw.api.heatmap.HeatMapGenerator.isHeatMapConfigured() and gw.api.heatmap.CatastropheHeatMap.isPolicyLocationDownloadConfigured()">
+        <PanelRef
+          def="AdminCatastrophePolicyPanelSet(catastrophe)"/>
+      </Card>
+    </CardViewPanel>
+    <Code><![CDATA[function findRelatedClaims() {
+  gw.transaction.Transaction.runWithNewBundle(\ bundle -> {
+    bundle.add(catastrophe).ScheduleBatch = true
+  })
+  util.LocationUtil.addRequestScopedInfoMessage(displaykey.Web.Admin.AdminCatastrophe.MatchedClaimsAvailableNextDay)
+}]]></Code>
+  </Screen>
+</PCF>

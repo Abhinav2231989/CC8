@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><entity xmlns="http://guidewire.com/datamodel" desc="Table linking Reviews to QuestionSet" entity="ReviewQAnswerSet" exportable="true" platform="false" subpackage="contact" table="reviewqanswerset" type="joinarray">
+  <implementsEntity name="Extractable"/>
+  <foreignkey columnName="ReviewID" desc="Associated Review." fkentity="Review" name="Review" nullok="false"/>
+  <column name="ElementOrder" nullok="false" type="integer"/>
+  <typekey desc="Category of this QuestionSet." name="ReviewCategory" nullok="true" typelist="ReviewCategory"/>
+  <foreignkey columnName="QuestionSetID" desc="Associated QuestionSet." fkentity="QuestionSet" name="QuestionSet" nullok="false" triggersValidation="true"/>
+  <foreignkey columnName="AnswerSetID" desc="Associated AnswerSet." fkentity="AnswerSet" name="AnswerSet" nullok="false" owner="true" triggersValidation="true"/>
+</entity>

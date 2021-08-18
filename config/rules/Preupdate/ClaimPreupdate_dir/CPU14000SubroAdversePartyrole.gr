@@ -1,0 +1,38 @@
+package rules.Preupdate.ClaimPreupdate_dir
+
+@gw.rules.RuleName("CPU14000 - Subro Adverse Party role")
+internal class CPU14000SubroAdversePartyrole {
+  static function doCondition(claim : entity.Claim) : boolean {
+    
+/*start00rule*/
+return claim.SubrogationSummary != null
+/*end00rule*/
+
+  }
+
+  static function doAction(claim : entity.Claim, actions : gw.rules.Action) {
+
+/*start00rule*/
+/* Iterate over the subro adverse parties. If any of these has a different contact, then
+ * iterate over the claimcontacts to find the one with the same contact that is the adverse party.
+ * If this claimcontact does not have the role of "adverseparty", then add a new claimcontactrole
+ * of "adverseparty" for this claimcontact.
+ */
+for (thisparty in claim.SubrogationSummary.SubroAdverseParties) { 
+  if (thisparty.isFieldChanged("AdverseParty")) {
+    for (thiscontact in claim.Contacts) { 
+      if (thisparty.AdverseParty == thiscontact.Contact) {
+        if (not exists (thisrole in thiscontact.Roles where thisrole.Role == "adverseparty")) {
+          var ccc = new ClaimContactRole(thiscontact)
+          ccc.Role = "adverseparty"
+          ccc.Active = true
+          thiscontact.addToRoles(ccc)
+        }
+      }
+    } // for (thiscontact
+  }  // if (thisparty
+}  // for (thisparty
+/*end00rule*/
+
+  }
+}

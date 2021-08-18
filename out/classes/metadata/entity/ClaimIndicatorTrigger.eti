@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<entity xmlns="http://guidewire.com/datamodel"
+        entity="ClaimIndicatorTrigger"
+        table="claimindicatortrigger"
+        type="retireable"
+        subpackage="specialhandling"
+        loadable="false"
+        admin="true"
+        desc="An automated handler trigger whose execution is dependent on the change of a specific Claim Indicator on a Claim">
+    <fulldescription>
+        A type of automated handler trigger whose execution behavior is based on a specified ClaimIndicator and a value for that indicator.  For example, the trigger might be setup so that it will only execute when the FatalityIndicator for a Claim changes to a value of TRUE (i.e., someone associated with the Claim has died).
+    </fulldescription>
+    <implementsInterface iface="gw.api.specialhandling.AutomatedHandlerTrigger"
+                         impl="gw.specialhandling.ClaimIndicatorAutomatedHandlerTriggerMethodsImpl"/>
+    <typekey name="ClaimIndicator"
+             typelist="ClaimIndicator"
+             nullok="false"
+             desc="The Claim Indicator that can cause this trigger to execute"/>
+    <column name="TriggeringValue"
+            type="bit"
+            nullok="false"
+            desc="The value on which to execute this trigger.  If the specified ClaimIndicator changes to this value for a given Claim then this trigger should execute"/>
+    <foreignkey fkentity="AutomatedHandler" name="AutomatedHandler" columnName="AutomatedHandlerID" nullok="false"/>
+</entity>

@@ -1,0 +1,26 @@
+package rules.Segmentation.ExposureSegmentationRules_dir.ESG03000WC_dir
+
+@gw.rules.RuleName("ESG03200 - Lost Wages")
+internal class ESG03200LostWages {
+  static function doCondition(exposure : entity.Exposure) : boolean {
+    
+/*start00rule*/
+return exposure.ExposureType == "lostwages"
+/*end00rule*/
+
+  }
+
+  static function doAction(exposure : entity.Exposure, actions : gw.rules.Action) {
+
+/*start00rule*/
+uses gw.api.util.Logger
+
+exposure.Segment = "wc_lost_time"
+Logger.logDebug(displaykey.Rules.Segmentation.Exposure(actions.ShortRuleName))
+Logger.logDebug(displaykey.Rules.Segmentation.Exposure.SegmentedTo(exposure.Segment))
+actions.exit()
+
+/*end00rule*/
+
+  }
+}

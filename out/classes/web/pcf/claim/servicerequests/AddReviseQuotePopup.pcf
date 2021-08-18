@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Popup
+    beforeCommit="finishSetup()"
+    canEdit="true"
+    canVisit="true"
+    id="AddReviseQuotePopup"
+    startInEditMode="true"
+    title="null">
+    <LocationEntryPoint
+      signature="AddReviseQuotePopup(serviceRequest : entity.ServiceRequest)"/>
+    <LocationEntryPoint
+      signature="AddReviseQuotePopup(serviceRequest : entity.ServiceRequest, oldQuote : entity.ServiceRequestQuote)"/>
+    <Variable
+      name="serviceRequest"
+      type="ServiceRequest"/>
+    <Variable
+      initialValue="initializeQuote()"
+      name="currentQuote"
+      type="ServiceRequestQuote"/>
+    <Variable
+      name="oldQuote"
+      type="entity.ServiceRequestQuote"/>
+    <Screen
+      editable="true">
+      <TitleBar
+        id="TitleBar"
+        title="oldQuote == null ? displaykey.Web.ServiceRequest.StateTransition.AddReviseQuotePopup.AddTitle : displaykey.Web.ServiceRequest.StateTransition.AddReviseQuotePopup.ReviseTitle"/>
+      <Toolbar
+        visible="true">
+        <EditButtons
+          showUpdateConfirmMessage="false"/>
+      </Toolbar>
+      <PanelRef
+        def="StatementDV(currentQuote, oldQuote?.Amount, true)"
+        mode="oldQuote != null ? &quot;quoterevision&quot; : &quot;quote&quot;"/>
+      <PanelRef
+        def="StatementDocumentsLV(currentQuote, true)"
+        visible="true">
+        <TitleBar
+          title="displaykey.Web.ServiceRequest.Quote.Documents"/>
+        <Toolbar>
+          <PickerToolbarButton
+            action="PickExistingDocumentPopup.push(serviceRequest.Claim)"
+            id="Link"
+            label="displaykey.Web.ServiceRequest.Statement.LinkDocument"
+            onPick="currentQuote.linkDocumentForUI(PickedValue, false)"
+            visible="perm.System.viewdocs"/>
+          <ToolbarButton
+            action="AttachStatementDocumentPopup.push(currentQuote)"
+            id="AttachDocument"
+            label="displaykey.Web.ServiceRequest.Statement.AttachDocument"/>
+        </Toolbar>
+      </PanelRef>
+    </Screen>
+    <Code><![CDATA[function initializeQuote() : ServiceRequestQuote {
+  var quote : ServiceRequestQuote
+  if (oldQuote == null) {
+    quote = new ServiceRequestQuote()
+  } else {
+    return oldQuote.copyQuoteForRevision()
+  }      
+  quote.ServiceRequest = serviceRequest
+  return quote
+}
+
+function finishSetup() {
+  // Validate at least one document is attached to the Quote
+  if (currentQuote.Documents.Empty) {
+    throw new gw.api.util.DisplayableException(displaykey.Web.ServiceRequest.Quote.MissingQuoteDocuments)
+  }
+  currentQuote.finishSetup(false)
+}]]></Code>
+  </Popup>
+</PCF>

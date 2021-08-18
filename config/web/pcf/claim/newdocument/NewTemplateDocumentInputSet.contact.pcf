@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <InputSet
+    id="NewTemplateDocumentInputSet"
+    mode="contact">
+    <Require
+      name="DocumentCreationInfo"
+      type="gw.document.DocumentCreationInfo"/>
+    <Require
+      name="Document"
+      type="Document"/>
+    <Require
+      name="Claim"
+      type="Claim"/>
+    <Require
+      name="dynamicWidgetInfo"
+      type="gw.document.DocumentCreationInfo.DynamicWidgetInfo"/>
+    <Variable
+      initialValue="DocumentCreationInfo.ContextObjectValueMap[dynamicWidgetInfo.Name] as Contact"
+      name="DocumentCreationInfoContextObject"
+      recalculateOnRefresh="true"
+      type="Contact"/>
+    <ClaimContactInput
+      claim="Claim"
+      editable="true"
+      id="DynamicInput"
+      label="dynamicWidgetInfo.DisplayName"
+      newContactMenu="ContextObjectContactPickerMenuItemSet(DocumentCreationInfo, DynamicWidgetInfo.Name, eval(&quot;entity.&quot; + dynamicWidgetInfo.Type) as Type, claim)"
+      onPick="DocumentCreationInfo.ContextObjectValueMap[dynamicWidgetInfo.Name]=DocumentCreationInfoContextObject"
+      required="!dynamicWidgetInfo.ShowNoneSelected"
+      showSearchInMenu="false"
+      value="DocumentCreationInfoContextObject"
+      valueRange="DocumentCreationInfo.getPossibleContextObjectValues(dynamicWidgetInfo.Name) as Contact[]"
+      visible="true">
+      <PostOnChange
+        onChange="DocumentCreationInfo.ContextObjectValueMap[dynamicWidgetInfo.Name]=DocumentCreationInfoContextObject"/>
+    </ClaimContactInput>
+  </InputSet>
+</PCF>

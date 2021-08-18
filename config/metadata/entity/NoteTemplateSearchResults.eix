@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><internalExtension xmlns="http://guidewire.com/datamodel" entityName="NoteTemplateSearchResults">
+  <description>
+            Array of search results that match the specified criteria defined in NoteTemplateSearchCriteria.
+    </description>
+  <column desc="The type of the Loss" name="LossTypes" nullok="true" type="varchar">
+    <columnParam name="size" value="60"/>
+  </column>
+</internalExtension>

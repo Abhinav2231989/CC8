@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <ListViewPanel
+    id="CustomerServiceTierConditionsLV">
+    <Variable
+      initialValue="CustomerServiceTier.findAvailableCustomerTiers()"
+      name="availableCustomerServiceTiers"
+      recalculateOnRefresh="true"/>
+    <Require
+      name="classification"
+      type="WorkloadClassification"/>
+    <ExposeIterator
+      valueType="CustomerServiceTierConditionFilter"
+      widget="CustomerServiceTierConditionsLV"/>
+    <RowIterator
+      editable="true"
+      elementName="customerServiceTierFilter"
+      hideCheckBoxesIfReadOnly="true"
+      toAdd="classification.CustomerServiceTierCondition.addToConditionFilters(customerServiceTierFilter)"
+      toRemove="classification.CustomerServiceTierCondition.removeFromConditionFilters(customerServiceTierFilter)"
+      value="classification.CustomerServiceTierCondition.ConditionFilters">
+      <Row>
+        <RangeCell
+          editable="true"
+          id="CustomerServiceTierConditionFilter"
+          label="displaykey.Web.Admin.Workload.WorkloadClassification.CustomerServiceTierConditionFilter.CustomerServiceTier"
+          required="true"
+          value="customerServiceTierFilter.CustomerServiceTier"
+          valueRange="availableCustomerServiceTiers"/>
+      </Row>
+    </RowIterator>
+  </ListViewPanel>
+</PCF>

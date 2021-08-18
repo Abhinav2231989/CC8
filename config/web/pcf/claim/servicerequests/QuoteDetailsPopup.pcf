@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Popup
+    afterReturnFromPopup="quote = serviceRequest.LatestQuote"
+    canEdit="false"
+    id="QuoteDetailsPopup"
+    title="displaykey.Web.ServiceRequest.Quote.DetailTitle">
+    <LocationEntryPoint
+      signature="QuoteDetailsPopup(quote: ServiceRequestQuote)"/>
+    <Variable
+      name="quote"
+      type="ServiceRequestQuote"/>
+    <Variable
+      initialValue="quote.ServiceRequest"
+      name="serviceRequest"
+      type="ServiceRequest"/>
+    <Variable
+      initialValue="serviceRequest.createStateHandler()"
+      name="stateHandler"/>
+    <Screen>
+      <DetailViewPanel
+        available="true"
+        visible="quote.ServiceRequest.LatestQuote.equals(quote)">
+        <InputColumn>
+          <ContentInput
+            available="true"
+            labelAbove="true">
+            <Link
+              action="ApproveQuotePopup.push(serviceRequest)"
+              available="true"
+              id="ApproveQuote"
+              label="displaykey.Web.ServiceRequest.StateTransition.ApproveQuote"
+              showConfirmMessage="false"
+              styleClass="bigButton"
+              visible="serviceRequest.operationAvailable(TC_APPROVEQUOTE, false, stateHandler)"/>
+            <Link
+              action="RequestRequotePopup.push(serviceRequest)"
+              available="true"
+              id="RequestRequote"
+              label="displaykey.Web.ServiceRequest.StateTransition.RequestRequote"
+              showConfirmMessage="false"
+              styleClass="bigButton"
+              visible="serviceRequest.operationAvailable(TC_REQUESTREQUOTE, false, stateHandler)"/>
+            <Link
+              action="AddReviseQuotePopup.push(serviceRequest, serviceRequest.LatestQuote)"
+              id="ReviseQuote"
+              label="displaykey.Web.ServiceRequest.StateTransition.ReviseQuote"
+              showConfirmMessage="false"
+              styleClass="bigButton"
+              visible="serviceRequest.operationAvailable(TC_ADDQUOTE, false, stateHandler)"/>
+          </ContentInput>
+        </InputColumn>
+      </DetailViewPanel>
+      <PanelRef
+        def="StatementDV(quote, quote?.Amount, false)"
+        mode="&quot;quote&quot;"/>
+      <PanelRef
+        def="StatementDocumentsLV(quote, false)"
+        visible="true">
+        <TitleBar
+          title="displaykey.Web.ServiceRequest.Quote.Documents"/>
+        <Toolbar/>
+      </PanelRef>
+    </Screen>
+  </Popup>
+</PCF>

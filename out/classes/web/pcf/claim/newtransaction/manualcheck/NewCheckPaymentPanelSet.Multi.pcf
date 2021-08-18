@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <PanelSet
+    id="NewCheckPaymentPanelSet"
+    mode="Multi">
+    <ExposeIterator
+      name="NewCheckPaymentsLV"
+      valueType="entity.Payment"
+      widget="NewCheckPaymentsLV.NewCheckPaymentsLV"/>
+    <Require
+      name="Wizard"
+      type="financials.CheckWizardInfo"/>
+    <Require
+      name="reserveLineInputSetHelper"
+      type="financials.ReserveLineInputSetHelper"/>
+    <ListDetailPanel
+      selectionName="Payment"
+      selectionType="Payment">
+      <PanelRef
+        def="NewCheckPaymentsLV(Wizard.Check.Payments, Wizard)"/>
+      <CardViewPanel>
+        <Card
+          id="PaymentDetailsCard"
+          title="displaykey.NVV.Financials.Check.PaymentDetails">
+          <PanelRef
+            def="NewPaymentDetailDV(Payment, Wizard, reserveLineInputSetHelper)">
+            <Toolbar/>
+          </PanelRef>
+        </Card>
+      </CardViewPanel>
+    </ListDetailPanel>
+  </PanelSet>
+</PCF>

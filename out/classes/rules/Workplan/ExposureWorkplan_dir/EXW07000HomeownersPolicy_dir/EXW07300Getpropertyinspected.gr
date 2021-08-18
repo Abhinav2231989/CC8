@@ -1,0 +1,24 @@
+package rules.Workplan.ExposureWorkplan_dir.EXW07000HomeownersPolicy_dir
+
+@gw.rules.RuleName("EXW07300 - Get property inspected")
+internal class EXW07300Getpropertyinspected {
+  static function doCondition(exposure : entity.Exposure) : boolean {
+    
+/*start00rule*/
+return exposure.ExposureType =="Dwelling"
+or exposure.ExposureType == "OtherStructure" 
+or (exposure.ExposureType == "PropertyDamage"
+    and exposure.CoverageSubType == "HOLIPersonalLiabPD")
+/*end00rule*/
+
+  }
+
+  static function doAction(exposure : entity.Exposure, actions : gw.rules.Action) {
+
+/*start00rule*/
+exposure.Claim.createActivityFromPattern(
+    exposure, ActivityPattern.finder.getActivityPatternByCode("property_inspection"))
+/*end00rule*/
+
+  }
+}

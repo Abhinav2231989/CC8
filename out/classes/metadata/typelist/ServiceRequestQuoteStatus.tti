@@ -1,0 +1,2 @@
+<?xml version="1.0"?>
+<typelist xmlns="http://guidewire.com/typelists" desc="Status of a service quote" final="false" subpackage="vendormanagement" name="ServiceRequestQuoteStatus"/>

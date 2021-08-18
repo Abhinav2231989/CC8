@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <DetailViewPanel
+    id="OrganizationDetail_BasicDV">
+    <Require
+      name="Group"
+      type="Group"/>
+    <Require
+      name="Organization"
+      type="Organization"/>
+    <InputColumn>
+      <Input
+        editable="true"
+        id="Name"
+        label="displaykey.Web.Admin.OrganizationDetail.BasicDV.Name"
+        required="true"
+        value="OrganizationName"/>
+      <TypeKeyInput
+        editable="Organization.New and !Organization.Carrier"
+        id="Type"
+        label="displaykey.Web.Admin.OrganizationDetail.BasicDV.Type"
+        value="Organization.Type">
+        <PostOnChange/>
+      </TypeKeyInput>
+      <InputSetRef
+        def="GlobalPhoneInputSet(new gw.api.phone.StandardPhoneOwner(new gw.api.phone.ContactPhoneDelegate(Organization.Contact, Contact#WorkPhone), displaykey.Web.Admin.ContactDetailDV.Phone, false))"
+        editable="true"
+        id="Work"/>
+      <InputSetRef
+        def="GlobalPhoneInputSet(new gw.api.phone.StandardPhoneOwner(new gw.api.phone.ContactPhoneDelegate(Organization.Contact, Contact#FaxPhone), displaykey.Web.Admin.ContactDetailDV.Fax, false))"
+        editable="true"
+        id="Fax"/>
+      <Input
+        editable="true"
+        id="Email"
+        label="displaykey.Web.Admin.ContactDetailDV.Email"
+        value="Organization.Contact.EmailAddress1"/>
+      <InputSetRef
+        def="CCAddressInputSet(Organization.Contact.AddressOwner)"/>
+      <ListViewInput
+        def="GroupUsersLV(Group)"
+        editable="true"
+        label="displaykey.Web.Admin.GroupDetail.BasicDV.Users">
+        <Toolbar>
+          <IteratorButtons
+            iterator="GroupUsersLV.GroupUsersLV"/>
+        </Toolbar>
+      </ListViewInput>
+    </InputColumn>
+    <Code><![CDATA[
+property get OrganizationName() : String {
+    return Organization.Name
+  }
+  
+  property set OrganizationName(name : String) {
+    Organization.setNameAndRootGroupName(name)
+  }
+    ]]></Code>
+  </DetailViewPanel>
+</PCF>

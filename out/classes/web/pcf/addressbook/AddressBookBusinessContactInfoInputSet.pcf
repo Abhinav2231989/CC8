@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../pcf.xsd">
+  <InputSet
+    id="AddressBookBusinessContactInfoInputSet">
+    <!-- Note the name of this symbol cannot be "contact"; otherwise, it interferes with the symbol defined by
+    the ContactInput widget that is used to implement the "View Details" action. -->
+    <Require
+      name="businessContact"
+      type="Contact"/>
+    <Require
+      name="externalContactSource"
+      type="contact.ExternalContactSource"/>
+    <Require
+      name="allowEditContact"
+      type="boolean"/>
+    <InputDivider/>
+    <Label
+      label="topLabel()"/>
+    <AddressBookContactInput
+      allowEditContact="allowEditContact"
+      editable="true"
+      forceContactSubtype="entity.Person"
+      id="PrimaryContact"
+      label="displaykey.Web.ContactDetail.PrimaryContact"
+      parentContact="businessContact"
+      value="businessContact.PrimaryContact"/>
+    <InputSetRef
+      def="GlobalPhoneInputSet(new gw.api.phone.StandardPhoneOwner(new gw.api.phone.ContactPhoneDelegate(businessContact, Contact#WorkPhone), displaykey.Web.ContactDetail.Phone.Work, false))"
+      editable="true"
+      id="Work"/>
+    <InputSetRef
+      def="GlobalPhoneInputSet(new gw.api.phone.StandardPhoneOwner(new gw.api.phone.ContactPhoneDelegate(businessContact, Contact#HomePhone), displaykey.Web.ContactDetail.Phone.Home, false))"
+      editable="true"
+      id="Home"
+      visible="businessContact typeis Person"/>
+    <InputSetRef
+      def="GlobalPhoneInputSet(new gw.api.phone.StandardPhoneOwner(createCellPhoneDelegate(), displaykey.Web.ContactDetail.Phone.Cell, false))"
+      editable="true"
+      id="Cell"
+      visible="businessContact typeis Person"/>
+    <InputSetRef
+      def="GlobalPhoneInputSet(new gw.api.phone.StandardPhoneOwner(new gw.api.phone.ContactPhoneDelegate(businessContact, Contact#FaxPhone), displaykey.Web.ContactDetail.Phone.Fax, false))"
+      editable="true"
+      id="Fax"/>
+    <TypeKeyInput
+      editable="true"
+      id="PrimaryPhone"
+      label="displaykey.Web.ContactDetail.Phone.PrimaryPhone"
+      validationExpression="(businessContact.PrimaryPhone == null or (businessContact.PrimaryPhone == &quot;work&quot; and businessContact.WorkPhone != null) or  (businessContact.PrimaryPhone == &quot;home&quot; and businessContact.HomePhone != null) or (businessContact.PrimaryPhone == &quot;mobile&quot; and (businessContact as Person).CellPhone != null)) ? null : displaykey.Web.ContactDetail.Phone.PrimaryPhone.Error"
+      value="(businessContact as Person).PrimaryPhone"
+      visible="businessContact typeis Person"/>
+    <InputDivider
+      visible="businessContact typeis Person"/>
+    <Label
+      label="displaykey.Web.ContactDetail.Email"
+      visible="businessContact typeis Person"/>
+    <TextInput
+      editable="true"
+      formatType="email"
+      id="Email1"
+      label="mainEmailLabel()"
+      value="businessContact.EmailAddress1"/>
+    <TextInput
+      editable="true"
+      formatType="email"
+      id="Email2"
+      label="alternateEmailLabel()"
+      value="businessContact.EmailAddress2"/>
+    <Code><![CDATA[function createCellPhoneDelegate() : gw.api.phone.ContactPhoneDelegate {
+  if (businessContact typeis Person) {
+    return new gw.api.phone.ContactPhoneDelegate(businessContact, businessContact#CellPhone)
+  } else {
+    return null
+  }
+}
+
+
+function topLabel() : String {
+  if (businessContact typeis Person) {
+    return displaykey.Web.ContactDetail.Phone
+  } else {
+    return displaykey.Web.ContactDetail.ContactInfo
+  }
+}
+
+function mainEmailLabel() : String {
+  if (businessContact typeis Person) {
+    return displaykey.Web.ContactDetail.Email.Primary
+  } else {
+    return displaykey.Web.ContactDetail.PrimaryContact.Email1
+  }
+}
+
+function alternateEmailLabel() : String {
+  if (businessContact typeis Person) {
+    return displaykey.Web.ContactDetail.Email.Secondary
+  } else {
+    return displaykey.Web.ContactDetail.PrimaryContact.Email2
+  }
+}]]></Code>
+  </InputSet>
+</PCF>

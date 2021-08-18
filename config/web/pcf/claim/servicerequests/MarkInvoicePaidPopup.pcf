@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="pcf.xsd">
+  <Popup
+    beforeCommit="invoice.pay()"
+    canEdit="true"
+    id="MarkInvoicePaidPopup"
+    startInEditMode="true"
+    title="displaykey.Web.ServiceRequest.MarkAsPaidPopup.Title">
+    <LocationEntryPoint
+      signature="MarkInvoicePaidPopup(invoice: ServiceRequestInvoice)"/>
+    <Variable
+      name="invoice"
+      type="ServiceRequestInvoice"/>
+    <Screen>
+      <Toolbar>
+        <EditButtons/>
+      </Toolbar>
+      <DetailViewPanel>
+        <InputColumn>
+          <InputSet>
+            <RangeInput
+              editable="true"
+              id="ClaimChecks"
+              label="displaykey.Web.ServiceRequest.MarkAsPaidPopup.ClaimChecks"
+              required="true"
+              value="invoice.Check"
+              valueRange="CompatibleChecks"/>
+          </InputSet>
+        </InputColumn>
+      </DetailViewPanel>
+    </Screen>
+    <Code><![CDATA[/**
+ * Return all the claim checks that matches the following conditions:
+ * are single-payee
+ * are non-recurring,
+ * have the same currency as the service request
+ */
+property get CompatibleChecks(): List<Check> {
+  return invoice.ServiceRequest.Claim.ChecksQuery.where( \ check -> check.Currency.equals(invoice.ServiceRequest.Currency)
+                                      and not check.CheckSet.Recurring
+                                      and not check.isGroupMember(false))
+}]]></Code>
+  </Popup>
+</PCF>

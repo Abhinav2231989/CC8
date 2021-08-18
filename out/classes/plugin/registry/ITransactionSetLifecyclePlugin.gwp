@@ -1,0 +1,3 @@
+<plugin name="ITransactionSetLifecyclePlugin">
+  <plugin-java javaclass="com.guidewire.cc.plugin.lifecycle.internal.RulesBasedTransactionSetLifecyclePlugin"/>
+</plugin>

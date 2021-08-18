@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<subtype xmlns="http://guidewire.com/datamodel" desc="Classification condition filter by CustomerServiceTier" entity="CustomerServiceTierConditionFilter" final="false" priority="1" supertype="ConditionFilter">
+  <typekey
+    desc="Classification condition filter by Service Tier"
+    name="CustomerServiceTier"
+    nullok="false"
+    typelist="CustomerServiceTier"/>
+  <index name="cst_cond_index_1"
+         desc="Prevents duplicate condition filters"
+         unique="true">
+    <indexcol name="ClassificationConditionID" keyposition="1"/>
+    <indexcol name="CustomerServiceTier" keyposition="2"/>
+  </index>
+</subtype>

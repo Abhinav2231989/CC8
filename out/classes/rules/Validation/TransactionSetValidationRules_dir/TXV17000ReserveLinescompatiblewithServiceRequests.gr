@@ -1,0 +1,36 @@
+package rules.Validation.TransactionSetValidationRules_dir
+
+
+@gw.rules.RuleName("TXV17000 - Reserve Lines compatible with Service Requests")
+internal class TXV17000ReserveLinescompatiblewithServiceRequests {
+  static function doCondition(transactionSet : entity.TransactionSet) : boolean {
+/*start00rule*/
+return transactionSet typeis CheckSet
+/*end00rule*/
+}
+
+  static function doAction(transactionSet : entity.TransactionSet, actions : gw.rules.Action) {
+/*start00rule*/
+// This OOTB rule only needs to run for checks.
+// It validates all the checks that are linked to a ServiceRequestInvoice to determine whether
+// the check reserve line is compatible with at least one of the invoices service request. It is
+// compatible if the service request is claim level or has the same incident as the reserve line.
+for (check in (transactionSet as CheckSet).Checks) {
+
+  if (check.LinkedToServiceRequests) {
+    for (payment in check.Payments) {
+      if (payment.Exposure != null) {
+        // Validate whether the reserve line incident matches at least one service request
+        if (not check.ServiceRequestInvoices*.ServiceRequest.hasMatch( \ sr ->
+                        sr.Incident == null or
+                        sr.Incident == payment.Exposure.Incident)) {
+          transactionSet.reject(null, null,ValidationLevel.TC_LOADSAVE,
+            displaykey.Rules.Validation.Transaction.IncompatibleServiceRequest(check.DisplayName, check.ServiceRequestInvoices.toSet()*.ServiceRequest*.TypePrefixedIncidentName.join(", ")))
+        }
+      }
+    }
+  }
+}
+/*end00rule*/
+  }
+}

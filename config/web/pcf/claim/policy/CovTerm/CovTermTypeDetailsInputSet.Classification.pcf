@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <InputSet
+    id="CovTermTypeDetailsInputSet"
+    mode="Classification">
+    <Require
+      name="CovTerm"
+      type="CovTerm"/>
+    <Variable
+      initialValue="CovTerm as ClassificationCovTerm"
+      name="ClassificationCovTerm"
+      type="ClassificationCovTerm"/>
+    <Input
+      editable="true"
+      id="Code"
+      label="displaykey.Web.ClaimPolicy.CovTerm.Code"
+      value="ClassificationCovTerm.Code"/>
+    <Input
+      editable="true"
+      id="Description"
+      label="displaykey.Web.ClaimPolicy.CovTerm.Description"
+      value="ClassificationCovTerm.Description"/>
+  </InputSet>
+</PCF>

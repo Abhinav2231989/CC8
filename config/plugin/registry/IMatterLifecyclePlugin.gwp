@@ -1,0 +1,3 @@
+<plugin name="IMatterLifecyclePlugin">
+  <plugin-java javaclass="com.guidewire.cc.plugin.lifecycle.internal.RulesBasedMatterLifecyclePlugin"/>
+</plugin>

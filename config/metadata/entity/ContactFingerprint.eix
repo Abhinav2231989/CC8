@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<internalExtension xmlns="http://guidewire.com/datamodel" entityName="ContactFingerprint">
+    <implementsEntity name="Extractable"/>
+    <implementsEntity name="OverlapTable"/>
+</internalExtension>

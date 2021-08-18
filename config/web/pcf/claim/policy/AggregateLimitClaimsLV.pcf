@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <ListViewPanel
+    desc="Provides a list of claims that pertain to an aggregate limit along with their contributing limit used."
+    id="AggregateLimitClaimsLV">
+    <Require
+      name="ClaimAggregateLimitRptList"
+      type="ClaimAggregateLimitRpt[]"/>
+    <Require
+      name="AggregateLimit"
+      type="AggregateLimit"/>
+    <Variable
+      initialValue="gw.claim.ClaimLimitUsedAmount.fromClaimAggregateLimitRpts(ClaimAggregateLimitRptList)"
+      name="ClaimLimitUsedAmounts"
+      recalculateOnRefresh="true"
+      type="gw.claim.ClaimLimitUsedAmount[]"/>
+    <RowIterator
+      canPick="false"
+      editable="false"
+      elementName="claimRow"
+      value="ClaimLimitUsedAmounts">
+      <Row
+        useArchivedStyle="claimRow.Archived">
+        <Cell
+          action="ClaimFinancialsSummary.goInMain(claimRow.Claim)"
+          available="not claimRow.Archived"
+          footerLabel="displaykey.Java.ListView.Sum"
+          id="CClaimNumber"
+          label="displaykey.LV.Policy.AggregateLimits.ClaimNumber"
+          value="claimRow.ClaimNumber"/>
+        <Cell
+          footerSumValue="claimRow.LimitUsed"
+          formatType="currency"
+          id="CLimitUsed"
+          label="displaykey.LV.Policy.AggregateLimits.AmountUsed"
+          value="claimRow.LimitUsed"/>
+        <Cell
+          footerSumValue="claimRow.NetIncurredContribution"
+          formatType="currency"
+          id="CNetIncurredContribution"
+          label="displaykey.LV.Policy.AggregateLimits.NetIncurredContribution"
+          tooltip="displaykey.LV.Policy.AggregateLimits.NetIncurredContribution.Tooltip"
+          value="claimRow.NetIncurredContribution"
+          width="170"/>
+        <Cell
+          footerSumValue="claimRow.NetPaidContribution"
+          formatType="currency"
+          id="CNetPaidContribution"
+          label="displaykey.LV.Policy.AggregateLimits.NetPaidContribution"
+          tooltip="displaykey.LV.Policy.AggregateLimits.NetPaidContribution.Tooltip"
+          value="claimRow.NetPaidContribution"/>
+      </Row>
+    </RowIterator>
+  </ListViewPanel>
+</PCF>

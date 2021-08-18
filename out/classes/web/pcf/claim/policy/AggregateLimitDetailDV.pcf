@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <!-- This file automatically generated from nvv_policy.xml -->
+  <DetailViewPanel
+    id="AggregateLimitDetailDV">
+    <Require
+      name="AggregateLimit"
+      type="AggregateLimit"/>
+    <Require
+      name="Policy"
+      type="Policy"/>
+    <Require
+      name="AggregateLimitHelper"
+      type="admin.AggregateLimitHelper"/>
+    <Variable
+      initialValue="AggregateLimit.PolicyPeriod.PolicyPeriodType"
+      name="PolicyPeriodType"
+      type="PolicyPeriodType"/>
+    <InputColumn>
+      <RangeInput
+        confirmMessage="displaykey.Java.AggregateLimit.Warning.PolicyPeriodTypeChanged"
+        editable="AggregateLimit.New or AggregateLimitHelper.canChangeGrouping(Policy, PolicyPeriodType)"
+        id="AggregateLimit_PolicyPeriodType"
+        label="displaykey.NVV.Policy.AggregateLimitDetail.AggregateLimit.PolicyPeriodType"
+        required="true"
+        showConfirmMessage="PolicyPeriodType != null and not AggregateLimit.CoverageLines.IsEmpty"
+        value="PolicyPeriodType"
+        valueRange="gw.api.admin.AggregateLimitUtil.getPolicyTypes(Policy)">
+        <PostOnChange
+          onChange="AggregateLimitHelper.resetCoveragesAndAssign(AggregateLimit, PolicyPeriodType, Policy); AggregateLimitHelper.invalidateListViewCache(CurrentLocation, &quot;AggregateLimitCoveragesLV&quot;)"/>
+      </RangeInput>
+      <TypeKeyInput
+        editable="true"
+        id="AggregateLimit_ValueType"
+        label="displaykey.NVV.Policy.AggregateLimitDetail.AggregateLimit.ValueType"
+        required="true"
+        value="AggregateLimit.ValueType">
+        <PostOnChange/>
+      </TypeKeyInput>
+      <Input
+        available="PolicyPeriodType != null"
+        editable="true"
+        formatType="currency"
+        id="AggregateLimit_LimitAmount"
+        label="displaykey.NVV.Policy.AggregateLimitDetail.AggregateLimit.LimitAmount"
+        required="true"
+        value="AggregateLimit.LimitAmount"/>
+      <Input
+        formatType="currency"
+        id="AggregateLimit_AmountUsed"
+        label="displaykey.NVV.Policy.AggregateLimitDetail.AggregateLimit.AmountUsed"
+        required="false"
+        value="AggregateLimit.LimitUsed"
+        visible="not CurrentLocation.InEditMode"/>
+      <Input
+        formatType="currency"
+        id="AggregateLimit_AmountRemaining"
+        label="displaykey.NVV.Policy.AggregateLimitDetail.AggregateLimit.AmountRemaining"
+        required="false"
+        value="AggregateLimit.LimitRemaining"
+        visible="not CurrentLocation.InEditMode"/>
+      <TypeKeyInput
+        editable="true"
+        id="aggLimitCalcCriteria"
+        label="displaykey.NVV.Policy.AggregateLimitDetail.AggregateLimit.CalculationCriteria"
+        required="true"
+        value="AggregateLimit.AggLimitCalcCriteria"/>
+      <TextAreaInput
+        editable="true"
+        id="AggregateLimit_Comments"
+        label="displaykey.NVV.Policy.AggregateLimitDetail.AggregateLimit.Comments"
+        numCols="50"
+        numRows="5"
+        required="false"
+        value="AggregateLimit.Comments"/>
+      <ListViewInput
+        def="AggregateLimitCoveragesLV(AggregateLimitHelper, Policy, AggregateLimit)"
+        editable="AggregateLimit.PolicyPeriod != null"
+        label="displaykey.NVV.Policy.AggregateLimitDetail.Coverages">
+        <Toolbar>
+          <IteratorButtons
+            iterator="AggregateLimitCoveragesLV.AggregateLimitCoveragesLV"/>
+        </Toolbar>
+      </ListViewInput>
+      <InputSet
+        visible="not CurrentLocation.InEditMode">
+        <InputDivider/>
+        <Input
+          id="lid"
+          label="displaykey.LV.Policy.AggregateLimits.Details"
+          value="displaykey.LV.Policy.AggregateLimits.ContributingClaims.ExplanationText"/>
+        <Input
+          id="lid1"
+          value="displaykey.LV.Policy.AggregateLimits.CalculationUsedForRealized(AggregateLimit.FinancialsCalculationDescription)"
+          visible="AggregateLimit.PolicyPeriod.PolicyPeriodType == typekey.PolicyPeriodType.TC_POLICY"/>
+        <ListViewInput
+          def="AggregateLimitClaimsLV(AggregateLimit.ApplicableNonZeroClaimAggregateLimitRpts, AggregateLimit)"
+          id="agglimitsListView">
+          <Toolbar/>
+        </ListViewInput>
+      </InputSet>
+    </InputColumn>
+  </DetailViewPanel>
+</PCF>

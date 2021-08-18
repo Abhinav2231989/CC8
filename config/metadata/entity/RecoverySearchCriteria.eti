@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><nonPersistentEntity xmlns="http://guidewire.com/datamodel" desc="Non-persistent set of criteria to use in searching for a specific Recovery." entity="RecoverySearchCriteria" extendable="true" subpackage="financials">
+  <column name="ClaimNumber" nullok="true" type="claimnumber"/>
+  <foreignkey columnName="CreatedByUserID" fkentity="User" name="CreatedByUser" nullok="true"/>
+  <foreignkey columnName="NameCriteriaID" fkentity="CCNameCriteria" name="NameCriteria" nullok="false"/>
+  <typekey name="CostType" nullok="true" typelist="CostType"/>
+  <typekey name="RecoveryStatus" nullok="true" typefilter="recovery" typelist="TransactionStatus"/>
+  <typekey name="RecoveryCategory" nullok="true" typelist="RecoveryCategory"/>
+  <foreignkey columnName="DateCriterionChoiceID" fkentity="DateCriterionChoice" name="DateCriterionChoice" nullok="false"/>
+  <foreignkey columnName="FinancialCriterionID" fkentity="FinancialCriterionMC" name="FinancialCriterion" nullok="false"/>
+</nonPersistentEntity>

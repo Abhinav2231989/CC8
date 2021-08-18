@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <ListViewPanel
+    id="ClaimSnapshotPolicyLocations800LV">
+    <Require
+      name="Claim"
+      type="Claim"/>
+    <Require
+      name="SnapshotParam"
+      type="Object"/>
+    <Variable
+      initialValue="(SnapshotParam as snapshot.v800.Claim).Policy"
+      name="Policy"
+      type="snapshot.v800.Policy"/>
+    <RowIterator
+      canPick="false"
+      editable="false"
+      elementName="PolicyLocation"
+      hasCheckBoxes="true"
+      id="PolicyLocationIterator"
+      value="Policy.PolicyLocations">
+      <Row>
+        <Cell
+          action="ClaimSnapshotPolicyLocation800Popup.push(Claim, PolicyLocation)"
+          id="Location"
+          label="displaykey.Web.ClaimSnapshotPolicyLocationsLV.Location"
+          value="PolicyLocation.LocationNumber"/>
+        <Cell
+          id="Description"
+          label="displaykey.Web.ClaimSnapshotPolicyLocationsLV.Description"
+          value="PolicyLocation.Address.Description"/>
+        <Cell
+          action="ClaimSnapshotPolicyLocation800Popup.push(Claim, PolicyLocation)"
+          id="Address"
+          label="displaykey.Web.ClaimSnapshotPolicyLocationsLV.Address"
+          value="util.Snapshot.renderValue(PolicyLocation.Address)"/>
+        <Cell
+          id="Lienholders"
+          label="displaykey.LV.Policy.Locations.Lienholders"
+          value="util.Snapshot.renderValue(getLocationLienHolders(PolicyLocation))"
+          visible="Claim.Policy.PolicyType != PolicyType.TC_WORKERSCOMP"/>
+        <Cell
+          id="HighValueItems"
+          label="displaykey.LV.Policy.Locations.HasListedItems"
+          value="hasListedItems(PolicyLocation)"/>
+      </Row>
+    </RowIterator>
+    <Code><![CDATA[function getLocationLienHolders(policyLocation : snapshot.v800.PolicyLocation) : snapshot.v800.PropertyOwner[] {
+  var list = new java.util.ArrayList<snapshot.v800.PropertyOwner>()
+  for (lienHolder in (policyLocation.Lienholders as snapshot.v800.PropertyOwner[])) {
+    if(lienHolder.LocationBasedRU == null) {
+      list.add(lienHolder)
+    }
+   }
+  var result = new snapshot.v800.PropertyOwner[list.size()]
+  return list.toArray(result)
+}
+
+function hasListedItems(policyLocation : snapshot.v800.PolicyLocation) : String {
+  if((policyLocation.HighValueItems as snapshot.v800.PropertyItem[]).HasElements)
+    return YesNo.TC_YES.DisplayName
+  return YesNo.TC_NO.DisplayName  
+}]]></Code>
+  </ListViewPanel>
+</PCF>

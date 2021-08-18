@@ -1,0 +1,3 @@
+<plugin name="IClaimLifecyclePlugin">
+  <plugin-java javaclass="com.guidewire.cc.plugin.lifecycle.internal.RulesBasedClaimLifecyclePlugin"/>
+</plugin>

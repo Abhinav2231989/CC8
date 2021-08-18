@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><entity xmlns="http://guidewire.com/datamodel" desc="Represents the current state of synchronization between a Claim and a MessageSink." entity="ClaimSynchState" loadable="false" platform="false"  subpackage="messaging" table="claimsynchst" type="versionable">
+  <implementsEntity name="Extractable"/>
+  <fulldescription>&lt;p&gt;Represents the synchronization state of a &lt;code&gt;Claim&lt;/code&gt; with respect to a particular &lt;code&gt;MessageSink&lt;/code&gt;.
+As part of the work of integrating Guidewire application with other external and/or legacy systems, &lt;code&gt;MessageSink&lt;/code&gt;
+objects are set up to receive messages and update those systems to reflect the new state of the &lt;code&gt;Claim&lt;/code&gt; in the system.&lt;/p&gt;
+&lt;p&gt;
+Due to the asynchronous nature of messaging, those messages may not be transmitted immeditately, so the &lt;code&gt;ClaimSynchState&lt;/code&gt;
+entity exists to track whether the external system represented by a particular &lt;code&gt;MessageSink&lt;/code&gt; can be considered to
+be up-to-date with the system changes.&lt;/p&gt;&lt;p&gt;
+See {@link com.guidewire.pl.system.typelist.tl.SynchState} for the available synchronization states.
+&lt;/p&gt;
+@see Claim#getClaimSynchStates
+      
+    </fulldescription>
+  <foreignkey columnName="ClaimID" desc="The Claim to which the synchronization state applies." exportable="false" fkentity="Claim" name="Claim" nullok="false"/>
+  <column desc="Identifies the message sink to which the synchronization state applies." name="MessageSink" nullok="false" type="integer"/>
+  <typekey desc="The synchronization state of the given Claim with respect to the given message sink." name="SynchState" nullok="true" typelist="SynchState"/>
+  <index desc="Enforce uniqueness, only one entry per message sink per claim" name="claimsynchstu1" unique="true">
+    <indexcol keyposition="1" name="ClaimID"/>
+    <indexcol keyposition="2" name="MessageSink"/>
+  </index>
+</entity>

@@ -1,0 +1,20 @@
+package rules.Validation.ClaimClosedValidationRules_dir
+
+@gw.rules.RuleName("CCV07000 - Open matters")
+internal class CCV07000Openmatters {
+  static function doCondition(claim : entity.Claim) : boolean {
+    
+/*start00rule*/
+return exists (mat in claim.Matters where not (mat.Closed))
+/*end00rule*/
+
+  }
+
+  static function doAction(claim : entity.Claim, actions : gw.rules.Action) {
+
+/*start00rule*/
+claim.reject("newloss", displaykey.Rules.Validation.CloseClaim.CloseAllOpenMatters, null, null)
+/*end00rule*/
+
+  }
+}

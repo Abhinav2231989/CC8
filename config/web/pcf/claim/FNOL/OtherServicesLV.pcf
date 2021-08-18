@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <ListViewPanel
+    available="true"
+    id="OtherServicesLV"
+    visible="true">
+    <Require
+      name="otherServiceRequests"
+      type="java.util.Set&lt;ServiceRequest&gt;"/>
+    <ExposeIterator
+      name="OtherServicesLV"
+      valueType="entity.ServiceRequest"
+      widget="OtherServicesIterator"/>
+    <Require
+      name="alsoRemove"
+      type="java.util.Set&lt;ServiceRequest&gt;"/>
+    <RowIterator
+      canPick="false"
+      checkBoxVisible="CurrentLocation.InEditMode and (serviceRequest.IsEditableInUI)"
+      editable="false"
+      elementName="serviceRequest"
+      hasCheckBoxes="true"
+      id="OtherServicesIterator"
+      toRemove="removeServiceRequest(serviceRequest)"
+      value="otherServiceRequests.toList()">
+      <Row>
+        <Cell
+          icon="serviceRequest.Kind.Icon"
+          iconLabel="serviceRequest.Kind.Label"
+          id="Kind"
+          label="displaykey.LV.Claim.ServiceRequest.Kind"
+          showHeaderIcon="false"
+          value="true"/>
+        <Cell
+          id="Incident"
+          label="displaykey.LV.Claim.ServiceRequest.RelatesTo"
+          value="serviceRequest.TypePrefixedIncidentName"/>
+        <Cell
+          id="Services"
+          label="displaykey.LV.Claim.ServiceRequest.Services"
+          value="serviceRequest.ServicesString"/>
+        <Cell
+          id="Specialist"
+          label="displaykey.LV.Claim.ServiceRequest.Specialist"
+          value="serviceRequest.SpecialistName"/>
+      </Row>
+    </RowIterator>
+    <Code><![CDATA[function removeServiceRequest(sr : ServiceRequest) {
+  otherServiceRequests.remove(sr)
+  alsoRemove?.remove(sr)
+  //safe to just delete the SR, since it's in draft and therefore no quotes / invoices / statements exist, and everything is deleted in a cascade
+  sr.remove()
+}]]></Code>
+  </ListViewPanel>
+</PCF>

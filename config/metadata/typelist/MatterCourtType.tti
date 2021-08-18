@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<typelist xmlns="http://guidewire.com/typelists" desc="Court jurisdiction" final="false" subpackage="matter" name="MatterCourtType">
+  <typecode code="state" desc="State court." name="State"/>
+</typelist>

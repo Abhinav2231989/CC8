@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><internalExtension xmlns="http://guidewire.com/datamodel" entityName="Message">
+  <description>
+An active message created by the event fired rules in response to an event in the ClaimCenter system.  A message is intended for a particular destination that can be determined by &lt;b&gt;getDestinationID&lt;/b&gt;.     Messages carry a payload containing the data to be sent to the destination.  Messages are dispatched using a MessageTransport plugin specified in config.xml, which is responsible for sending the message to the receiving system. See the ClaimCenter Integration documentation for more details about the lifecycle of Messages.
+      
+    </description>
+  <foreignkey columnName="ClaimID" desc="Associated claim, if applicable.  If null, then the associated object is a cross-claim object." fkentity="Claim" name="Claim" nullok="true"/>
+  <index desc="Descending index on claim and send order, used for getting the max send order when creating messages." name="ClaimSendOrder" trackUsage="true">
+    <indexcol keyposition="1" name="ClaimID"/>
+    <indexcol keyposition="2" name="SendOrder"/>
+  </index>
+  <foreignkey columnName="contactID" desc="Associated contact, if applicable." exportable="false" fkentity="Contact" name="Contact" nullok="true"/>
+  <index name="PendingClaimIdx"
+       desc="Index for the query that gets all pending messages for Claims to send to a Destination."
+       trackUsage="true"
+       unique="true">
+    <indexcol keyposition="1" name="DestinationId"/>
+    <indexcol keyposition="2" name="ClaimID"/>
+    <indexcol keyposition="3" name="SendOrder"/>
+    <indexcol keyposition="4" name="Status"/>
+    <indexcol keyposition="5" name="CreationTime"/>
+    <indexcol keyposition="6" name="ID"/>
+  </index>
+  <index name="PendingContactIdx"
+       desc="Index for the query that gets all pending messages for Contacts to send to a Destination."
+       trackUsage="true"
+       unique="true">
+    <indexcol keyposition="1" name="DestinationId"/>
+    <indexcol keyposition="2" name="ContactID"/>
+    <indexcol keyposition="3" name="SendOrder"/>
+    <indexcol keyposition="4" name="Status"/>
+    <indexcol keyposition="5" name="CreationTime"/>
+    <indexcol keyposition="6" name="ID"/>
+  </index>
+   <index desc="Descending index on contact and send order, used for getting the max send order when creating messages." name="ContactSendOrder" trackUsage="true">
+     <indexcol keyposition="1" name="contactID"/>
+     <indexcol keyposition="2" name="SendOrder"/>
+   </index>
+  <dbcheckbuilder className="com.guidewire.cc.domain.messaging.dbchecks.CCMessageDBCheckBuilder"/>
+  <implementsInterface iface="gw.api.contact.ContactRetireBean" impl="gw.api.contact.MessageRetireBeanImpl"/>
+</internalExtension>

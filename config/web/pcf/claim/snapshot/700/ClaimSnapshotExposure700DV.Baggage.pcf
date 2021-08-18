@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <DetailViewPanel
+    id="ClaimSnapshotExposure700DV"
+    mode="Baggage">
+    <Require
+      name="Claim"
+      type="Claim"/>
+    <Require
+      name="Exposure"
+      type="snapshot.v700.Exposure"/>
+    <InputColumn>
+      <InputSetRef
+        def="ClaimSnapshotExposureDetailInputSet(Exposure)"
+        mode="700"/>
+    </InputColumn>
+    <InputColumn>
+      <Label
+        label="displaykey.Web.ClaimSnapshotExposureDV.Default.IncidentOverview"/>
+      <Input
+        hideChildrenIfReadOnly="false"
+        id="Baggage_Type"
+        label="displaykey.NVV.Exposure.SubView.Baggage.Exposure.BaggageIncident"
+        value="Exposure.BaggageIncident.BaggageType"/>
+      <Input
+        hideChildrenIfReadOnly="false"
+        id="Baggage_Incident"
+        label="Exposure.BaggageIncident.DelayOnly == true ? displaykey.Web.BaggageIncident.DelayDescription : displaykey.Web.BaggageIncident.Description"
+        value="Exposure.BaggageIncident.Description"/>
+      <Input
+        id="DelayOnly"
+        label="displaykey.NVV.Exposure.SubView.Baggage.Exposure.BaggageIncident.DelayOnly"
+        value="Exposure.BaggageIncident.DelayOnly"/>
+      <InputSetRef
+        def="ClaimSnapshotExposureCodingInputSet(Exposure)"
+        mode="700"/>
+    </InputColumn>
+    <InputFooterSection>
+      <InputSetRef
+        def="ClaimSnapshotOtherCarrierInvolvementInputSet(Exposure)"
+        mode="700"/>
+    </InputFooterSection>
+  </DetailViewPanel>
+</PCF>

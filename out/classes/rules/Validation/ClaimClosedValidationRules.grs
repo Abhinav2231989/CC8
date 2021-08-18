@@ -1,0 +1,13 @@
+package rules.Validation
+
+@gw.rules.RuleName("Claim Closed Validation Rules")
+@gw.rules.RuleSetDescription("This is the Claim Closed Validation rule set. These rules are executed when an claim is closed. They execute before data is committed, before the Claim Closed rule set and then the normal preupdate and validation rule sets. They enable you to raise validation errors or warnings if the claim should not be closed.")
+class ClaimClosedValidationRules extends gw.rules.RuleSetBase {
+  static function invoke(bean : entity.Claim) : gw.rules.ExecutionSession {
+    return invoke( new gw.rules.ExecutionSession(), bean )
+  }
+
+  static function invoke(exeSession : gw.rules.ExecutionSession, bean : entity.Claim) : gw.rules.ExecutionSession {
+    return _invoke( exeSession, bean, "Claim Closed Validation Rules", ClaimClosedValidationRules )
+  }
+}

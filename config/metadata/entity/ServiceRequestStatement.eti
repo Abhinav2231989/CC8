@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<entity xmlns="http://guidewire.com/datamodel" desc="An estimation (such as a quote or invoice) received from a specialist and related to a Service Request." entity="ServiceRequestStatement" exportable="true" subpackage="vendormanagement" platform="false" table="servicerequeststatement" loadable="false" type="editable" extendable="true" final="false" abstract="true">
+  <implementsEntity name="Extractable"/>
+
+  <foreignkey columnName="ServiceRequestID" desc="Service Request the statement is linked to." fkentity="ServiceRequest" name="ServiceRequest" nullok="false"/>
+  <column name="ReferenceNumber" desc="A string identifier assigned to this ServiceRequestStatement by the specialist. The value of this field may only be meaningful to the specialist." nullok="true" type="shorttext"/>
+  <column name="StatementCreationTime" desc="The time at which this statement was created." type="datetime" nullok="false" />
+  <column name="ApprovalDate" desc="The time at which this statement was approved." type="datetime" nullok="true" />
+  <foreignkey name="ApprovedBy" fkentity="User" columnName="ApprovedByID" desc="The user who approved this statement." nullok="true" />
+  <array name="StatementDocumentLinks" arrayentity="ServiceRequestStatementDocumentLink" desc="The join entity that holds the information for documents associated with this statement" cascadeDelete="true" setterScriptability="hidden" />
+  <column name="Description" desc="The description for the statement" type="longtext" nullok="false" />
+  <column desc="Statement amount" name="Amount" nullok="false" type="currencyamount">
+    <columnParam name="currencyProperty" value="ServiceRequestCurrency"/>
+  </column>
+  <column name="DeclinedReason" desc="The reason the statement was declined" nullok="true" type="longtext" />
+  <events/>
+</entity>

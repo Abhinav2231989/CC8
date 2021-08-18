@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <ListViewPanel
+    id="EmailTemplateSearchResultLV">
+    <Require
+      name="EmailTemplateDescriptorList"
+      type="gw.plugin.email.IEmailTemplateDescriptor[]"/>
+    <RowIterator
+      editable="false"
+      elementName="EmailTemplateDescriptor"
+      pickValue="EmailTemplateDescriptor"
+      value="EmailTemplateDescriptorList">
+      <Row>
+        <Cell
+          id="Template"
+          label="displaykey.Web.EmailTemplateSearch.Template"
+          value="EmailTemplateDescriptor.Name"/>
+        <Cell
+          id="Topic"
+          label="displaykey.Web.EmailTemplateSearch.Topic"
+          value="EmailTemplateDescriptor.Topic"/>
+        <TypeKeyCell
+          id="Language"
+          label="displaykey.Web.EmailTemplateSearch.Language"
+          sortBy="EmailTemplateDescriptor.Locale"
+          value="gw.api.util.LocaleUtil.toLanguageType(EmailTemplateDescriptor.Locale)"
+          visible="LanguageType.getTypeKeys( false ).Count &gt; 1"/>
+      </Row>
+    </RowIterator>
+  </ListViewPanel>
+</PCF>

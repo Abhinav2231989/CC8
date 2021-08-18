@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <PanelSet
+    available="gw.api.system.CCConfigParameters.WeightedAssignmentEnabled.Value and perm.System.wwlcview"
+    editable="gw.api.system.CCConfigParameters.WeightedAssignmentEnabled.Value and perm.System.wwlcmanage"
+    id="WeightedWorkloadAdminPanelSet">
+    <Require
+      name="classification"
+      type="WorkloadClassification"/>
+    <PanelRow>
+      <PanelColumn>
+        <DetailViewPanel>
+          <InputColumn>
+            <Input
+              editable="true"
+              id="Name"
+              label="displaykey.Web.Admin.Workload.WorkloadClassification.Name"
+              required="true"
+              value="classification.Name"/>
+            <Input
+              editable="true"
+              id="Description"
+              label="displaykey.Web.Admin.Workload.WorkloadClassification.Description"
+              value="classification.Description"/>
+            <Input
+              editable="true"
+              id="Active"
+              label="displaykey.Web.Admin.Workload.WorkloadClassification.Active"
+              required="true"
+              value="classification.Active"/>
+            <Input
+              editable="true"
+              id="Priority"
+              label="displaykey.Web.Admin.Workload.WorkloadClassification.Rank"
+              required="true"
+              value="classification.Priority"/>
+            <Input
+              editable="true"
+              id="Weight"
+              label="displaykey.Web.Admin.Workload.WorkloadClassification.WorkloadWeight"
+              numCols="4"
+              required="true"
+              value="classification.Weight"
+              visible="true"/>
+          </InputColumn>
+        </DetailViewPanel>
+      </PanelColumn>
+    </PanelRow>
+    <PanelRef
+      def="WorkloadClassificationDV(classification)"
+      mode="(typeof classification).TypeInfo.Name">
+      <TitleBar
+        title="displaykey.Web.Admin.Workload.WorkloadClassification.Criteria"/>
+    </PanelRef>
+    <PanelRef
+      def="LocalizedValuesDV(classification, { &quot;Name&quot;, &quot;Description&quot;}, { displaykey.Web.Admin.CustomerServiceTier.Name, displaykey.Web.Admin.CustomerServiceTier.Description})"
+      id="LocalizedValues"/>
+  </PanelSet>
+</PCF>

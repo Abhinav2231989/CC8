@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><delegate xmlns="http://guidewire.com/datamodel" extendable="true" name="PercentMetricLimitDelegate" subpackage="metric">
+  <fulldescription>Delegate used by percent claim and exposure metric limits
+    </fulldescription>
+  <column desc="Percent field to store the target value." name="PercentTargetValue" nullok="true" type="percentagemetric"/>
+  <column desc="Percent field to store the yellow value." name="PercentYellowValue" nullok="true" type="percentagemetric"/>
+  <column desc="Percent field to store the red value." name="PercentRedValue" nullok="true" type="percentagemetric"/>
+</delegate>

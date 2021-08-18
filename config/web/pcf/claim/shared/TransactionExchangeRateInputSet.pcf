@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <InputSet
+    id="TransactionExchangeRateInputSet"
+    visible="util.CurrencyUtil.isMultiCurrencyMode() and transaction.Currency != transaction.ReservingCurrency">
+    <Require
+      name="transaction"
+      type="Transaction"/>
+    <BooleanRadioInput
+      editable="perm.ExchangeRate.edit"
+      falseLabel="displaykey.Web.Claim.ExchangeRateInputSet.Automatic"
+      id="Transaction_ExchangeRateOverride"
+      label="displaykey.Web.Claim.ExchangeRateInputSet.ExchangeRateMode"
+      trueLabel="displaykey.Web.Claim.ExchangeRateInputSet.Manual"
+      value="transaction.OverrideTransToReservingExchangeRate">
+      <PostOnChange/>
+    </BooleanRadioInput>
+    <TextInput
+      editable="transaction.OverrideTransToReservingExchangeRate"
+      format="var rate = transaction.TransToReservingExchangeRate; return &quot;1 &quot; + rate.BaseCurrency.DisplayName + &quot; = #.###### &quot; + rate.PriceCurrency.DisplayName;"
+      formatType="exactNumber"
+      id="Transaction_ExchangeRate"
+      label="displaykey.Web.Claim.ExchangeRateInputSet.ExchangeRate"
+      numCols="8"
+      value="transaction.TransToReservingExchangeRateRate">
+      <PostOnChange/>
+    </TextInput>
+    <Input
+      editable="transaction.OverrideTransToReservingExchangeRate"
+      id="Transaction_RateSet_Description"
+      label="displaykey.Web.Claim.ExchangeRateInputSet.RateSetDescription"
+      value="transaction.TransToReservingExchangeRate.ExchangeRateSet.Description"/>
+    <DateInput
+      id="Transaction_RateSet_Date"
+      label="displaykey.Web.Claim.ExchangeRateInputSet.ExchangeRateDate"
+      value="transaction.TransToReservingExchangeRate.ExchangeRateSet.EffectiveDate"/>
+  </InputSet>
+</PCF>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file describes the entity name and type list mappings between ContactManager and ClaimCenter. It is used
+    to map ContactManager entity names and type lists from the XSD into the values required by ClaimCenter when
+    it receives data from ContactManager.
+
+    Any entities that are transferred between ClaimCenter and ContactManager via the ABContactAPI, i.e. the
+    ab700 or newer plugin, should have entries in this file if the names are different in ClaimCenter and
+    ContactManager.
+
+    See type-mapping.xsd for the schema for this file.
+-->
+<TypeMapping
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="type-mapping.xsd">
+
+  <EntityMapping source="ABContact" target="Contact"/>
+  <EntityMapping source="ABAdjudicator" target="Adjudicator"/>
+  <EntityMapping source="ABAttorney" target="Attorney"/>
+  <EntityMapping source="ABAutoRepairShop" target="AutoRepairShop"/>
+  <EntityMapping source="ABAutoTowingAgcy" target="AutoTowingAgcy"/>
+  <EntityMapping source="ABCompany" target="Company"/>
+  <EntityMapping source="ABCompanyVendor" target="CompanyVendor"/>
+  <EntityMapping source="ABDoctor" target="Doctor"/>
+  <EntityMapping source="ABLawFirm" target="LawFirm"/>
+  <EntityMapping source="ABLegalVenue" target="LegalVenue"/>
+  <EntityMapping source="ABMedicalCareOrg" target="MedicalCareOrg"/>
+  <EntityMapping source="ABPerson" target="Person"/>
+  <EntityMapping source="ABPersonVendor" target="PersonVendor"/>
+  <EntityMapping source="ABPlace" target="Place"/>
+  <EntityMapping source="ABUserContact" target="UserContact"/>
+  <EntityMapping source="ABPolicyPerson" target="Person"/>
+  <EntityMapping source="ABPolicyCompany" target="Company"/>
+
+  <EntityMapping source="ABContactTag" target="ContactTag"/>
+
+  <EntityMapping source="ABContactContact" target="ContactContact"/>
+
+  <EntityMapping source="ABContactAddress" target="ContactAddress"/>
+
+  <EntityMapping source="ABContactCategoryScore" target="ContactCategoryScore"/>
+
+</TypeMapping>

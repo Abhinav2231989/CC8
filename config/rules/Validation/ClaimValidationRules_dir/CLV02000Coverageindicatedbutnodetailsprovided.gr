@@ -1,0 +1,34 @@
+package rules.Validation.ClaimValidationRules_dir
+
+@gw.rules.RuleDisabled
+@gw.rules.RuleName("CLV02000 - Coverage indicated but no details provided")
+internal class CLV02000Coverageindicatedbutnodetailsprovided {
+  static function doCondition(claim : entity.Claim) : boolean {
+    
+/*start00rule*/
+return true
+        
+/* NOTE: This rule is INACTIVE because exposures are validated in a
+ * dedicated exposure ruleset. Thus this rule serves only as an
+ * interesting example.
+ */
+
+/*end00rule*/
+
+  }
+
+  static function doAction(claim : entity.Claim, actions : gw.rules.Action) {
+
+/*start00rule*/
+for (exp in claim.Exposures) {
+  if (exp.OtherCoverage and exp.OtherCoverageDet.length == 0) {
+    // Mark each exposure where this occurs as invalid
+    claim.rejectSubField(exp, "OtherCoverageDet",
+       "newloss", displaykey.Rules.Validation.ProvideClaimantsOtherCoverage,
+       null, null)
+  }
+}
+/*end00rule*/
+
+  }
+}

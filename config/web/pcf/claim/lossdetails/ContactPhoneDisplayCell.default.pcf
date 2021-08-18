@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <ModalCell
+    id="ContactPhoneDisplayCell"
+    mode="default">
+    <Require
+      name="phoneOwner"
+      type="gw.api.phone.PhoneOwner"/>
+    <Require
+      name="aLodgingProvider"
+      type="entity.LodgingProvider"/>
+    <Variable
+      initialValue="gw.api.phone.PhoneOwnerFieldId"
+      name="fieldId"/>
+    <Variable
+      initialValue="!(isVisible(phoneOwner, fieldId.COUNTRY_CODE) || isVisible(phoneOwner, fieldId.EXTENSION))"
+      name="singleInput"
+      recalculateOnRefresh="true"/>
+    <FormatCell
+      id="details">
+      <TextInput
+        id="Contact_PrimaryAddress"
+        value="aLodgingProvider.Contact.PrimaryAddress"/>
+      <TextInput
+        id="label"
+        labelAbove="true"
+        value="phoneOwner.WidgetLabel"
+        visible="!singleInput &amp;&amp; CurrentLocation.InEditMode"/>
+      <TextInput
+        editable="phoneOwner.isEditable(fieldId.COUNTRY_CODE)"
+        hideIfReadOnly="true"
+        id="CountryCode"
+        label="displaykey.Web.ContactDetail.Phone.RegionCode"
+        required="phoneOwner.isRegionCodeRequired()"
+        value="phoneOwner.PhoneFields.CountryCode"
+        visible="isVisible(phoneOwner, fieldId.COUNTRY_CODE)"/>
+      <TextInput
+        editable="phoneOwner.isEditable(fieldId.NATIONAL_SUBSCRIBER_NUMBER)"
+        hideIfReadOnly="true"
+        id="NationalSubscriberNumber"
+        label="singleInput ? phoneOwner.PhoneFields.Type.DisplayName : displaykey.Web.ContactDetail.Phone.PhoneNumber"
+        required="phoneOwner.isRequired(fieldId.NATIONAL_SUBSCRIBER_NUMBER)"
+        value="phoneOwner.PhoneFields.NationalSubscriberNumber"
+        visible="isVisible(phoneOwner, fieldId.NATIONAL_SUBSCRIBER_NUMBER)">
+        <PostOnChange
+          onChange="phoneOwner.autoFormatAndCorrect(phoneOwner.PhoneFields.NationalSubscriberNumber, phoneOwner.PhoneFields.CountryCode)"/>
+      </TextInput>
+      <TextInput
+        editable="phoneOwner.isEditable(fieldId.EXTENSION)"
+        hideIfReadOnly="true"
+        id="Extension"
+        label="displaykey.Web.ContactDetail.Phone.Extension"
+        required="phoneOwner.isRequired(fieldId.EXTENSION)"
+        value="phoneOwner.PhoneFields.Extension"
+        visible="isVisible(phoneOwner, fieldId.EXTENSION)"/>
+      <TextInput
+        hideIfEditable="true"
+        id="PhoneDisplay"
+        label="phoneOwner.WidgetLabel"
+        value="phoneOwner.format()"
+        visible="isVisible(phoneOwner, fieldId.PHONE_DISPLAY)"/>
+    </FormatCell>
+    <Code><![CDATA[uses gw.api.phone.PhoneOwner
+uses gw.api.phone.PhoneOwnerFieldId
+
+function isVisible(owner: PhoneOwner, field : PhoneOwnerFieldId) : boolean {
+  if(CurrentLocation.InEditMode){
+    return owner.isFieldVisibleEditMode(field)
+  }else{
+    return owner.isFieldVisibleReadOnlyMode(field)
+  }
+}]]></Code>
+  </ModalCell>
+</PCF>

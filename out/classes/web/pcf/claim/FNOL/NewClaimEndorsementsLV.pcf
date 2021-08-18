@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <!-- This file automatically generated from lv_policy.xml -->
+  <ListViewPanel
+    id="NewClaimEndorsementsLV">
+    <ExposeIterator
+      valueType="entity.Endorsement"
+      widget="NewClaimEndorsementsLV"/>
+    <Require
+      name="EndorsementList"
+      type="Endorsement[]"/>
+    <Require
+      name="Policy"
+      type="Policy"/>
+    <RowIterator
+      editable="false"
+      elementName="Endorsement"
+      hasCheckBoxes="true"
+      pageSize="3"
+      pickLocation="NewClaimWizard_NewEndorsementPopup.push(Policy)"
+      toRemove="Policy.removeEndorsement(Endorsement)"
+      value="EndorsementList">
+      <Row>
+        <Cell
+          action="NewClaimWizard_EndorsementDetailPopup.push(Policy, Endorsement)"
+          id="FormNumber"
+          label="displaykey.LV.Policy.Endorsements.FormNumber"
+          printWidth="2"
+          sortOrder="1"
+          value="Endorsement.FormNumber"/>
+        <Cell
+          id="Description"
+          label="displaykey.LV.Policy.Endorsements.Description"
+          printWidth="4"
+          value="Endorsement.Description"/>
+        <DateCell
+          id="EffectiveDate"
+          label="displaykey.LV.Policy.Endorsements.EffectiveDate"
+          value="Endorsement.EffectiveDate"/>
+        <DateCell
+          id="ExpirationDate"
+          label="displaykey.LV.Policy.Endorsements.ExpirationDate"
+          value="Endorsement.ExpirationDate"/>
+        <Cell
+          id="Comments"
+          label="displaykey.LV.Policy.Endorsements.Comments"
+          printWidth="2"
+          value="Endorsement.Comments"/>
+      </Row>
+    </RowIterator>
+  </ListViewPanel>
+</PCF>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<entity xmlns="http://guidewire.com/datamodel" abstract="true" admin="true" desc="Filtering condition for classifications" entity="ClassificationCondition" exportable="false" extendable="true" final="false" subpackage="assignment.workload" platform="false" table="classificationcondition" type="editable" ignoreForEvents="true">
+  <foreignkey columnName="WorkloadClassificationID"  desc="Classification which this condition is related." exportable="false" fkentity="WorkloadClassification" name="WorkloadClassification" nullok="false"/>
+  <implementsInterface iface="gw.api.assignment.workload.classifications.conditions.ConditionMethods" impl="gw.assignment.workload.classifications.conditions.AbstractConditionMethodsImpl"/>
+  <column name="IncludeAll" type="bit" default="true" nullok="false" desc="flag determining if all entities or only selected few are considered by weight filter"/>
+</entity>

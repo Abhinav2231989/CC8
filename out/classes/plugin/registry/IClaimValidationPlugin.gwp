@@ -1,0 +1,3 @@
+<plugin name="IClaimValidationPlugin">
+  <plugin-java javaclass="com.guidewire.cc.system.validation.RulesBasedClaimValidationPlugin"/>
+</plugin>

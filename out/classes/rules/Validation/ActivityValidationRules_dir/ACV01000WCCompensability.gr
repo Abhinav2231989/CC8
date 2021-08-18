@@ -1,0 +1,25 @@
+package rules.Validation.ActivityValidationRules_dir
+
+@gw.rules.RuleName("ACV01000 - WC Compensability")
+internal class ACV01000WCCompensability {
+  static function doCondition(activity : entity.Activity) : boolean {
+    
+/*start00rule*/
+return activity.ActivityPattern.Code == "claim_acceptance" 
+and (activity.Claim.ClaimWorkComp.Compensable == null
+     or activity.Claim.ClaimWorkComp.Compensable == "pending")
+and activity.Status == "complete"
+/*end00rule*/
+
+  }
+
+  static function doAction(activity : entity.Activity, actions : gw.rules.Action) {
+
+/*start00rule*/
+var myMessage = displaykey.Rules.Validation.Activity.Compensable.Status(activity.Subject)
+
+activity.reject("external", myMessage, null, null)
+/*end00rule*/
+
+  }
+}

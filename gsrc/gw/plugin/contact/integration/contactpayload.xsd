@@ -1,0 +1,57 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://guidewire.com/cc/contact-payload"
+           targetNamespace="http://guidewire.com/cc/contact-payload">
+    <xs:element name="contact-payload" type="actionType"/>
+
+    <xs:complexType name="actionType" abstract="true"/>
+
+    <xs:complexType name="removeAction">
+        <xs:complexContent>
+            <xs:extension base="actionType">
+                <xs:sequence>
+                    <xs:element name="linkid" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+  <xs:complexType name="createAction">
+    <xs:complexContent>
+      <xs:extension base="actionType">
+        <xs:sequence>
+          <xs:element name="create-xml" type="xs:string" minOccurs="0"/>
+          <xs:element name="is-pending-create" type="xs:boolean" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="updateAction">
+        <xs:complexContent>
+            <xs:extension base="actionType">
+                <xs:sequence>
+                    <xs:element name="update-xml" type="xs:string" minOccurs="0"/>
+                    <xs:element name="tag-update-xml" type="xs:string" minOccurs="0"/>
+                    <xs:element name="is-pending-update" type="xs:boolean" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+  <xs:complexType name="tagUpdateAction">
+    <xs:complexContent>
+      <xs:extension base="actionType">
+        <xs:sequence>
+          <xs:element name="tag-update-xml" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="cancelUpdateAction">
+    <xs:complexContent>
+      <xs:extension base="actionType"/>
+    </xs:complexContent>
+  </xs:complexType>
+
+</xs:schema>

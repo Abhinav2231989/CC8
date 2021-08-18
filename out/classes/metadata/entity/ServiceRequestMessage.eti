@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<entity xmlns="http://guidewire.com/datamodel" desc="Messages for Service Requests" entity="ServiceRequestMessage" extendable="true" exportable="true"
+        subpackage="vendormanagement" loadable="false" lockable="true" platform="false"  table="servreqmsg" type="editable">
+    <implementsEntity name="Extractable"/>
+    <column name="Title" desc="The title of the service request message" nullok="false" type="shorttext" exportable="true"/>
+    <column name="Body" desc="The body of the service request message" nullok="false" type="longtext" exportable="true"/>
+    <column name="SendDate" desc="The date the message was sent" nullok="false" type="datetime" exportable="true"/>
+    <column name="SentFromPortal" desc="If the message is sent from an external portal" nullok="false" type="bit" exportable="true"/>
+    <typekey name="Type" desc="The message type" typelist="ServiceRequestMessageType" nullok="false" exportable="true"/>
+    <foreignkey columnName="ServiceRequestID" name="ServiceRequest" desc="The Service Request related to this message" fkentity="ServiceRequest" exportable="true" nullok="false"/>
+    <foreignkey columnName="AuthorID" name="Author" fkentity="Contact" exportable="true" desc="The author of the message" nullok="false"/>
+    <events>
+        <event description="A new message from Adjuster to Vendor" name="ServiceRequestMessageToVendorAdded"/>
+    </events>
+</entity>

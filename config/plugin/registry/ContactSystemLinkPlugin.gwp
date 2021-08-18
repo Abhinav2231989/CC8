@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<plugin name="ContactSystemLinkPlugin" interface="ContactSystemLinkPlugin">
+    <plugin-gosu disabled="false" gosuclass="gw.plugin.contact.ab800.ABContactSystemLinkPlugin"/>
+</plugin>

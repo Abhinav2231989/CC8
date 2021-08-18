@@ -1,0 +1,25 @@
+package rules.Validation.TransactionSetValidationRules_dir.TXV15000FinancialHolds_dir
+
+@gw.rules.RuleDisabled
+@gw.rules.RuleName("TXV15300 - Unverified Policy")
+internal class TXV15300UnverifiedPolicy {
+  static function doCondition(transactionSet : entity.TransactionSet) : boolean {
+    
+/*start00rule*/
+return not transactionSet.Claim.Policy.Verified
+/*end00rule*/
+
+  }
+
+  static function doAction(transactionSet : entity.TransactionSet, actions : gw.rules.Action) {
+
+/*start00rule*/
+if (exists (t in transactionSet.Transactions where t.CostType == "claimcost")) {
+  transactionSet.reject("payment", displaykey.Rules.Validation.Transaction.FinancialHolds.UnverifiedPolicyError, null, null)
+} else {
+  transactionSet.reject(null, null, "payment", displaykey.Rules.Validation.Transaction.FinancialHolds.UnverifiedPolicyWarning)
+}
+/*end00rule*/
+
+  }
+}

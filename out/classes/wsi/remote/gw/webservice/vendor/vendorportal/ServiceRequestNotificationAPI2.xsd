@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<xs:schema targetNamespace="http://ws.vendor.portal.edge/" version="1.0" xmlns:tns="http://ws.vendor.portal.edge/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="EmailException" type="tns:EmailException"/>
+  <xs:element name="sendNewDocumentNotification" type="tns:sendNewDocumentNotification"/>
+  <xs:element name="sendNewDocumentNotificationResponse" type="tns:sendNewDocumentNotificationResponse"/>
+  <xs:element name="sendNewMessageNotification" type="tns:sendNewMessageNotification"/>
+  <xs:element name="sendNewMessageNotificationResponse" type="tns:sendNewMessageNotificationResponse"/>
+  <xs:element name="sendOperationNotification" type="tns:sendOperationNotification"/>
+  <xs:element name="sendOperationNotificationResponse" type="tns:sendOperationNotificationResponse"/>
+  <xs:complexType name="sendNewDocumentNotification">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg1" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg2" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg3" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sendNewDocumentNotificationResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="EmailException">
+    <xs:sequence>
+      <xs:element name="message" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sendOperationNotification">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg1" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg2" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg3" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sendOperationNotificationResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="sendNewMessageNotification">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg1" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg2" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg3" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg4" type="xs:string" minOccurs="0"/>
+      <xs:element name="arg5" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sendNewMessageNotificationResponse">
+    <xs:sequence/>
+  </xs:complexType>
+</xs:schema>

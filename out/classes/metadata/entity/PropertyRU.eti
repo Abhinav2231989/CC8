@@ -1,0 +1,3 @@
+<?xml version="1.0"?>
+<!-- PropertyRU -->
+<subtype xmlns="http://guidewire.com/datamodel" desc="RiskUnit containing a policy." entity="PropertyRU" subpackage="policy" supertype="LocationBasedRU"/>

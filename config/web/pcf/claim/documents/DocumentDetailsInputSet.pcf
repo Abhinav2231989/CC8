@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <!-- The next area controls the document related nvvs
+    This file automatically generated from nvv_claim.xml -->
+  <InputSet
+    id="DocumentDetailsInputSet">
+    <Require
+      name="Document"
+      type="Document"/>
+    <Require
+      name="fromTemplate"
+      type="boolean"/>
+    <Require
+      name="relatedToReadOnly"
+      type="boolean"/>
+    <Variable
+      initialValue="Document.RelatedServiceRequests.toTypedArray()"
+      name="relatedServiceRequests"
+      type="ServiceRequest[]"/>
+    <Input
+      editable="true"
+      id="NewDocumentName"
+      label="displaykey.NVV.Claim.DocumentDetails.Document.Name"
+      required="true"
+      value="Document.Name"/>
+    <Input
+      editable="true"
+      id="Description"
+      label="displaykey.NVV.Claim.DocumentDetails.Document.Description"
+      value="Document.Description"/>
+    <RangeInput
+      editable="not fromTemplate"
+      id="DocType"
+      label="displaykey.NVV.Claim.DocumentDetails.Document.DocType"
+      optionLabel="gw.document.DocumentsUtilBase.getMimeTypeDescription(VALUE)"
+      required="true"
+      value="Document.MimeType"
+      valueRange="gw.document.DocumentsUtilBase.getMimeTypes()"/>
+    <RangeInput
+      editable="Document.Language == null or not fromTemplate"
+      id="Language"
+      label="displaykey.NVV.Claim.DocumentDetails.Document.Language"
+      value="Document.Language"
+      valueRange="LanguageType.getTypeKeys( false )"
+      visible="LanguageType.getTypeKeys( false ).Count &gt; 1"/>
+    <InputDivider/>
+    <RangeInput
+      editable="(relatedServiceRequests.Count == 0 or (relatedServiceRequests.Count == 1 and relatedServiceRequests.single().getMatchingServiceRequestDocumentLink(Document).DateSpecialistNotified == null)) and not relatedToReadOnly"
+      id="RelatedTo"
+      label="displaykey.NVV.Claim.ClaimDocumentsFilter.RelatedTo"
+      optionLabel="VALUE typeis Claim ? displaykey.Java.NoteView.EntireClaim : VALUE.DisplayName"
+      required="true"
+      sortValueRange="false"
+      value="Document.RelatedTo"
+      valueRange="Document.Claim.RelatedToCandidates"
+      visible="relatedServiceRequests.Count &lt;= 1"/>
+    <ListViewInput
+      label="displaykey.NVV.Claim.ClaimDocumentsFilter.RelatedTo"
+      visible="relatedServiceRequests.Count &gt; 1">
+      <Toolbar/>
+      <ListViewPanel
+        alternateEntryStyle="false"
+        id="RelatedServiceRequestsLV">
+        <RowIterator
+          editable="false"
+          elementName="ServiceRequest"
+          value="relatedServiceRequests">
+          <Row>
+            <Cell
+              id="ServiceRequestDisplayName"
+              label="displaykey.NVV.Claim.ClaimDocumentsFilter.ServiceRequest"
+              value="ServiceRequest.DisplayName"
+              width="800"/>
+          </Row>
+        </RowIterator>
+      </ListViewPanel>
+    </ListViewInput>
+    <Input
+      editable="true"
+      id="Author"
+      label="displaykey.NVV.Claim.DocumentDetails.Document.Author"
+      value="Document.Author"/>
+    <Input
+      editable="true"
+      id="Recipient"
+      label="displaykey.NVV.Claim.DocumentDetails.Document.Recipient"
+      value="Document.Recipient"/>
+    <InputDivider/>
+    <BooleanRadioInput
+      editable="true"
+      id="InBound"
+      label="displaykey.NVV.Claim.DocumentDetails.Document.InBound"
+      value="Document.InBound"/>
+    <TypeKeyInput
+      editable="true"
+      id="Status"
+      label="displaykey.NVV.Claim.DocumentDetails.Document.Status"
+      required="true"
+      value="Document.Status"/>
+    <TypeKeyInput
+      editable="true"
+      id="SecurityType"
+      label="displaykey.NVV.Claim.DocumentDetails.Document.SecurityType"
+      value="Document.SecurityType"/>
+    <TypeKeyInput
+      editable="true"
+      id="Type"
+      label="displaykey.NVV.Claim.DocumentDetails.Document.Type"
+      required="true"
+      value="Document.Type"/>
+  </InputSet>
+</PCF>

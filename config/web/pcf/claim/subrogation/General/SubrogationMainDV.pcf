@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../../pcf.xsd">
+  <DetailViewPanel
+    id="SubrogationMainDV">
+    <Require
+      name="Claim"
+      type="Claim"/>
+    <Variable
+      initialValue="Claim.SubrogationSummary"
+      name="SubrogationSummary"
+      type="SubrogationSummary"/>
+    <InputColumn>
+      <Label
+        label="displaykey.NVV.Claim.Subrogation"/>
+      <TypeKeyInput
+        editable="true"
+        id="Notification_Fault"
+        label="displaykey.NVV.Claim.Subrogation.Main.SubrogationStatus.Fault"
+        value="Claim.FaultRating">
+        <PostOnChange/>
+      </TypeKeyInput>
+      <Input
+        editable="true"
+        id="Notification_AtFaultPercentage"
+        label="displaykey.NVV.Claim.Subrogation.Main.SubrogationStatus.AtFaultPercentage"
+        value="Claim.Fault"
+        visible=" Claim.FaultRating == &quot;1&quot; "/>
+      <TypeKeyInput
+        editable="true"
+        id="SubrogationStatus"
+        label="displaykey.NVV.Claim.Subrogation.Main.SubrogationStatus"
+        value="Claim.SubrogationStatus">
+        <PostOnChange/>
+      </TypeKeyInput>
+      <DateInput
+        id="SubroCloseDate"
+        label="displaykey.NVV.Claim.Subrogation.Main.CloseDt"
+        required="true"
+        value="SubrogationSummary.SubroCloseDate"
+        visible="Claim.SubrogationStatus == &quot;closed&quot; "/>
+      <TextInput
+        editable=" Claim.isFieldChanged( &quot;SubrogationStatus&quot; )"
+        id="SubroComment"
+        label="displaykey.NVV.Claim.Subrogation.Main.CloseComment"
+        value="SubrogationSummary.SubroCloseComment"
+        visible=" Claim.SubrogationStatus == &quot;closed&quot; "/>
+      <TypeKeyInput
+        editable="Claim.isFieldChanged( &quot;SubrogationStatus&quot; )"
+        id="SubroClosedOutcome"
+        label="displaykey.NVV.Claim.Subrogation.Main.Outcome"
+        required="true"
+        value="SubrogationSummary.SubroClosedOutcome"
+        visible=" Claim.SubrogationStatus == &quot;closed&quot; "/>
+      <InputDivider
+        visible=" Claim.SubrogationStatus == &quot;closed&quot; "/>
+      <BooleanRadioInput
+        editable="true"
+        id="SubroExternalOwner"
+        label="displaykey.NVV.Claim.Subrogation.Main.SubrogationExternallyOwned"
+        required="true"
+        value="SubrogationSummary.ExtOwned"
+        visible="true">
+        <PostOnChange
+          onChange="if (!SubrogationSummary.ExtOwned) { SubrogationSummary.Claim.Subrogator = null}"/>
+      </BooleanRadioInput>
+      <!-- onChange="if (true) { SubrogationSummary.Claim.Subrogator = null}" -->
+      <ClaimContactInput
+        claim="Claim"
+        editable="true"
+        id="Subrogator"
+        label="displaykey.NVV.Claim.Subrogation.Main.Subrogator"
+        required="SubrogationSummary.ExtOwned"
+        value="Claim.Subrogator"
+        valueRange="Claim.relatedContacts"
+        visible="SubrogationSummary.ExtOwned"/>
+      <InputDivider/>
+      <Label
+        label="displaykey.NVV.Claim.Subrogation.Referral"/>
+      <BooleanRadioInput
+        editable="perm.System.editsubrodetails and not SubrogationSummary.EscalateSubro"
+        id="SIinfo_EscalateSubro"
+        label="displaykey.NVV.Claim.Subrogation.Main.EscalateSubro"
+        value="SubrogationSummary.EscalateSubro">
+        <PostOnChange/>
+      </BooleanRadioInput>
+      <DateInput
+        dateFormat="short"
+        id="SubroReferralDate"
+        label="displaykey.NVV.Claim.Subrogation.Main.ReferralDate"
+        timeFormat="short"
+        value="SubrogationSummary.SubroReferralDate"
+        visible="SubrogationSummary.SubroReferralDate != null"/>
+      <TextAreaInput
+        editable="SubrogationSummary.SubroReferralDate == null"
+        id="SubroReferralComment"
+        label="displaykey.NVV.Claim.Subrogation.Main.ReferralComment"
+        required="true"
+        value="SubrogationSummary.SubroReferralComment"
+        visible="SubrogationSummary.EscalateSubro"/>
+      <InputDivider/>
+      <Label
+        label="displaykey.NVV.Claim.Subrogation.Main.Matters"
+        visible="claim.getPartiesInMatters().length() &gt; 0 or claim.getSubroMatters().length &gt; 0"/>
+      <Input
+        id="SubroArbThoseInvolved"
+        label="displaykey.NVV.Claim.Subrogation.Main.Arbitration.ThoseInvolved"
+        value="claim.getPartiesInMatters()"
+        visible="claim.getPartiesInMatters().length() &gt; 0 or claim.getSubroMatters().length &gt; 0"/>
+      <ListViewInput
+        editable="false"
+        labelAbove="true"
+        visible="claim.getPartiesInMatters().length() &gt; 0 or claim.getSubroMatters().length &gt; 0">
+        <!-- label="displaykey.NVV.Claim.Subro.Matters" -->
+        <Toolbar/>
+        <ListViewPanel
+          id="SubroMattersLV">
+          <RowIterator
+            editable="true"
+            elementName="Matter"
+            hideCheckBoxesIfReadOnly="true"
+            pageSize="5"
+            value="claim.getSubroMatters()">
+            <Row>
+              <Cell
+                action="MatterDetailGroup.go(Claim, Matter)"
+                id="Name"
+                label="displaykey.LV.Subro.Matters.Name"
+                sortOrder="2"
+                value="Matter.Name"/>
+              <TypeKeyCell
+                id="TrialDetails_MatterType"
+                label="displaykey.LV.Subro.Matters.MatterType"
+                required="false"
+                value="Matter.MatterType"/>
+              <DateCell
+                dateFormat="short"
+                id="TrialDetails_TrialDate"
+                label="displaykey.LV.Subro.Matters.TrialDate"
+                required="false"
+                timeFormat="short"
+                value="Matter.TrialDateActivity.TargetDate"
+                wrapLabel="true"/>
+              <DateCell
+                id="Matter_CloseDate"
+                label="displaykey.LV.Subro.Matters.CloseDate"
+                value="Matter.CloseDate"
+                wrapLabel="true"/>
+            </Row>
+          </RowIterator>
+        </ListViewPanel>
+      </ListViewInput>
+    </InputColumn>
+    <InputColumn>
+      <ListViewInput
+        boldLabel="true"
+        def="EditableAdverseGeneralLV(Claim)"
+        editable="true"
+        id="AdversePartyInfo"
+        label="displaykey.NVV.Claim.Subro.AdverseParties"
+        labelAbove="true">
+        <Toolbar>
+          <AddButton
+            hideIfReadOnly="true"
+            id="AddResponsibleParty"
+            iterator="AdversePartyInfo.EditableAdverseGeneralLV"
+            label="displaykey.NVV.Claim.Subro.AdverseParties.New"
+            pickLocation="NewSubroAdversePartyPopup.push(Claim)"/>
+          <IteratorButtons
+            addVisible="false"
+            iterator="AdversePartyInfo.EditableAdverseGeneralLV"/>
+        </Toolbar>
+      </ListViewInput>
+      <InputDivider/>
+      <ListViewInput
+        boldLabel="true"
+        def="EditableStatuteLV(Claim)"
+        editable="true"
+        id="StatuteLimitations"
+        label="displaykey.NVV.Claim.Subro.StatuteLimitations"
+        labelAbove="true">
+        <Toolbar>
+          <IteratorButtons
+            iterator="StatuteLimitations.EditableStatuteLV"/>
+        </Toolbar>
+      </ListViewInput>
+      <InputDivider/>
+      <ListViewInput
+        boldLabel="true"
+        def="NotesLV(Claim.getSubroNotes()as entity.NoteQuery)"
+        editable="true"
+        id="SubroNotes"
+        label="displaykey.NVV.Claim.Subro.SubroNotes"
+        labelAbove="true">
+        <Toolbar/>
+      </ListViewInput>
+    </InputColumn>
+  </DetailViewPanel>
+</PCF>

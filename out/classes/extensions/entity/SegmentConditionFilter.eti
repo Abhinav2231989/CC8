@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<subtype xmlns="http://guidewire.com/datamodel" desc="Classification condition filter by Segment" entity="SegmentConditionFilter" final="false" priority="1" supertype="ConditionFilter">
+  <typekey name="Segment" typelist="ClaimSegment" desc="Classification condition filter by Segment"
+           nullok="false"/>
+
+  <index name="seg_cond_index_1"
+         unique="true" desc="Prevents duplicate condition filters">
+    <indexcol name="ClassificationConditionID" keyposition="1"/>
+    <indexcol name="Segment" keyposition="2"/>
+  </index>
+</subtype>

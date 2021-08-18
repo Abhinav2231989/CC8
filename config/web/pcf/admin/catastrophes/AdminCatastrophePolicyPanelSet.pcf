@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <PanelSet
+    id="AdminCatastrophePolicyPanelSet">
+    <Require
+      name="catastrophe"
+      type="Catastrophe"/>
+    <Variable
+      initialValue="true"
+      name="enterPage"/>
+    <Variable
+      initialValue="gw.api.heatmap.CatastropheSearchCriteria.getCriteria(enterPage, catastrophe, &quot;CatPolicyMap&quot;)"
+      name="criteria"
+      recalculateOnRefresh="true"
+      type="gw.api.heatmap.CatastropheSearchCriteria"/>
+    <Variable
+      initialValue="criteria.updateMapAndTable()"
+      name="updateMapAndTable"
+      recalculateOnRefresh="true"/>
+    <Variable
+      initialValue="criteria.HeatMap.SelectionMessage"
+      name="mapSelectionMessage"
+      recalculateOnRefresh="true"/>
+    <Variable
+      initialValue="enterPage = false; return 0"
+      name="clearEnterPage"/>
+    <DetailViewPanel>
+      <InputColumn>
+        <Label
+          label="displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.PolicyLocationRetrieval"/>
+        <DateInput
+          dateFormat="short"
+          editable="true"
+          id="PolicyEffectiveDate"
+          label="displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.PolicyEffectiveDate"
+          value="catastrophe.PolicyEffectiveDate">
+          <PostOnChange
+            onChange="setPolicyRetrievalSetTime()"/>
+        </DateInput>
+        <Input
+          id="Status"
+          label="displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.Status"
+          value="retrievalStatus()"/>
+        <DateInput
+          dateFormat="short"
+          id="PolicyRetrievalCompletionTime"
+          label="displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.LastRetrievalCompletedAt"
+          timeFormat="short"
+          value="catastrophe.PolicyRetrievalCompletionTime"
+          visible="catastrophe.PolicyRetrievalCompletionTime != null"/>
+        <Input
+          id="PolicyRetrievalCompletionTimeNever"
+          label="displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.LastRetrievalCompletedAt"
+          value="displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.NoRetrievalCompleted"
+          visible="catastrophe.PolicyRetrievalCompletionTime == null"/>
+        <Label
+          label="&quot;  &quot;"/>
+        <Label
+          label="displaykey.JSP.ClaimSearch.Search.ClaimSearch.CatastropheAreaOfInterest"/>
+      </InputColumn>
+    </DetailViewPanel>
+    <SearchPanel
+      criteriaName="searchCriteria"
+      resultsName="searchResults"
+      search="null"
+      searchCriteria="&quot;&quot;"
+      searchResultsType="String">
+      <PanelRef
+        def="CatastropheHeatMapFilterPanelSet(criteria, false)"/>
+      <DetailViewPanel
+        columnDivider="false"
+        visible="criteria.MapVisible">
+        <InputColumn>
+          <ButtonInput
+            action="setCatastropheAreaOfInterest()"
+            hideIfDisabled="false"
+            id="SetCatastropheZone"
+            value="displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.SetCatastropheArea"
+            visible="perm.Catastrophe.edit and CurrentLocation.InEditMode"/>
+        </InputColumn>
+        <InputColumn>
+          <Input
+            id="howToSelect"
+            value="displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.ToChangeSelection"/>
+        </InputColumn>
+      </DetailViewPanel>
+      <TemplatePanel><![CDATA[<iframe id="mapFrame" src="./../../../../MapOverlay.do?map.html=&mapName=${criteria.HeatMap.MapName}" width="100%" height="${criteria.HeatMap.InitialHeight}" frameborder="0"> <p>${displaykey.Web.HeatMap.BrowserDoesntSupportIframes}</p> </iframe>]]></TemplatePanel>
+    </SearchPanel>
+    <Code><![CDATA[uses gw.api.util.LocationUtil
+uses java.util.Date
+
+function setPolicyRetrievalSetTime() {
+  catastrophe.PolicyRetrievalSetTime = java.util.Date.CurrentDate
+}
+
+function retrievalStatus() : String {
+  if (catastrophe.PolicyEffectiveDate == null) {
+    if (criteria.HeatMap.AreaOfInterestPoint1 == null) {
+      return displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.SetEffDateAndAreaOfInterest
+    } else {
+      return displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.PleaseSetEffDate
+    }
+  } else if (criteria.HeatMap.AreaOfInterestPoint1 == null) {
+      return displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.PleaseSetAreaOfInterest
+  } else {
+    if (catastrophe.PolicyRetrievalCompletionTime == null) {
+      return displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.WaitingToRetrieve
+    } else if (catastrophe.PolicyRetrievalSetTime > catastrophe.PolicyRetrievalCompletionTime) {
+      return displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.WaitingToRetrieveUpdated
+    } else {
+      return displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.PolicyRetrievalComplete
+    }
+  }
+}
+
+  // set the catastrophe area of interest from the selection
+  function setCatastropheAreaOfInterest() {
+    if (not CurrentLocation.InEditMode) {
+      LocationUtil.addRequestScopedInfoMessage(displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.PleaseClickEdit)
+      return
+    }
+    var HeatMap = criteria.HeatMap
+    if (HeatMap.SelectionPoint1 != null) {
+      setPolicyRetrievalSetTime()
+      if (HeatMap.SelectionPoint1.Lat == HeatMap.SelectionPoint2.Lat or HeatMap.SelectionPoint1.Long == HeatMap.SelectionPoint2.Long) {
+        LocationUtil.addRequestScopedErrorMessage(displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.NonZeroHeightAndWidth)
+        return
+      } 
+      criteria.AreaOfInterestPoint1 = HeatMap.SelectionPoint1
+      criteria.AreaOfInterestPoint2 = HeatMap.SelectionPoint2
+      updateCatastropheAreaOfInterest()
+      HeatMap.setSelection(null, null)
+    } else {
+      LocationUtil.addRequestScopedInfoMessage(displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.PleaseSelectArea)
+    }
+  }
+
+  function updateCatastropheAreaOfInterest() {
+    catastrophe.PolicyRetrievalSetTime = Date.CurrentDate
+
+    catastrophe.TopLeftLatitude = criteria.AreaOfInterestPoint1.Lat
+    catastrophe.TopLeftLongitude = criteria.AreaOfInterestPoint1.Long
+    catastrophe.BottomRightLatitude = criteria.AreaOfInterestPoint2.Lat
+    catastrophe.BottomRightLongitude = criteria.AreaOfInterestPoint2.Long
+  }]]></Code>
+  </PanelSet>
+</PCF>

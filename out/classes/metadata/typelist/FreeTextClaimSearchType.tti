@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!-- ****************************************************************************
+    Free Text Claim Search Typelists
+  **************************************************************************** -->
+<typelist xmlns="http://guidewire.com/typelists" desc="Type of claim searches available&lt;br&gt;&lt;br&gt;&lt;i&gt;Experimental. Do not use without consulting Guidewire.&lt;/i&gt;" subpackage="claim" name="FreeTextClaimSearchType">
+  <typecode code="byContactInfoActive" desc="Claims stored on active database&lt;br&gt;&lt;br&gt;&lt;i&gt;Experimental. Do not use without consulting Guidewire.&lt;/i&gt;" name="Active Database" priority="1"/>
+  <typecode code="byContactInfoArchive" desc="Claims stored in archive&lt;br&gt;&lt;br&gt;&lt;i&gt;Experimental. Do not use without consulting Guidewire.&lt;/i&gt;" name="Archive" priority="2"/>
+</typelist>

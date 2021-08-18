@@ -1,0 +1,213 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Screen
+    id="FNOLWizard_AutoFirstAndFinalScreen">
+    <Require
+      name="Claim"
+      type="Claim"/>
+    <Require
+      name="Wizard"
+      type="claim.NewClaimWizardInfo"/>
+    <Variable
+      initialValue="Claim.Exposures.single()"
+      name="exposure"
+      type="Exposure"/>
+    <Variable
+      initialValue="Claim.ServiceRequests.single()"
+      name="serviceRequest"/>
+    <Toolbar>
+      <WizardButtons/>
+      <ToolbarButton
+        action="Wizard.goToFullWizardFromIncompatible(&quot;BasicInfo&quot;, &quot;Summary&quot;)"
+        confirmMessage="displaykey.Web.NewClaimWizard.AutoFirstAndFinal.GoToFullClaimConfirm"
+        id="NewClaimWizard_QuickClaimScreen_ReturnFromQuickClaimButton"
+        label="displaykey.Button.Wizard.ReturnFromQuickClaim"
+        shortcut="R"/>
+    </Toolbar>
+    <DetailViewPanel>
+      <InputColumn>
+        <TypeKeyRadioInput
+          editable="true"
+          id="FirstFinalReportedAgencyRadioButton"
+          label="displaykey.Web.NewClaimWizard.AutoFirstAndFinal.WhoReported"
+          value="Wizard.FirstFinalReportedAgency">
+          <PostOnChange
+            onChange="Claim.reporter = (Wizard.FirstFinalReportedAgency == FirstFinalReportedAgency.TC_INSURED ? Claim.Insured : null)"/>
+        </TypeKeyRadioInput>
+      </InputColumn>
+    </DetailViewPanel>
+    <PanelDivider/>
+    <PanelRef
+      def="FNOLWizardAutoFirstAndFinalPanelSet(Claim, Wizard, VehicleIncident)"
+      id="AutoFirstAndFinalReportedPanelSet"
+      mode="Wizard.FirstFinalReportedAgency.Code"/>
+    <PanelRow>
+      <PanelColumn>
+        <PanelDivider/>
+        <DetailViewPanel>
+          <InputColumn>
+            <Label
+              label="displaykey.Web.NewClaimWizard.AutoFirstAndFinal.Damage"/>
+            <RangeInput
+              editable="true"
+              flatten="true"
+              id="Vehicle_Name"
+              label="displaykey.NVV.Claim.SubView.NewQuickClaimClaimAutoFirstAndFinal.Claim.Vehicle.Name"
+              required="true"
+              sortValueRange="false"
+              validationExpression="!(VehicleIncident.Vehicle.Vin == null and VehicleIncident.Vehicle.LicensePlate == null and (VehicleIncident.Vehicle.Model == null or exposure.VehicleIncident.Vehicle.Make == null)) ? null : displaykey.NVV.Claim.SubView.NewQuickClaimClaimAutoFirstAndFinal.Claim.Vehicle.ValidationError"
+              value="VehicleRU"
+              valueRange="Claim.Policy.Vehicles">
+              <PostOnChange/>
+            </RangeInput>
+            <TextAreaInput
+              editable="true"
+              id="Description"
+              label="displaykey.Web.FNOLWizard.AutoFirstAndFinal.LossDescription"
+              numCols="35"
+              numRows="3"
+              required="true"
+              value="Claim.Description"/>
+            <Label
+              label="displaykey.NVV.Exposure.SubView.NewQuickClaimClaimGL.Exposure.Claimant"/>
+            <ClaimContactInput
+              claim="Claim"
+              editable="true"
+              id="Claimant_Picker"
+              label="displaykey.NVV.Exposure.SubView.NewQuickClaimClaimGL.Exposure.Claimant.Picker"
+              required="true"
+              value="exposure.Claimant"
+              valueRange="Claim.getRelatedContacts(exposure.getContactType(&quot;claimant&quot;))"/>
+            <RangeInput
+              align="left"
+              editable="true"
+              id="Claimant_Type"
+              label="displaykey.NVV.Exposure.SubView.NewQuickClaimClaimGL.Exposure.Claimant.Type"
+              required="true"
+              value="exposure.ClaimantType"
+              valueRange="ClaimantType.getTypeKeys(false)">
+              <Reflect
+                triggerIds="Claimant_Picker">
+                <ReflectCondition
+                  condition="Claim.Insured==VALUE"
+                  value="&quot;insured&quot;"/>
+                <ReflectCondition
+                  condition="true"
+                  value="&quot;&quot;"/>
+              </Reflect>
+            </RangeInput>
+            <Input
+              id="Claimant_Workphone"
+              label="displaykey.NVV.Exposure.SubView.NewQuickClaimClaimGL.Exposure.Claimant.Workphone"
+              value="exposure.claimant.PrimaryPhoneValue">
+              <Reflect
+                triggerIds="Claimant_Picker"
+                value="VALUE.PrimaryPhoneValue"/>
+            </Input>
+            <Input
+              id="Claimant_Address"
+              label="displaykey.NVV.Exposure.SubView.NewQuickClaimClaimGL.Exposure.Claimant.Address"
+              value="exposure.Claimant.PrimaryAddressDisplayValue">
+              <Reflect
+                triggerIds="Claimant_Picker"
+                value="VALUE.primaryAddressDisplayValue"/>
+            </Input>
+            <BooleanRadioInput
+              editable="true"
+              id="Claimant_OtherCoverage"
+              label="displaykey.NVV.Exposure.SubView.NewQuickClaimClaimGL.Exposure.Claimant.OtherCoverage"
+              required="false"
+              value="exposure.OtherCoverage"/>
+            <Label
+              label="displaykey.Web.FNOLWizard.AutoFirstAndFinal.Repair"/>
+            <ClaimContactInput
+              claim="Claim"
+              editable="Wizard.FirstFinalReportedAgency != typekey.FirstFinalReportedAgency.TC_VENDOR"
+              id="RepairShop_Picker"
+              label="displaykey.Web.FNOLWizard.AutoFirstAndFinal.RepairShop"
+              newContactMenu="ClaimNewRepairShopOnlyPickerMenuItemSet"
+              onPick="repairShopOnPick()"
+              required="true"
+              specialistServices="new java.util.ArrayList&lt;SpecialistService&gt;()"
+              value="serviceRequest.Specialist"
+              valueRange="Claim.RelatedAutoRepairShopArray"
+              visible="true"/>
+            <Input
+              editable="true"
+              id="ServiceRequest_InstructionText"
+              label="displaykey.NVV.Exposure.SubView.NewQuickClaimClaimGL.ServiceRequestInstructions"
+              value="serviceRequest.Instruction.InstructionText"/>
+            <Label
+              label="displaykey.Web.FNOLWizard.AutoFirstAndFinal.ExposureDetails"/>
+            <TypeKeyInput
+              id="Exposure_PrimaryCoverage"
+              label="displaykey.NVV.Exposure.SubView.NewQuickClaimClaimGL.Exposure.PrimaryCoverage"
+              value="exposure.PrimaryCoverage"/>
+          </InputColumn>
+        </DetailViewPanel>
+        <DetailViewPanel>
+          <InputColumn>
+            <BooleanRadioInput
+              editable="true"
+              id="ReadyToPay"
+              label="displaykey.Web.FNOLWizard.AutoFirstAndFinal.ReadyToPay"
+              value="Wizard.Check.ReadyToPay">
+              <PostOnChange/>
+            </BooleanRadioInput>
+          </InputColumn>
+        </DetailViewPanel>
+        <PanelRef
+          def="FNOLWizardCheckDV(Claim, Wizard)"
+          mode="Wizard.Check.ReadyToPay ? &quot;ready&quot; : &quot;notready&quot;"/>
+      </PanelColumn>
+      <PanelColumn>
+        <PanelDivider/>
+        <DetailViewPanel>
+          <InputColumn>
+            <InputSetRef
+              def="CCAddressInputSet(Claim.AddressOwner)"/>
+            <DateInput
+              dateFormat="short"
+              id="Claim_LossDate"
+              label="displaykey.NVV.Claim.SubView.NewClaimLossDetailsAuto.Claim.LossDate"
+              validationExpression="Claim.LossDate == null || Claim.LossDate &lt; util.DateUtil.currentDate() ? null : displaykey.Java.Validation.Date.ForbidFuture"
+              value="Claim.LossDate"/>
+            <DateInput
+              editable="true"
+              id="Claim_lossTime"
+              label="displaykey.Web.FNOLWizard.AutoFirstAndFinal.Time"
+              timeFormat="short"
+              validationExpression="Claim.LossDate == null || Claim.LossDate &lt; util.DateUtil.currentDate() ? null : displaykey.Java.Validation.Date.ForbidFuture"
+              value="Claim.LossDate"/>
+          </InputColumn>
+        </DetailViewPanel>
+      </PanelColumn>
+    </PanelRow>
+    <Code><![CDATA[property get VehicleIncident() : VehicleIncident {return exposure.VehicleIncident}
+
+property get VehicleRU() : VehicleRU {
+  return Claim.Policy.Vehicles.firstWhere( \ vru -> vru.Vehicle==exposure.VehicleIncident.Vehicle)
+}
+
+property set VehicleRU(riskUnit : VehicleRU) {
+  VehicleIncident.Vehicle = riskUnit.Vehicle
+  // changing the risk unit will invalidate any existing deductable.  Resetting the Wizard to not apply the deductible in this case
+  if (exposure.Coverage.ClaimDeductible != null) {
+    Wizard.Check.ApplyDeductible = false
+  }
+  exposure.updateCoverage(riskUnit)
+}
+
+function repairShopOnPick() {
+  if (Wizard.Check.ReadyToPay and  Wizard.Check.Payee == null) {
+    var payee = serviceRequest.Specialist
+    Wizard.Check.Payee = payee
+    Wizard.Check.PayeeRole = ContactRole.TC_VENDOR
+    Wizard.Check.MailTo = payee.DisplayName
+    Wizard.Check.MailToAddress = payee.PrimaryAddressDisplayValue;
+  }
+}]]></Code>
+  </Screen>
+</PCF>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<extension xmlns="http://guidewire.com/datamodel" entityName="Transaction">
+<!-- The deductible handling feature in CC 6.0 does not use deductiblepaid field.  If the data in this
+       column is to be retained, please uncomment this section.
+  <extension entityName="Transaction">
+    <typekey name="DeductiblePaid" typelist="YesNo" nullok="true" desc="Deductible completely Paid - Yes or No." />
+  </extension>
+-->
+</extension>

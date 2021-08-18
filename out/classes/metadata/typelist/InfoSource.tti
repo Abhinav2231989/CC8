@@ -1,0 +1,2 @@
+<?xml version="1.0"?>
+<typelist xmlns="http://guidewire.com/typelists" desc="Medical info source - for use on MedCaseMgr Screen" final="false" subpackage="claim" name="InfoSource"/>

@@ -1,0 +1,3 @@
+<plugin name="IValidationPlugin">
+  <plugin-java javaclass="com.guidewire.cc.system.validation.CCValidationPluginImpl"/>
+</plugin>

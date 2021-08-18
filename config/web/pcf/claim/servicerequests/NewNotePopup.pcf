@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="pcf.xsd">
+  <Popup
+    canEdit="true"
+    id="NewNotePopup"
+    startInEditMode="true"
+    title="displaykey.Web.ServiceRequest.Note.NewNote">
+    <LocationEntryPoint
+      signature="NewNotePopup(serviceRequest : ServiceRequest)"/>
+    <Variable
+      name="serviceRequest"
+      type="ServiceRequest"/>
+    <Variable
+      initialValue="serviceRequest.newNote()"
+      name="note"
+      type="Note"/>
+    <Screen>
+      <Toolbar>
+        <EditButtons/>
+      </Toolbar>
+      <PanelRef
+        def="NoteDetailDV(note)"/>
+    </Screen>
+  </Popup>
+</PCF>

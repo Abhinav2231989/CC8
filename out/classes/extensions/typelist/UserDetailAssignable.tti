@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<typelist
+  xmlns="http://guidewire.com/typelists"
+  desc="Set of assignable object choices available for viewing in the user administration"
+  name="UserDetailAssignable">
+  <typecode
+    code="claim"
+    name="Claims" desc="claims"/>
+  <typecode
+    code="exposure"
+    name="Exposures" desc="exposures"/>
+  <typecode
+    code="matter"
+    name="Matters" desc="matters"/>
+  <typecode
+    code="activity"
+    name="Activities" desc="activities"/>
+</typelist>

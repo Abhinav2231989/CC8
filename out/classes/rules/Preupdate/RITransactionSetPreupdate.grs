@@ -1,0 +1,13 @@
+package rules.Preupdate
+
+@gw.rules.RuleName("RITransactionSetPreupdate")
+@gw.rules.RuleSetDescription("This is the RITransactionSet preupdate rule set to permit modification of RITransaction entities and related entities. Do modify the amount of an RITransaction in this ruleset. Exceptions will cause the bounding database transaction to roll back, effectively vetoing the update.")
+class RITransactionSetPreupdate extends gw.rules.RuleSetBase {
+  static function invoke(bean : entity.RITransactionSet) : gw.rules.ExecutionSession {
+    return invoke( new gw.rules.ExecutionSession(), bean )
+  }
+
+  static function invoke(exeSession : gw.rules.ExecutionSession, bean : entity.RITransactionSet) : gw.rules.ExecutionSession {
+    return _invoke( exeSession, bean, "RITransactionSetPreupdate", RITransactionSetPreupdate )
+  }
+}

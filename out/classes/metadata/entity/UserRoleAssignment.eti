@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><entity xmlns="http://guidewire.com/datamodel" admin="true" desc="Claim-level user role assignment." entity="UserRoleAssignment" extendable="true" loadable="true" platform="false" subpackage="claim" table="userroleassign" type="retireable">
+  <implementsEntity name="UserRoleAssignmentDelegate"/>
+  <implementsEntity name="Extractable"/>
+  <implementsEntity name="CCAssignable"/>
+  <foreignkey columnName="ClaimID" desc="The claim." fkentity="Claim" name="Claim" nullok="false"/>
+  <foreignkey columnName="ExposureID" desc="The associated exposure, if any." fkentity="Exposure" name="Exposure" nullok="true"/>
+  <index desc="Enforce uniqueness for a particular user with a particular role on a claim" name="urassignu1" unique="true">
+    <indexcol keyposition="1" name="ClaimID"/>
+    <indexcol keyposition="2" name="Retired"/>
+    <indexcol keyposition="3" name="ExposureID"/>
+    <indexcol keyposition="4" name="AssignedUserID"/>
+    <indexcol keyposition="5" name="Role"/>
+  </index>
+  <index desc="Speed up search for claims related to a particular user, as used in the claim desktop open related filter" name="urassign2" trackUsage="true">
+    <indexcol keyposition="1" name="AssignedUserID"/>
+    <indexcol keyposition="2" name="Retired"/>
+    <indexcol keyposition="3" name="Active"/>
+    <indexcol keyposition="4" name="ClaimID"/>
+  </index>
+</entity>

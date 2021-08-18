@@ -1,0 +1,27 @@
+package rules.Preupdate.ClaimPreupdate_dir
+
+@gw.rules.RuleName("CPU12000 - Subro Status - Close")
+internal class CPU12000SubroStatusClose {
+  static function doCondition(claim : entity.Claim) : boolean {
+    
+/*start00rule*/
+return claim.isFieldChanged("SubrogationStatus")
+and claim.SubrogationStatus == "closed"
+/*end00rule*/
+
+  }
+
+  static function doAction(claim : entity.Claim, actions : gw.rules.Action) {
+
+/*start00rule*/
+if(claim.SubrogationSummary != null) {
+  claim.SubrogationSummary.SubroCloseDate = gw.api.util.DateUtil.currentDate()
+  claim.createCustomHistoryEvent("DataChange",
+      displaykey.Subrogation.History.ClosedStatus(
+          claim.SubrogationSummary.SubroCloseComment != null ? 
+            claim.SubrogationSummary.SubroCloseComment : ""))
+}
+/*end00rule*/
+
+  }
+}

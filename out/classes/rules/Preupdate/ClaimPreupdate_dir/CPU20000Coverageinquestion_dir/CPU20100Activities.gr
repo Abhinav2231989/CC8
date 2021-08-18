@@ -1,0 +1,31 @@
+package rules.Preupdate.ClaimPreupdate_dir.CPU20000Coverageinquestion_dir
+
+@gw.rules.RuleName("CPU20100 - Activities")
+internal class CPU20100Activities {
+  static function doCondition(claim : entity.Claim) : boolean {
+    
+/*start00rule*/
+return claim.CoverageInQuestion == true 
+and (!claim.Activities.hasMatch(\ a -> a.ActivityPattern.Code == "coverage") 
+     and !claim.Activities.hasMatch(\ a -> a.ActivityPattern.Code == "recovery_opportunity"))
+/*end00rule*/
+
+  }
+
+  static function doAction(claim : entity.Claim, actions : gw.rules.Action) {
+
+/*start00rule*/
+uses gw.api.financials.FinancialsCalculations
+
+if(FinancialsCalculations.getTotalPaymentsIncludingPending().withClaim(claim).withCostType(CostType.TC_CLAIMCOST).Amount == null) {
+  //No claim cost payments have been made
+  claim.createActivityFromPattern(null, ActivityPattern.finder.getActivityPatternByCode("coverage"))
+} 
+else {
+  //Claim cost payments have been made
+  claim.createActivityFromPattern(null, ActivityPattern.finder.getActivityPatternByCode("recovery_opportunity"))
+}
+/*end00rule*/
+
+  }
+}

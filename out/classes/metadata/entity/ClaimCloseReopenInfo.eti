@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><subtype xmlns="http://guidewire.com/datamodel" desc="Temporary entity that holds transitional internal state information during all claim close or reopen operations." entity="ClaimCloseReopenInfo" subpackage="claim" supertype="CloseReopenInfo">
+  <fulldescription>
+      Holds transitional internal state information during all claim close or reopen operations. This is an abstract base
+      entity for CloseClaimInfo and ReopenClaimInfo. ClaimCloseReopenInfo is a virtual entity and is not represented in the database.
+      
+    </fulldescription>
+  <foreignkey columnName="ClaimID" desc="Claim that the action was applied." fkentity="Claim" name="Claim" nullok="true"/>
+</subtype>

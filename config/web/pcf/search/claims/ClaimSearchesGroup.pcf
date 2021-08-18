@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <LocationGroup
+    canVisit="perm.Claim.genericviewclaim and perm.System.viewsearch"
+    id="ClaimSearchesGroup"
+    title="displaykey.JSP.ClaimSearch.Search.ClaimSearch">
+    <LocationRef
+      label="displaykey.JSP.ClaimSearch.Search.ClaimSearch.Simple.Tab"
+      location="SimpleClaimSearch()"
+      shortcut="S"/>
+    <LocationRef
+      label="displaykey.JSP.ClaimSearch.Search.ClaimSearch.Advanced.Tab"
+      location="ClaimSearch()"
+      shortcut="A"/>
+    <LocationRef
+      label="displaykey.JSP.ClaimSearch.Search.ClaimSearch.FreeText.Tab"
+      location="FreeTextClaimSearch()"
+      shortcut="F"/>
+    <LocationRef
+      label="displaykey.JSP.ClaimSearch.Search.ClaimSearch.Catastrophe.Tab"
+      location="CatastropheSearch(null)"/>
+  </LocationGroup>
+</PCF>

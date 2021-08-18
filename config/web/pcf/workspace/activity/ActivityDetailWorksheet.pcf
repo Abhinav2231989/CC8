@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Worksheet
+    afterCancel="activityDetailHelper.worksheetClosed(Activity)"
+    afterReturnFromPopup="returnToWorksheet()"
+    alwaysInEditMode=" "
+    beforeCommit="activityDetailHelper.beforeCommit(Activity)"
+    canEdit="canEdit"
+    canVisit="perm.Activity.view(Activity)"
+    id="ActivityDetailWorksheet"
+    parent="ClaimWorkplan(Activity.Claim)"
+    startInEditMode="canEdit"
+    tabLabel="displaykey.Web.Claim.ActivityDetailWorksheet.Tab"
+    title="displaykey.JSP.ActivityDetail.Detail.Title(Activity.Claim.ClaimNumber)">
+    <LocationEntryPoint
+      signature="ActivityDetailWorksheet(Claim : Claim, Activity : Activity)"/>
+    <Scope
+      location="Claim(Claim)"/>
+    <Variable
+      name="Claim"
+      type="Claim"/>
+    <Variable
+      name="Activity"
+      type="Activity"/>
+    <Variable
+      initialValue="Activity.canEdit()"
+      name="canEdit"
+      recalculateOnRefresh="true"
+      type="boolean"/>
+    <Variable
+      initialValue="new activity.ActivityDetailHelper(Activity)"
+      name="activityDetailHelper"/>
+    <ScreenRef
+      def="ActivityDetailScreen(Activity, activityDetailHelper, true)"
+      mode="canEdit ? &quot;editable&quot; : &quot;readonly&quot;"/>
+    <Code><![CDATA[function returnToWorksheet() {
+  // Assigning the activity does not set the Changed flag to true; we only want to cancel and re-enter if returning from the AssignActivitiesPopup
+  if(!Activity.Changed) {
+    CurrentLocation.cancel()
+    ActivityDetailForward.goInWorkspace(Activity.Claim, Activity)
+  }
+}]]></Code>
+  </Worksheet>
+</PCF>

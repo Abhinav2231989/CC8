@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<subtype xmlns="http://guidewire.com/datamodel" desc="Classification condition filter by Incident Severity" entity="IncidentSeverityConditionFilter" final="false" priority="1" supertype="ConditionFilter">
+  <typekey name="IncidentSeverity" typelist="SeverityType" desc="Classification condition filter by Incident Severity"
+           nullok="false"/>
+
+  <index name="insev_cond_index_1"
+         unique="true"
+         desc="Prevents duplicate condition filters">
+    <indexcol name="ClassificationConditionID" keyposition="1"/>
+    <indexcol name="IncidentSeverity" keyposition="2"/>
+  </index>
+</subtype>

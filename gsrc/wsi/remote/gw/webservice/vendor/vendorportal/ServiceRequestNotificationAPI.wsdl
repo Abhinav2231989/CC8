@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<wsdl:definitions targetNamespace="http://ws.vendor.portal.edge/" name="ServiceRequestNotificationAPIService" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://ws.vendor.portal.edge/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://ws.vendor.portal.edge/" attributeFormDefault="unqualified" elementFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="sendNewDocumentNotification" type="tns:sendNewDocumentNotification"/>
+      <xs:element name="sendNewDocumentNotificationResponse" type="tns:sendNewDocumentNotificationResponse"/>
+      <xs:element name="sendNewMessageNotification" type="tns:sendNewMessageNotification"/>
+      <xs:element name="sendNewMessageNotificationResponse" type="tns:sendNewMessageNotificationResponse"/>
+      <xs:element name="sendOperationNotification" type="tns:sendOperationNotification"/>
+      <xs:element name="sendOperationNotificationResponse" type="tns:sendOperationNotificationResponse"/>
+      <xs:complexType name="sendNewDocumentNotification">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+          <xs:element minOccurs="0" name="arg1" type="xs:string"/>
+          <xs:element minOccurs="0" name="arg2" type="xs:string"/>
+          <xs:element minOccurs="0" name="arg3" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="sendNewDocumentNotificationResponse">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="sendOperationNotification">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+          <xs:element minOccurs="0" name="arg1" type="xs:string"/>
+          <xs:element minOccurs="0" name="arg2" type="xs:string"/>
+          <xs:element minOccurs="0" name="arg3" type="xs:string"/>
+          <xs:element minOccurs="0" name="arg4" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="sendOperationNotificationResponse">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="sendNewMessageNotification">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+          <xs:element minOccurs="0" name="arg1" type="xs:string"/>
+          <xs:element minOccurs="0" name="arg2" type="xs:string"/>
+          <xs:element minOccurs="0" name="arg3" type="xs:string"/>
+          <xs:element minOccurs="0" name="arg4" type="xs:string"/>
+          <xs:element minOccurs="0" name="arg5" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="sendNewMessageNotificationResponse">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:element name="EmailException" type="tns:EmailException"/>
+      <xs:complexType name="EmailException">
+        <xs:sequence/>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="EmailException">
+    <wsdl:part name="EmailException" element="tns:EmailException"/>
+  </wsdl:message>
+  <wsdl:message name="sendNewMessageNotificationResponse">
+    <wsdl:part name="parameters" element="tns:sendNewMessageNotificationResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendNewDocumentNotificationResponse">
+    <wsdl:part name="parameters" element="tns:sendNewDocumentNotificationResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendNewDocumentNotification">
+    <wsdl:part name="parameters" element="tns:sendNewDocumentNotification"/>
+  </wsdl:message>
+  <wsdl:message name="sendOperationNotificationResponse">
+    <wsdl:part name="parameters" element="tns:sendOperationNotificationResponse"/>
+  </wsdl:message>
+  <wsdl:message name="sendOperationNotification">
+    <wsdl:part name="parameters" element="tns:sendOperationNotification"/>
+  </wsdl:message>
+  <wsdl:message name="sendNewMessageNotification">
+    <wsdl:part name="parameters" element="tns:sendNewMessageNotification"/>
+  </wsdl:message>
+  <wsdl:portType name="ServiceRequestNotification">
+    <wsdl:operation name="sendNewDocumentNotification">
+      <wsdl:input name="sendNewDocumentNotification" message="tns:sendNewDocumentNotification"/>
+      <wsdl:output name="sendNewDocumentNotificationResponse" message="tns:sendNewDocumentNotificationResponse"/>
+      <wsdl:fault name="EmailException" message="tns:EmailException"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendOperationNotification">
+      <wsdl:input name="sendOperationNotification" message="tns:sendOperationNotification"/>
+      <wsdl:output name="sendOperationNotificationResponse" message="tns:sendOperationNotificationResponse"/>
+      <wsdl:fault name="EmailException" message="tns:EmailException"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendNewMessageNotification">
+      <wsdl:input name="sendNewMessageNotification" message="tns:sendNewMessageNotification"/>
+      <wsdl:output name="sendNewMessageNotificationResponse" message="tns:sendNewMessageNotificationResponse"/>
+      <wsdl:fault name="EmailException" message="tns:EmailException"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServiceRequestNotificationAPIServiceSoapBinding" type="tns:ServiceRequestNotification">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="sendNewDocumentNotification">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="sendNewDocumentNotification">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendNewDocumentNotificationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="EmailException">
+        <soap:fault name="EmailException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="sendOperationNotification">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="sendOperationNotification">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendOperationNotificationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="EmailException">
+        <soap:fault name="EmailException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="sendNewMessageNotification">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="sendNewMessageNotification">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendNewMessageNotificationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="EmailException">
+        <soap:fault name="EmailException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ServiceRequestNotificationAPIService">
+    <wsdl:port name="ServiceRequestNotificationPort" binding="tns:ServiceRequestNotificationAPIServiceSoapBinding">
+      <soap:address location="http://localhost:8090/vendor/services/ServiceRequestNotificationAPI"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

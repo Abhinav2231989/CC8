@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <LocationGroup
+    id="SpecialHandling"
+    canVisit="perm.System.accountview or perm.System.custsvctierview"
+    title="displaykey.Web.Admin.SpecialHandling">
+    <LocationRef
+      location="AccountAdmin()"/>
+    <LocationRef
+      location="CustomerServiceTierAdmin()"/>
+  </LocationGroup>
+</PCF>

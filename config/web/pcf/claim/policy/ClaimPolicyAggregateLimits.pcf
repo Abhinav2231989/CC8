@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<PCF
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../../../../../pcf.xsd">
+  <Page
+    canEdit="false"
+    canVisit="gw.api.policy.PolicyTabUtil.hasTab(Claim, &quot;AggregateLimits&quot;) and perm.Policy.view(Claim) and perm.System.viewpolicy"
+    id="ClaimPolicyAggregateLimits"
+    title="displaykey.JSP.ClaimPolicy.Policy.Navigation.AggregateLimits">
+    <LocationEntryPoint
+      signature="ClaimPolicyAggregateLimits(Claim : Claim)"/>
+    <Variable
+      name="Claim"
+      type="Claim"/>
+    <Variable
+      initialValue="canAddAggLimit()"
+      name="enableAdd"
+      recalculateOnRefresh="true"
+      type="boolean"/>
+    <Screen
+      id="ClaimPolicyAggregateLimitsScreen">
+      <Toolbar>
+        <ToolbarButton
+          action="ClaimPolicyNewAggregateLimit.go(Claim)"
+          available="enableAdd"
+          default="true"
+          id="ClaimPolicyAggregateLimits_AddButton"
+          label="displaykey.Button.Add"
+          tooltip="enableAdd ? null : displaykey.LV.Policy.AggregateLimits.AddDisabledTooltip"
+          visible="perm.Policy.edit(Claim)"/>
+        <CheckedValuesToolbarButton
+          checkedRowAction="gw.api.admin.AggregateLimitUtil.removeLimit(CheckedValue)"
+          flags="any AggregateLimit"
+          id="ClaimPolicyAggregateLimits_DeleteButton"
+          iterator="AggregateLimitsLV.AggregateLimitsLV"
+          label="displaykey.Button.Delete"
+          shortcut="E"
+          visible="perm.Policy.edit(Claim)"/>
+      </Toolbar>
+      <DetailViewPanel
+        visible="Claim.AggregateLimits.hasMatch(\ a -&gt; a.Valid == false)">
+        <InputColumn>
+          <Label
+            id="someInvalidLabelID"
+            label="displaykey.Java.AggregateLimit.SomeInvalid"/>
+        </InputColumn>
+      </DetailViewPanel>
+      <PanelRef
+        def="AggregateLimitsLV(Claim.AggregateLimits, Claim)"
+        editable="false"/>
+    </Screen>
+    <Code><![CDATA[uses com.guidewire.pl.web.navigation.UnsavedWorkUtil;
+
+function canAddAggLimit() : boolean {
+  for (unsavedWork in UnsavedWorkUtil.getAllUnsavedWork().Keys) {
+    if (unsavedWork typeis ClaimPolicyGeneral) {
+      var unsavedClaim = unsavedWork.Destination.getVariable("Claim") as Claim
+      if (Claim.ID == unsavedClaim.ID) {
+        return false
+      }
+    }
+  }
+  return true
+}]]></Code>
+  </Page>
+</PCF>

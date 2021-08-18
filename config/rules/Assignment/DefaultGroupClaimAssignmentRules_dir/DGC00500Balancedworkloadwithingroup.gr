@@ -1,0 +1,41 @@
+package rules.Assignment.DefaultGroupClaimAssignmentRules_dir
+
+@gw.rules.RuleDisabled
+@gw.rules.RuleName("DGC00500 - Balanced workload within group")
+internal class DGC00500Balancedworkloadwithingroup {
+  static function doCondition(claim : entity.Claim) : boolean {
+    
+/*start00rule*/
+return // weighted workload assignment enabled?
+gw.api.system.CCConfigParameters.WeightedAssignmentEnabled.Value
+
+and 
+
+// Checks if there are users who are active, members and whose vacation status is at work
+exists (aUser in claim.CurrentAssignment.AssignedGroup.Users where 
+  aUser.User.Credential.Active 
+  and aUser.Member 
+  and aUser.User.VacationStatus == VacationStatusType.TC_ATWORK)
+/*end00rule*/
+
+  }
+
+  static function doAction(claim : entity.Claim, actions : gw.rules.Action) {
+
+/*start00rule*/
+uses gw.api.system.CCLoggerCategory
+
+// try assignment by workload. Do not cascade into subgroups
+var assignmentSuccess = claim.assignUserByWorkload(false, claim.CurrentAssignment.AssignedGroup)
+
+// debug logging
+if (CCLoggerCategory.ASSIGNMENT_WEIGHTED_WORKLOAD.DebugEnabled and assignmentSuccess) {
+  CCLoggerCategory.ASSIGNMENT_WEIGHTED_WORKLOAD.debug(displaykey.Rules.Assignment.DefaultGroup.Claim(actions.getRule().DisplayName))
+  CCLoggerCategory.ASSIGNMENT_WEIGHTED_WORKLOAD.debug(displaykey.Rules.Assignment.AssignedUserIs(claim.AssignedUser))
+}
+
+actions.exit()
+/*end00rule*/
+
+  }
+}
