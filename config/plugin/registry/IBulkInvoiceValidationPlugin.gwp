@@ -4,5 +4,5 @@
   <!-- Configure a plugin for the BulkInvoice validation - current entry is a
          sample Gosu plugin implementation of the interface -->
   <plugin-gosu
-    gosuclass="gw.plugin.bulkinvoice.impl.SampleBulkInvoiceValidationPlugin"/>
+    gosuclass="gw.plugin.bulkinvoice.impl.BulkInvoiceValidationPlugin"/>
 </plugin>
