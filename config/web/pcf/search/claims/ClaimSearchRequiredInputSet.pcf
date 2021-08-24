@@ -85,8 +85,9 @@
       id="CatNumber"
       label="displaykey.JSP.ClaimSearch.Claims.CatNumber"
       required="false"
+      sortValueRange="false"
       value="ClaimSearchCriteria.catastrophe"
-      valueRange="gw.api.admin.CatastropheUtil.getCatastrophes()"/>
+      valueRange="gw.api.admin.CatastropheUtil.getCatastrophes().orderByDescending( \ row -&gt; row.CatastropheValidFrom).toList()"/>
     <Input
       available="liveClaimFlag"
       editable="true"
