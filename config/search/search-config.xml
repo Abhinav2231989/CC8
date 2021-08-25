@@ -172,6 +172,7 @@
     <Criterion property="InvoiceNumber" matchType="eq"/>
     <Criterion property="CheckNumber" matchType="eq"/>
     <Criterion property="PayTo" matchType="contains"/>
+      <Criterion property="Status" matchType="eq"/>
 
     <CriterionChoice property="DateCriterionChoice"
         init="DateCriterionChoice.SearchType = &quot;payment&quot;; DateCriterionChoice.DateSearchType = &quot;fromlist&quot;; DateCriterionChoice.DateRangeChoice = &quot;n90&quot;; DateCriterionChoice.ChosenOption = &quot;Java.Criterion.Option.BulkPay.SendDate&quot;">

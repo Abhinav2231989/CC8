@@ -22,6 +22,17 @@
       label="displaykey.JSP.RecoverySearch.Recoveries.CreatedBy"
       required="false"
       value="RecoverySearchCriteria.createdByUser"/>
+    <GroupInput
+      editable="true"
+      id="ApprovedByGroup"
+      label="displaykey.JSP.PaymentSearch.Payments.ApprovedByGroup"
+      required="false"
+      value="RecoverySearchCriteria.ApprovedByGroup.AssignedToGroup"/>
+    <BooleanRadioInput
+      editable="true"
+      id="IncludeSubGroups"
+      label="displaykey.Web.PaymentSearch.Required.IncludeChildGroups"
+      value="RecoverySearchCriteria.ApprovedByGroup.IncludeSubGroups"/>
     <InputSetRef
       def="GlobalPersonNameInputSet(new gw.api.name.SearchNameOwner(RecoverySearchCriteria.NameCriteria) { :NameLabelType = gw.api.name.SearchNameOwner.PAYER } )"
       mode="gw.api.name.NameLocaleSettings.PCFMode"/>

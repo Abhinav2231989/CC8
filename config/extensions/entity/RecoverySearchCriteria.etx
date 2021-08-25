@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<extension
+  xmlns="http://guidewire.com/datamodel"
+  entityName="RecoverySearchCriteria">
+  <foreignkey
+    columnName="ApprovedByGroupID"
+    fkentity="GroupSearchCriterion"
+    name="ApprovedByGroup"
+    nullok="true"/>
+</extension>
