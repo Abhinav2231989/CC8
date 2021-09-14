@@ -1,10 +1,18 @@
 package gw.api.financials
 
+uses gw.api.webservice.cc.financials.bulkpay.BulkInvoiceAPIImpl
+uses java.util.ArrayList
+uses gw.plugin.util.SequenceUtil
+uses java.util.Date
+uses gw.api.database.Query
+
 /**
  * This class provides helpful methods for all the pages related to BulkInvoice.
  */
 @Export
 class BulkInvoiceUIHelper {
+
+
 
   /**
   * Callback that gets invoked just before submitting a BulkInvoice. This OOTB implementation updates the RequestingUser
@@ -12,6 +20,7 @@ class BulkInvoiceUIHelper {
   * cases where one user creates the BulkInvoice and another one (say, an admin) submits it.
   */
   static function beforeSubmit(bulkInvoice : BulkInvoice) {
+    print("Tresting")
     var currentUser = User.util.CurrentUser
     if (currentUser != bulkInvoice.RequestingUser) {
       gw.transaction.Transaction.runWithNewBundle( \ bundle -> {
@@ -19,5 +28,6 @@ class BulkInvoiceUIHelper {
       })
     }
   }
+
 
 }
