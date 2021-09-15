@@ -16,7 +16,7 @@ class BulkInvoiceHelperSample {
 
     static function createBulkInvoice(bulkInvoice : BulkInvoice) {
       var bulkInvoiceAPI  = new BulkInvoiceAPIImpl()
-      var clm =Claim.finder.findClaimByClaimNumber("000-00-000603")
+      var clm =Claim.finder.findClaimByClaimNumber("000-00-000604")
       var bulkInvItemArray = new ArrayList<BulkInvoiceItem>()
       var bulkInvoiceItem = new BulkInvoiceItem()
       bulkInvoiceItem.Claim = clm
