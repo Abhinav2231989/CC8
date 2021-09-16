@@ -21,6 +21,7 @@ class BulkInvoiceUIHelper {
   */
   static function beforeSubmit(bulkInvoice : BulkInvoice) {
     print("Tresting22222------------121212121212:another try from fork usig jra trying now at 20:42")
+    print("Bit bucket testing push")
     var currentUser = User.util.CurrentUser
     if (currentUser != bulkInvoice.RequestingUser) {
       gw.transaction.Transaction.runWithNewBundle( \ bundle -> {
