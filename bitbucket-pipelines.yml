@@ -4,4 +4,4 @@ pipelines:
   default:
     - step:
         script:
-          - git push --mirror https://github.com/Abhinav2231989/CC8.git
+          - git push --mirror  git@github.com:Abhinav2231989/CC8.git
