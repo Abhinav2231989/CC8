@@ -1,7 +1,8 @@
 clone:
   depth: full
 pipelines:
-  default:
+  branches:
+    '{master}':      
     - step:
         script:
-          - git push --mirror  git@github.com:Abhinav2231989/CC8.git
+          - git push --mirror  git@github.com:Abhinav2231989/CC8.git          
