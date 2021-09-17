@@ -20,8 +20,6 @@ class BulkInvoiceUIHelper {
   * cases where one user creates the BulkInvoice and another one (say, an admin) submits it.
   */
   static function beforeSubmit(bulkInvoice : BulkInvoice) {
-    print("Tresting22222------------121212121212:another try from fork usig jra trying now at 20:42 ")
-    print("Bit bucket testing push using YML file to sync in github-testing bugfixbranch using git and bitbuckeytsync")
     var currentUser = User.util.CurrentUser
     if (currentUser != bulkInvoice.RequestingUser) {
       gw.transaction.Transaction.runWithNewBundle( \ bundle -> {
