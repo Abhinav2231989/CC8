@@ -1,6 +1,8 @@
 clone:
   depth: full
 pipelines:
+branches:
+    '{master}':
   default:
     - step:
         script:
