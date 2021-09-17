@@ -8,7 +8,7 @@ class SampleBulkInvoiceValidationPlugin implements IBulkInvoiceValidationPlugin 
   public override function validateBulkInvoice(bulkInvoice : BulkInvoice) : BIValidationAlert[] {
     // you have full access to the BulkInvoice's fields and the contained BulkInvoiceItems
     // i.e., var items = bulkInvoice.InvoiceItems;
-    print("testing from other machine")
+    print("testing from other machine once again after chnaging remote url")
 
     // As a convenience for testing, we'll generate two validation alerts if the InvoiceNumber contains the word "fail"
     if (bulkInvoice.InvoiceNumber != null  and  bulkInvoice.InvoiceNumber.containsIgnoreCase("fail")) {
