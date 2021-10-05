@@ -11,6 +11,7 @@
       <Label
         label="displaykey.NVV.Financials.Check"/>
       <Input
+        desc="Testing"
         id="PayTo_Ext"
         label="displaykey.NVV.Financials.Check.PayTo"
         value="Check.PayTo"
