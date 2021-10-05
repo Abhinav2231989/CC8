@@ -11,7 +11,8 @@
       <Label
         label="displaykey.NVV.Financials.Check"/>
       <Input
-        id="PayTo"
+        desc="Testing"
+        id="PayTo_Ext"
         label="displaykey.NVV.Financials.Check.PayTo"
         value="Check.PayTo"
         visible="Check.PaymentMethod != PaymentMethod.TC_EFT"/>
