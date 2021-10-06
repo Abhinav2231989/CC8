@@ -17,7 +17,7 @@
         <Cell
           icon="&quot;new.png&quot;"
           iconLabel="displaykey.LV.Financials.Check.Primary.Tip"
-          id="Primary"
+          id="Primary_Ext"
           label="displaykey.LV.Financials.Check.Primary"
           tooltip="displaykey.LV.Financials.Check.Primary.Tip"
           value="Check.Primary"/>
