@@ -40,7 +40,7 @@
         highlighted="bulkInvoice.hasInvalidInvoiceItems()">
         <Cell
           action="EditBulkInvoiceDetail.drilldown(bulkInvoice)"
-          id="InvoiceNumber_Ext"
+          id="InvoiceNumber_Ext1"
           label="displaykey.Web.Financials.BulkPay.Invoice.InvoiceNumber"
           value="bulkInvoice.InvoiceNumber"/>
         <TypeKeyCell
